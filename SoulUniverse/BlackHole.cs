@@ -12,16 +12,23 @@ namespace SoulUniverse
         public BlackHole()
         {
             Random rnd = new Random();
-            _x = rnd.Next(console_x);
-            _y = rnd.Next(console_y);
-            Draw(_x, _y);
+            Coordinates.x = rnd.Next(universe_x);
+            Coordinates.y = rnd.Next(universe_y);
+            Draw(Coordinates.x, Coordinates.y);
+        }
+
+        public BlackHole(int x, int y)
+        {
+            Coordinates.x = x;
+            Coordinates.y = y;
+            Draw(Coordinates.x, Coordinates.y);
         }
 
         protected void Draw(int x, int y)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.SetCursorPosition(x, y);
-            Console.Write("\u25C9");
+            Console.Write("\u00D8");
 
         }
     }

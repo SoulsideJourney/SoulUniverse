@@ -9,8 +9,11 @@ namespace SoulUniverse
     internal abstract class VoidObject
     {
         protected int _id;
-        protected int _x;
-        protected int _y;
+        public int test;
+        public Coordinates Coordinates = new();
+
+
+
 
         //protected abstract void Draw();
         //protected abstract void Draw(int x, int y);

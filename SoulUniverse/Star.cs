@@ -18,28 +18,30 @@ namespace SoulUniverse
         public Star()
         {
             Random rnd = new Random();
-            _x = rnd.Next(console_x);
-            _y = rnd.Next(console_y);
+            Coordinates.x = rnd.Next(universe_x);
+            Coordinates.y = rnd.Next(universe_y);
             _starClass = (starClass)Enum.GetValues(typeof(starClass)).GetValue(rnd.Next(Enum.GetValues(typeof(starClass)).Length-1));
-            Draw(_x, _y, _starClass);
+            Draw(Coordinates.x, Coordinates.y, _starClass);
+
         }
 
         public Star(int x, int y)
         {
             Random rnd = new Random();
-            _x = x;
-            _y = y;
+            Coordinates.x = x;
+            Coordinates.y = y;
             _starClass = (starClass)Enum.GetValues(typeof(starClass)).GetValue(rnd.Next(Enum.GetValues(typeof(starClass)).Length-1));
-            Draw(_x, _y, _starClass);
+            Draw(Coordinates.x, Coordinates.y, _starClass);
         }
 
         public Star(starClass starClass)
         {
             Random rnd = new Random();
-            _x = rnd.Next(console_x);
-            _y = rnd.Next(console_y);
+            Coordinates.x = rnd.Next(universe_x);
+            Coordinates.y = rnd.Next(universe_y);
             _starClass = starClass;
-            Draw(_x, _y, starClass); 
+            Draw(Coordinates.x, Coordinates.y, starClass);
+            
         }
 
         public Star(int x, int y, starClass starClass)

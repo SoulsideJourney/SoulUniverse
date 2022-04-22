@@ -12,9 +12,16 @@ namespace SoulUniverse
         public Wormhole()
         {
             Random rnd = new Random();
-            _x = rnd.Next(console_x);
-            _y = rnd.Next(console_y);
-            Draw(_x, _y);
+            Coordinates.x = rnd.Next(universe_x);
+            Coordinates.y = rnd.Next(universe_y);
+            Draw(Coordinates.x, Coordinates.y);
+        }
+
+        public Wormhole(int x, int y)
+        {
+            Coordinates.x = x;
+            Coordinates.y = y;
+            Draw(Coordinates.x, Coordinates.y);
         }
 
         protected void Draw(int x, int y)
