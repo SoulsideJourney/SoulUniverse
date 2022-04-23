@@ -9,8 +9,8 @@ namespace SoulUniverse
 {
     internal class Star : VoidObject
     {
-        private starClass _starClass;
-        public enum starClass
+        public StarClass starClass;
+        public enum StarClass
         {
             W, O, B, A, F, G, K, M, L
         }
@@ -20,8 +20,8 @@ namespace SoulUniverse
             Random rnd = new Random();
             Coordinates.x = rnd.Next(universe_x);
             Coordinates.y = rnd.Next(universe_y);
-            _starClass = (starClass)Enum.GetValues(typeof(starClass)).GetValue(rnd.Next(Enum.GetValues(typeof(starClass)).Length-1));
-            Draw(Coordinates.x, Coordinates.y, _starClass);
+            starClass = (StarClass)Enum.GetValues(typeof(StarClass)).GetValue(rnd.Next(Enum.GetValues(typeof(StarClass)).Length-1));
+            Draw(Coordinates.x, Coordinates.y, starClass);
 
         }
 
@@ -30,65 +30,68 @@ namespace SoulUniverse
             Random rnd = new Random();
             Coordinates.x = x;
             Coordinates.y = y;
-            _starClass = (starClass)Enum.GetValues(typeof(starClass)).GetValue(rnd.Next(Enum.GetValues(typeof(starClass)).Length-1));
-            Draw(Coordinates.x, Coordinates.y, _starClass);
+            starClass = (StarClass)Enum.GetValues(typeof(StarClass)).GetValue(rnd.Next(Enum.GetValues(typeof(StarClass)).Length-1));
+            Draw(Coordinates.x, Coordinates.y, starClass);
         }
 
-        public Star(starClass starClass)
+        public Star(StarClass starClass)
         {
             Random rnd = new Random();
             Coordinates.x = rnd.Next(universe_x);
             Coordinates.y = rnd.Next(universe_y);
-            _starClass = starClass;
+            this.starClass = starClass;
             Draw(Coordinates.x, Coordinates.y, starClass);
             
         }
 
-        public Star(int x, int y, starClass starClass)
+        public Star(int x, int y, StarClass starClass)
         {
-            _starClass = starClass;
+            this.starClass = starClass;
             Draw(x, y, starClass);
         }
+        
+        public void Draw()
+        {
+            Draw(Coordinates.x, Coordinates.y, starClass);
+        }
 
-        protected void Draw(int x, int y, starClass starClass)
+        protected void Draw(int x, int y, StarClass starClass)
         {
             switch (starClass)
             {
-                case starClass.W:
+                case StarClass.W:
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     break;
-                case starClass.O:
+                case StarClass.O:
                     Console.ForegroundColor = ConsoleColor.DarkBlue;
                     break;
-                case starClass.B:
+                case StarClass.B:
                     Console.ForegroundColor = ConsoleColor.Blue;
                     break;
-                case starClass.A:
+                case StarClass.A:
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
                     break;
-                case starClass.F:
+                case StarClass.F:
                     Console.ForegroundColor = ConsoleColor.White;
                     break;
-                case starClass.G:
+                case StarClass.G:
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     break;
-                case starClass.K:
+                case StarClass.K:
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     break;
-                case starClass.M:
+                case StarClass.M:
                     Console.ForegroundColor = ConsoleColor.Red;
                     break;
-                case starClass.L:
+                case StarClass.L:
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     break;
                 default:
                     Console.ResetColor();
                     break;
             }
-
             Console.SetCursorPosition(x, y);
             Console.Write("*");
-
         }
     }
 }

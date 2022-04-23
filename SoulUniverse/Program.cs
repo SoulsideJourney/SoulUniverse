@@ -24,36 +24,114 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
 
             List<VoidObject> voidObjects = new();
 
-            DrawSomeStars(voidObjects);
-            DrawSomeWormholes(voidObjects);
-            DrawSomeBlackHoles(voidObjects);
 
-            Console.SetCursorPosition(0, 0);
-            Console.Beep();
+            //Создание объектов
+            GenerateSomeStars(voidObjects);
+            GenerateSomeWormholes(voidObjects);
+            GenerateSomeBlackHoles(voidObjects);
 
+
+
+            //Считывание кнопок
+            int cursor_x = 0;
+            int cursor_y = 0;
+            Console.SetCursorPosition(cursor_x, cursor_y);
+            while (true)
+            {
+                //Информация об объекте
+
+                foreach (VoidObject obj in voidObjects)
+                {
+                    if (obj.Coordinates.x == cursor_x && obj.Coordinates.y == cursor_y)
+                    {
+                        Console.ResetColor();
+                        Console.SetCursorPosition(universe_x + 2, 2);
+                        Console.Write("Информация об объекте: ");
+                        if (obj is Star)
+                        {
+                            string starClass = (obj as Star).starClass.ToString();
+                            Console.Write(string.Format("Звезда класса {0}", starClass));
+                            Console.SetCursorPosition(universe_x + 2, 3);
+                            Console.Write("Количество планет: неизвестно");
+                        }
+                        else if (obj is BlackHole)
+                        {
+                            Console.Write("Черная дыра");
+                        }
+                        else if (obj is Wormhole)
+                        {
+                            Console.Write("Червоточина");
+                        }
+                        else Console.Write("Неизвестный объект");
+
+                        //Возвращение курсора
+                        Console.SetCursorPosition(cursor_x, cursor_y);
+                        break;
+                    }
+                    else
+                    {
+                        //Очистка инфо, если ничего не найдено
+                        Console.SetCursorPosition(universe_x + 2, 2);
+                        Console.Write("                                        ");
+                        Console.SetCursorPosition(universe_x + 2, 3);
+                        Console.Write("                                        ");
+                        //Возвращение курсора
+                        Console.SetCursorPosition(cursor_x, cursor_y);
+                    }
+                }
+                
+
+                //Считывание нажатий
+                ConsoleKeyInfo consoleKeyInfo =  Console.ReadKey();
+
+                //Стрелки
+                if (consoleKeyInfo.Key == ConsoleKey.LeftArrow && cursor_x > 0)
+                {
+                    Console.SetCursorPosition(--cursor_x, cursor_y);
+                }
+                if (consoleKeyInfo.Key == ConsoleKey.RightArrow && cursor_x < universe_x)
+                {
+                    Console.SetCursorPosition(++cursor_x, cursor_y);
+                }
+                if (consoleKeyInfo.Key == ConsoleKey.UpArrow && cursor_y > 0)
+                {
+                    Console.SetCursorPosition(cursor_x, --cursor_y);
+                }
+                if (consoleKeyInfo.Key == ConsoleKey.DownArrow && cursor_y < universe_y)
+                {
+                    Console.SetCursorPosition(cursor_x, ++cursor_y);
+                }
+
+                //Выход
+                if (consoleKeyInfo.Key == ConsoleKey.Escape)
+                {
+                    Environment.Exit(0);
+                }
+
+                //ConsoleCancelEventHandler? cancelKeyPress = Console.CancelKeyPress;
+
+
+            }
+
+
+            //Завершение
             Console.ReadKey();
-
             Console.ResetColor();
             Console.SetCursorPosition(0, universe_y + 1);
             (int w, int z) = Console.GetCursorPosition();
 
-            //Star star1 = new(0, 0, Star.starClass.O);
-            //Star star2 = new(1, 0, Star.starClass.B);
-            //Star star3 = new(2, 0, Star.starClass.A);
-            //Star star4 = new(3, 0, Star.starClass.F);
-            //Console.ForegroundColor = ConsoleColor.DarkMagenta;
         }
 
         private static void DrawFrames()
         {
             //Горизонтальные рамки
             Console.SetCursorPosition(universe_x + 1, universe_y);
-            for (int i = universe_x + 1; i <= console_x; i++)
+            for (int i = universe_x + 1; i < console_x; i++)
             {
                 Console.Write("-");
             }
             Console.SetCursorPosition(universe_x + 1, 0);
-            for (int i = universe_x + 1; i <= console_x; i++)
+            for (int i = universe_x + 1; i < console_x; i++)
             {
                 Console.Write("-");
             }
@@ -72,7 +150,7 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
             }
         }
 
-        static void DrawSomeStars(List<VoidObject> voidObjects)
+        static void GenerateSomeStars(List<VoidObject> voidObjects)
         {
             for (int i = 0; i < 100; i++)
             {
@@ -102,7 +180,7 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
                 }              
             }
         }
-        static void DrawSomeWormholes(List<VoidObject> voidObjects)
+        static void GenerateSomeWormholes(List<VoidObject> voidObjects)
         {
             for (int i = 0; i < 10; i++)
             {
@@ -134,7 +212,7 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
             }
         }
 
-        static void DrawSomeBlackHoles(List<VoidObject> voidObjects)
+        static void GenerateSomeBlackHoles(List<VoidObject> voidObjects)
         {
             for (int i = 0; i < 10; i++)
             {
