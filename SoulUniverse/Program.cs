@@ -7,19 +7,26 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
     static class Program
     {
         //Границы генерации мира
-        public const int universe_x = 150;
-        public const int universe_y = 45;
+        public const int universe_x = 100;
+        public const int universe_y = 40;
 
         //Размер консоли
-        public const int console_x = 200;
-        public const int console_y = 50;
+        public const int console_x = 150;
+        public const int console_y = 41;
 
         //List<VoidObject> voidObjects1 = new List<VoidObject>();
 
         static void Main(string[] args)
         {
+            //Настройка консоли
+            Console.Title = "Консольная Вселенная";
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+            #pragma warning disable CA1416 // Проверка совместимости платформы
             Console.SetWindowSize(console_x, console_y);
+            Console.SetBufferSize(console_x, console_y);
+            //Console.SetWindowPosition(1, 1);
+            
             DrawFrames();
 
             List<VoidObject> voidObjects = new();
@@ -35,6 +42,8 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
             //Считывание кнопок
             int cursor_x = 0;
             int cursor_y = 0;
+            bool infoIsClear = true;
+            VoidObject? checkedVoidObject = null;
             Console.SetCursorPosition(cursor_x, cursor_y);
             while (true)
             {
@@ -44,15 +53,23 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
                 {
                     if (obj.Coordinates.x == cursor_x && obj.Coordinates.y == cursor_y)
                     {
+                        int row = 2;
                         Console.ResetColor();
-                        Console.SetCursorPosition(universe_x + 2, 2);
+                        Console.SetCursorPosition(universe_x + 2, row);
                         Console.Write("Информация об объекте: ");
                         if (obj is Star)
                         {
-                            string starClass = (obj as Star).starClass.ToString();
+                            Star star = (Star)obj;
+                            string starClass = star.starClass.ToString();
                             Console.Write(string.Format("Звезда класса {0}", starClass));
-                            Console.SetCursorPosition(universe_x + 2, 3);
-                            Console.Write("Количество планет: неизвестно");
+                            Console.SetCursorPosition(universe_x + 2, ++row);
+                            int planets = star.starSystemObjects.Count;
+                            Console.Write(string.Format("Количество планетарных тел: {0}", planets));
+
+                            if (planets > 0)
+                            {
+                                WriteSystemInfo(star, row);
+                            }
                         }
                         else if (obj is BlackHole)
                         {
@@ -63,6 +80,8 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
                             Console.Write("Червоточина");
                         }
                         else Console.Write("Неизвестный объект");
+                        infoIsClear = false;
+                        checkedVoidObject = obj;
 
                         //Возвращение курсора
                         Console.SetCursorPosition(cursor_x, cursor_y);
@@ -71,10 +90,17 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
                     else
                     {
                         //Очистка инфо, если ничего не найдено
-                        Console.SetCursorPosition(universe_x + 2, 2);
-                        Console.Write("                                        ");
-                        Console.SetCursorPosition(universe_x + 2, 3);
-                        Console.Write("                                        ");
+                        if (!infoIsClear)
+                        {
+                            for (int i = 2; i < universe_y; i++)
+                            {
+                                Console.SetCursorPosition(universe_x + 2, i);
+                                Console.Write("                                          ");
+                            }
+                        }
+                        
+                        infoIsClear = true;
+                        checkedVoidObject = null;
                         //Возвращение курсора
                         Console.SetCursorPosition(cursor_x, cursor_y);
                     }
@@ -82,24 +108,38 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
                 
 
                 //Считывание нажатий
-                ConsoleKeyInfo consoleKeyInfo =  Console.ReadKey();
+                ConsoleKeyInfo consoleKeyInfo =  Console.ReadKey(true);
 
                 //Стрелки
                 if (consoleKeyInfo.Key == ConsoleKey.LeftArrow && cursor_x > 0)
                 {
                     Console.SetCursorPosition(--cursor_x, cursor_y);
                 }
-                if (consoleKeyInfo.Key == ConsoleKey.RightArrow && cursor_x < universe_x)
+                else if (consoleKeyInfo.Key == ConsoleKey.RightArrow && cursor_x < universe_x)
                 {
                     Console.SetCursorPosition(++cursor_x, cursor_y);
                 }
-                if (consoleKeyInfo.Key == ConsoleKey.UpArrow && cursor_y > 0)
+                else if (consoleKeyInfo.Key == ConsoleKey.UpArrow && cursor_y > 0)
                 {
                     Console.SetCursorPosition(cursor_x, --cursor_y);
                 }
-                if (consoleKeyInfo.Key == ConsoleKey.DownArrow && cursor_y < universe_y)
+                else if (consoleKeyInfo.Key == ConsoleKey.DownArrow && cursor_y < universe_y)
                 {
                     Console.SetCursorPosition(cursor_x, ++cursor_y);
+                }
+
+                //Enter -- отрисовка системы
+                else if (consoleKeyInfo.Key == ConsoleKey.Enter && checkedVoidObject != null && checkedVoidObject is Star)
+                {
+                    Console.Write("OLOLO");
+                    Console.Clear();
+                    DrawFrames();
+                    Star star = (Star)checkedVoidObject;
+                    star.Draw(20, 20);
+                    foreach(StarSystemObject starSystemObject in star.starSystemObjects)
+                    {
+                        starSystemObject.Draw();
+                    }
                 }
 
                 //Выход
@@ -120,6 +160,34 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
             Console.SetCursorPosition(0, universe_y + 1);
             (int w, int z) = Console.GetCursorPosition();
 
+        }
+
+        private static void WriteSystemInfo(Star star, int row)
+        {
+            Console.SetCursorPosition(universe_x + 2, ++row);
+            Console.Write("Информация об объектах системы:");
+            Console.SetCursorPosition(universe_x + 2, ++row);
+            Console.Write("------------------------------------------");
+            Console.SetCursorPosition(universe_x + 2, ++row);
+            Console.Write("| № | Расстояние до звезды | Класс       |");
+            Console.SetCursorPosition(universe_x + 2, ++row);
+            Console.Write("------------------------------------------");
+            int planetNumber = 0;
+            foreach (StarSystemObject starSystemObject in star.starSystemObjects)
+            {
+                Console.SetCursorPosition(universe_x + 2, ++row);
+                string planetClass;
+                if (starSystemObject is Planet)
+                {
+                    Planet planet = (Planet)starSystemObject;
+                    planetClass = planet.planetClass.ToString();
+
+                }
+                else planetClass = "";
+                Console.Write(string.Format("|{0, 2} | {1, 16} а.е | {2, 11} |", ++planetNumber, starSystemObject.Distance, planetClass));
+            }
+            Console.SetCursorPosition(universe_x + 2, ++row);
+            Console.Write("------------------------------------------");
         }
 
         private static void DrawFrames()

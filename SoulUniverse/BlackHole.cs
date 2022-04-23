@@ -14,22 +14,31 @@ namespace SoulUniverse
             Random rnd = new Random();
             Coordinates.x = rnd.Next(universe_x);
             Coordinates.y = rnd.Next(universe_y);
-            Draw(Coordinates.x, Coordinates.y);
+            Draw();
+            //Draw(Coordinates.x, Coordinates.y);
         }
 
         public BlackHole(int x, int y)
         {
             Coordinates.x = x;
             Coordinates.y = y;
-            Draw(Coordinates.x, Coordinates.y);
+            Draw();
+            //Draw(Coordinates.x, Coordinates.y);
         }
 
-        protected void Draw(int x, int y)
+        protected void Draw()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.SetCursorPosition(x, y);
+            Console.SetCursorPosition(Coordinates.x, Coordinates.y);
             Console.Write("\u00D8");
-
         }
+
+        //protected void Draw(int x, int y)
+        //{
+        //    Console.ForegroundColor = ConsoleColor.Yellow;
+        //    Console.SetCursorPosition(x, y);
+        //    Console.Write("\u00D8");
+
+        //}
     }
 }
