@@ -33,7 +33,8 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
 
 
             //Создание объектов
-            GenerateSomeStars(voidObjects);
+            //GenerateSomeStars(voidObjects);
+            CheckAndDraw<Star>(voidObjects, 100);
             GenerateSomeWormholes(voidObjects);
             GenerateSomeBlackHoles(voidObjects);
 
@@ -314,32 +315,38 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
 
 
 
-        //static void CheckAndDraw<T>(List<VoidObject> voidObjects)
-        //{
-        //    int x;
-        //    int y;
-        //    bool isPositionOccupied = false;
-        //    Random rnd = new Random();
+        static void CheckAndDraw<T>(List<VoidObject> voidObjects, int count) where T : VoidObject, new()
+        {
+            for (int i = 0; i < count; i++)
+            {
+                int x;
+                int y;
+                bool isPositionOccupied = false;
+                Random rnd = new Random();
 
-        //    while (!isPositionOccupied)
-        //    {
-        //        x = rnd.Next(console_x);
-        //        y = rnd.Next(console_y);
-        //        foreach (VoidObject obj in voidObjects)
-        //        {
-        //            if (obj.Coordinates.x == x && obj.Coordinates.y == y)
-        //            {
-        //                isPositionOccupied = true;
-        //                break;
-        //            }
-        //        }
-        //        if (isPositionOccupied) continue;
-        //        else
-        //        {
-        //            voidObjects.Add(new T(x, y));
-        //            break;
-        //        }
-        //    }
-        //}
+                while (!isPositionOccupied)
+                {
+                    x = rnd.Next(console_x);
+                    y = rnd.Next(console_y);
+                    foreach (VoidObject obj in voidObjects)
+                    {
+                        if (obj.Coordinates.x == x && obj.Coordinates.y == y)
+                        {
+                            isPositionOccupied = true;
+                            break;
+                        }
+                    }
+                    if (isPositionOccupied) continue;
+                    else
+                    {
+                        T voidObject = new T() { };
+                        voidObject.Coordinates.x = x;
+                        voidObject.Coordinates.y = y;
+                        voidObjects.Add(voidObject);
+                        break;
+                    }
+                }
+            }            
+        }
     }
 }

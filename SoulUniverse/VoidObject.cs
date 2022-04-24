@@ -13,7 +13,6 @@ namespace SoulUniverse
 
 
 
-
         //protected abstract void Draw();
         //protected abstract void Draw(int x, int y);
 
