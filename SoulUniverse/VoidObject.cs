@@ -10,11 +10,7 @@ namespace SoulUniverse
     {
         protected int _id;
         public Coordinates Coordinates = new();
-
-
-
-        //protected abstract void Draw();
-        //protected abstract void Draw(int x, int y);
+        public abstract void Draw();
 
     }
 }

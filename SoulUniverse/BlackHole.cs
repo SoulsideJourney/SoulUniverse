@@ -14,7 +14,7 @@ namespace SoulUniverse
             Random rnd = new Random();
             Coordinates.x = rnd.Next(universe_x);
             Coordinates.y = rnd.Next(universe_y);
-            Draw();
+            //Draw();
             //Draw(Coordinates.x, Coordinates.y);
         }
 
@@ -22,11 +22,11 @@ namespace SoulUniverse
         {
             Coordinates.x = x;
             Coordinates.y = y;
-            Draw();
+            //Draw();
             //Draw(Coordinates.x, Coordinates.y);
         }
 
-        protected void Draw()
+        override public void Draw()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.SetCursorPosition(Coordinates.x, Coordinates.y);

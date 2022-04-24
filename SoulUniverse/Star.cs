@@ -23,9 +23,40 @@ namespace SoulUniverse
             Coordinates.y = rnd.Next(universe_y);
             starClass = (StarClass)Enum.GetValues(typeof(StarClass)).GetValue(rnd.Next(Enum.GetValues(typeof(StarClass)).Length - 1));
             GenerateStarSystemObjects();
-            Draw();
+            //Draw();
             //Draw(Coordinates.x, Coordinates.y, starClass);
 
+        }
+        
+        public Star(int x, int y)
+        {
+            Random rnd = new Random();
+            Coordinates.x = x;
+            Coordinates.y = y;
+            starClass = (StarClass)Enum.GetValues(typeof(StarClass)).GetValue(rnd.Next(Enum.GetValues(typeof(StarClass)).Length));
+            GenerateStarSystemObjects();
+            //Draw();
+            //Draw(Coordinates.x, Coordinates.y, starClass);
+        }
+
+        public Star(StarClass starClass)
+        {
+            Random rnd = new Random();
+            Coordinates.x = rnd.Next(universe_x);
+            Coordinates.y = rnd.Next(universe_y);
+            this.starClass = starClass;
+            GenerateStarSystemObjects();
+            //Draw();
+            //Draw(Coordinates.x, Coordinates.y, starClass);
+            
+        }
+
+        public Star(int x, int y, StarClass starClass)
+        {
+            this.starClass = starClass;
+            GenerateStarSystemObjects();
+            //Draw();
+            //Draw(x, y, starClass);
         }
 
         private void GenerateStarSystemObjects()
@@ -38,7 +69,7 @@ namespace SoulUniverse
                 bool isPositionOccupied = false;
                 while (!isPositionOccupied)
                 {
-                    int x = rnd.Next(universe_y / 2 - 1);
+                    int x = rnd.Next(2, universe_y / 2 - 1);
                     foreach (StarSystemObject obj in starSystemObjects)
                     {
                         if (obj.Distance == x)
@@ -58,38 +89,7 @@ namespace SoulUniverse
             //starSystemObjects.Sort();
         }
 
-        public Star(int x, int y)
-        {
-            Random rnd = new Random();
-            Coordinates.x = x;
-            Coordinates.y = y;
-            starClass = (StarClass)Enum.GetValues(typeof(StarClass)).GetValue(rnd.Next(Enum.GetValues(typeof(StarClass)).Length));
-            GenerateStarSystemObjects();
-            Draw();
-            //Draw(Coordinates.x, Coordinates.y, starClass);
-        }
-
-        public Star(StarClass starClass)
-        {
-            Random rnd = new Random();
-            Coordinates.x = rnd.Next(universe_x);
-            Coordinates.y = rnd.Next(universe_y);
-            this.starClass = starClass;
-            GenerateStarSystemObjects();
-            Draw();
-            //Draw(Coordinates.x, Coordinates.y, starClass);
-            
-        }
-
-        public Star(int x, int y, StarClass starClass)
-        {
-            this.starClass = starClass;
-            GenerateStarSystemObjects();
-            Draw();
-            //Draw(x, y, starClass);
-        }
-        
-        public void Draw()
+        override public void Draw()
         {
             Draw(Coordinates.x, Coordinates.y, starClass);
         }

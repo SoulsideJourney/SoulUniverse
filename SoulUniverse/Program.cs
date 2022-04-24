@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using SoulUniverse;
+﻿using SoulUniverse;
 using System;
 
 namespace SoulUniverse // Note: actual namespace depends on the project name.
@@ -14,35 +13,44 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
         public const int console_x = 150;
         public const int console_y = 41;
 
-        //List<VoidObject> voidObjects1 = new List<VoidObject>();
-
-        static void Main(string[] args)
+        static void Main()
         {
             //Настройка консоли
             Console.Title = "Консольная Вселенная";
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-
-            #pragma warning disable CA1416 // Проверка совместимости платформы
+            //int test = Console.CursorSize;
+            Console.CursorSize = 1;
             Console.SetWindowSize(console_x, console_y);
             Console.SetBufferSize(console_x, console_y);
-            //Console.SetWindowPosition(1, 1);
-            
+
             DrawFrames();
 
             List<VoidObject> voidObjects = new();
 
-
             //Создание объектов
-            //GenerateSomeStars(voidObjects);
-            CheckAndDraw<Star>(voidObjects, 100);
-            GenerateSomeWormholes(voidObjects);
-            GenerateSomeBlackHoles(voidObjects);
-
-
-
-            //Считывание кнопок
+            GenerateObjects<Star>(voidObjects, 100);
+            GenerateObjects<Wormhole>(voidObjects, 10);
+            GenerateObjects<BlackHole>(voidObjects, 10);
             int cursor_x = 0;
             int cursor_y = 0;
+            while (true)
+            {
+                OpenUniverse(voidObjects, ref cursor_x, ref cursor_y);
+            }            
+        }
+
+        private static void OpenUniverse(List<VoidObject> voidObjects, ref int cursor_x, ref int cursor_y)
+        {
+            Console.Title = "Консольная Вселенная: звездная карта";
+            Console.Clear();
+            DrawFrames();
+            //Отрисовка объектов
+            foreach (VoidObject voidObject in voidObjects)
+            {
+                voidObject.Draw();
+            }
+
+            //Считывание кнопок
             bool infoIsClear = true;
             VoidObject? checkedVoidObject = null;
             Console.SetCursorPosition(cursor_x, cursor_y);
@@ -99,17 +107,16 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
                                 Console.Write("                                          ");
                             }
                         }
-                        
+
                         infoIsClear = true;
                         checkedVoidObject = null;
                         //Возвращение курсора
                         Console.SetCursorPosition(cursor_x, cursor_y);
                     }
                 }
-                
 
                 //Считывание нажатий
-                ConsoleKeyInfo consoleKeyInfo =  Console.ReadKey(true);
+                ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
 
                 //Стрелки
                 if (consoleKeyInfo.Key == ConsoleKey.LeftArrow && cursor_x > 0)
@@ -132,15 +139,8 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
                 //Enter -- отрисовка системы
                 else if (consoleKeyInfo.Key == ConsoleKey.Enter && checkedVoidObject != null && checkedVoidObject is Star)
                 {
-                    Console.Write("OLOLO");
-                    Console.Clear();
-                    DrawFrames();
-                    Star star = (Star)checkedVoidObject;
-                    star.Draw(20, 20);
-                    foreach(StarSystemObject starSystemObject in star.starSystemObjects)
-                    {
-                        starSystemObject.Draw();
-                    }
+                    OpenStarSystem(checkedVoidObject);
+                    return;
                 }
 
                 //Выход
@@ -148,19 +148,122 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
                 {
                     Environment.Exit(0);
                 }
+            }
+        }
 
-                //ConsoleCancelEventHandler? cancelKeyPress = Console.CancelKeyPress;
-
-
+        private static void OpenStarSystem(VoidObject checkedVoidObject)
+        {
+            int starPoint = 20;
+            Console.Title = "Консольная Вселенная: карта завездной системы";
+            Console.Clear();
+            DrawFrames();
+            Star star = (Star)checkedVoidObject;
+            star.Draw(starPoint, starPoint);
+            foreach (StarSystemObject starSystemObject in star.starSystemObjects)
+            {
+                starSystemObject.Draw();
             }
 
+            int cursor_x = starPoint;
+            int cursor_y = starPoint;
+            bool infoIsClear = true;
+            //StarSystemObject? checkedStarSystemObject = null;
+            Console.SetCursorPosition(cursor_x, cursor_y);
+            while (true)
+            {                
+                //Информация об объекте
 
-            //Завершение
-            Console.ReadKey();
-            Console.ResetColor();
-            Console.SetCursorPosition(0, universe_y + 1);
-            (int w, int z) = Console.GetCursorPosition();
+                foreach (StarSystemObject obj in star.starSystemObjects)
+                {
+                    if (cursor_x == starPoint && cursor_y == starPoint)
+                    {
+                        int row = 2;
+                        Console.ResetColor();
+                        Console.SetCursorPosition(universe_x + 2, row);
+                        Console.Write("Информация об объекте: ");
+                        string starClass = star.starClass.ToString();
+                        Console.Write(string.Format("Звезда класса {0}", starClass));
+                        Console.SetCursorPosition(universe_x + 2, ++row);
+                        int planets = star.starSystemObjects.Count;
+                        Console.Write(string.Format("Количество планетарных тел: {0}", planets));
 
+                        if (planets > 0)
+                        {
+                            WriteSystemInfo(star, row);
+                        }
+                        infoIsClear = false;
+                        //checkedVoidObject = obj;
+
+                        //Возвращение курсора
+                        Console.SetCursorPosition(cursor_x, cursor_y);
+                        break;
+                    }
+                    if (obj.Coordinates.x == cursor_x - starPoint && obj.Coordinates.y == cursor_y - starPoint)
+                    {
+                        int row = 2;
+                        Console.ResetColor();
+                        Console.SetCursorPosition(universe_x + 2, row);
+                        Console.Write("Информация об объекте: ");
+                        if (obj is Planet)
+                        {
+                            Planet planet = (Planet)obj;
+                            string planetClass = planet.planetClass.ToString();
+                            Console.Write(string.Format("Планета класса {0}", planetClass));
+                            Console.SetCursorPosition(universe_x + 2, ++row);
+                            Console.Write(string.Format("Расстояние до родительского тела: {0} а.е. ", planet.Distance));
+                        }
+                        else Console.Write("Неизвестный объект");
+                        infoIsClear = false;
+                        //checkedVoidObject = obj;
+
+                        //Возвращение курсора
+                        Console.SetCursorPosition(cursor_x, cursor_y);
+                        break;
+                    }
+                    else
+                    {
+                        //Очистка инфо, если ничего не найдено
+                        if (!infoIsClear)
+                        {
+                            for (int i = 2; i < universe_y; i++)
+                            {
+                                Console.SetCursorPosition(universe_x + 2, i);
+                                Console.Write("                                              ");
+                            }
+                        }
+
+                        infoIsClear = true;
+                        //checkedVoidObject = null;
+                        //Возвращение курсора
+                        Console.SetCursorPosition(cursor_x, cursor_y);
+                    }
+                }
+
+                //Считывание нажатий
+                ConsoleKeyInfo consoleKeyInfo = Console.ReadKey(true);
+
+                //Стрелки
+                if (consoleKeyInfo.Key == ConsoleKey.LeftArrow && cursor_x > 0)
+                {
+                    Console.SetCursorPosition(--cursor_x, cursor_y);
+                }
+                else if (consoleKeyInfo.Key == ConsoleKey.RightArrow && cursor_x < universe_x)
+                {
+                    Console.SetCursorPosition(++cursor_x, cursor_y);
+                }
+                else if (consoleKeyInfo.Key == ConsoleKey.UpArrow && cursor_y > 0)
+                {
+                    Console.SetCursorPosition(cursor_x, --cursor_y);
+                }
+                else if (consoleKeyInfo.Key == ConsoleKey.DownArrow && cursor_y < universe_y)
+                {
+                    Console.SetCursorPosition(cursor_x, ++cursor_y);
+                }
+                else if (consoleKeyInfo.Key == ConsoleKey.Escape)
+                {
+                    return;
+                }
+            }
         }
 
         private static void WriteSystemInfo(Star star, int row)
@@ -193,6 +296,7 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
 
         private static void DrawFrames()
         {
+            Console.ResetColor();
             //Горизонтальные рамки
             Console.SetCursorPosition(universe_x + 1, universe_y);
             for (int i = universe_x + 1; i < console_x; i++)
@@ -219,39 +323,9 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
             }
         }
 
-        static void GenerateSomeStars(List<VoidObject> voidObjects)
+        static void GenerateObjects<T>(List<VoidObject> voidObjects, int number) where T : VoidObject, new()
         {
-            for (int i = 0; i < 100; i++)
-            {
-                int x;
-                int y;
-                bool isPositionOccupied = false;
-                Random rnd = new Random();
-
-                while (!isPositionOccupied)
-                {
-                    x = rnd.Next(universe_x);
-                    y = rnd.Next(universe_y);
-                    foreach (VoidObject obj in voidObjects)
-                    {
-                        if (obj.Coordinates.x == x && obj.Coordinates.y == y)
-                        {
-                            isPositionOccupied = true;
-                            break;
-                        }                        
-                    }
-                    if (isPositionOccupied) continue;
-                    else
-                    {
-                        voidObjects.Add(new Star(x, y));
-                        break;
-                    }                         
-                }              
-            }
-        }
-        static void GenerateSomeWormholes(List<VoidObject> voidObjects)
-        {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < number; i++)
             {
                 int x;
                 int y;
@@ -273,72 +347,7 @@ namespace SoulUniverse // Note: actual namespace depends on the project name.
                     if (isPositionOccupied) continue;
                     else
                     {
-                        voidObjects.Add(new Wormhole(x, y));
-                        break;
-                    }
-                }
-
-            }
-        }
-
-        static void GenerateSomeBlackHoles(List<VoidObject> voidObjects)
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                    int x;
-                    int y;
-                    bool isPositionOccupied = false;
-                    Random rnd = new Random();
-
-                    while (!isPositionOccupied)
-                    {
-                        x = rnd.Next(universe_x);
-                        y = rnd.Next(universe_y);
-                        foreach (VoidObject obj in voidObjects)
-                        {
-                            if (obj.Coordinates.x == x && obj.Coordinates.y == y)
-                            {
-                                isPositionOccupied = true;
-                                break;
-                            }
-                        }
-                        if (isPositionOccupied) continue;
-                        else
-                        {
-                            voidObjects.Add(new BlackHole(x, y));
-                            break;
-                        }
-                    }
-            }
-        }
-
-
-
-
-        static void CheckAndDraw<T>(List<VoidObject> voidObjects, int count) where T : VoidObject, new()
-        {
-            for (int i = 0; i < count; i++)
-            {
-                int x;
-                int y;
-                bool isPositionOccupied = false;
-                Random rnd = new Random();
-
-                while (!isPositionOccupied)
-                {
-                    x = rnd.Next(console_x);
-                    y = rnd.Next(console_y);
-                    foreach (VoidObject obj in voidObjects)
-                    {
-                        if (obj.Coordinates.x == x && obj.Coordinates.y == y)
-                        {
-                            isPositionOccupied = true;
-                            break;
-                        }
-                    }
-                    if (isPositionOccupied) continue;
-                    else
-                    {
+                        //voidObjects.Add(new T(x, y));
                         T voidObject = new T() { };
                         voidObject.Coordinates.x = x;
                         voidObject.Coordinates.y = y;
