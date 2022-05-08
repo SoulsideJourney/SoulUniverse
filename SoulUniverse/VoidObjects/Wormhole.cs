@@ -3,41 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
 namespace SoulUniverse
 {
     internal class Wormhole : VoidObject
     {
+        protected override char Symbol { get; } = '@';
+        protected override ConsoleColor Color { get; } = ConsoleColor.Gray;
         public Wormhole()
         {
-            Random rnd = new Random();
+            Random rnd = new();
             Coordinates.x = rnd.Next(universe_x);
             Coordinates.y = rnd.Next(universe_y);
-            //Draw();
-            //Draw(Coordinates.x, Coordinates.y);
         }
 
         public Wormhole(int x, int y)
         {
             Coordinates.x = x;
             Coordinates.y = y;
-            //Draw();
-            //Draw(Coordinates.x, Coordinates.y);
         }
 
         override public void Draw()
         {
-            Console.ForegroundColor = ConsoleColor.Gray;
+            if (FractionDisplayMode == DisplayMode.Fractions)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+            }
+            else Console.ForegroundColor = Color;
             Console.SetCursorPosition(Coordinates.x, Coordinates.y);
-            Console.Write("@");
+            Console.Write(Symbol);
         }
-
-        //protected void Draw(int x, int y)
-        //{
-        //    Console.ForegroundColor = ConsoleColor.Gray;
-        //    Console.SetCursorPosition(x, y);
-        //    Console.Write("@");
-        //}
     }
 }
