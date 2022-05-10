@@ -10,7 +10,8 @@ namespace SoulUniverse
 {
     internal class BlackHole : VoidObject
     {
-        protected override char Symbol { get; } = '\u00D8';
+        protected override char Symbol { get; } = '\u00D8'; //Ø
+
         protected override ConsoleColor Color { get; } = ConsoleColor.Yellow;
         public BlackHole()
         {

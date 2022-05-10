@@ -26,31 +26,6 @@ namespace SoulUniverse
             GenerateStarSystemObjects();
 
         }
-        
-        //public Star(int x, int y)
-        //{
-        //    Random rnd = new();
-        //    Coordinates.x = x;
-        //    Coordinates.y = y;
-        //    starClass = (StarClass)Enum.GetValues(typeof(StarClass)).GetValue(rnd.Next(Enum.GetValues(typeof(StarClass)).Length - 1));
-        //    Color = GetColor(starClass);
-        //    GenerateStarSystemObjects();
-        //}
-
-        //public Star(StarClass starClass)
-        //{
-        //    Random rnd = new();
-        //    Coordinates.x = rnd.Next(universe_x);
-        //    Coordinates.y = rnd.Next(universe_y);
-        //    this.starClass = starClass;
-        //    GenerateStarSystemObjects();
-        //}
-
-        //public Star(int x, int y, StarClass starClass)
-        //{
-        //    this.starClass = starClass;
-        //    GenerateStarSystemObjects();
-        //}
 
         private void GenerateStarSystemObjects()
         {
@@ -108,7 +83,10 @@ namespace SoulUniverse
             if (FractionDisplayMode == DisplayMode.Fractions)
             {
                 //Фракционный цвет звезды по цвету первой попавшейся фракции в системе окда?
+                //FractionColor? fractionColor = starSystemObjects.Find(obj => obj.Fractions.Count > 0)?.Fractions.ElementAt(0).Color;
+                //ConsoleColor? temp = (ConsoleColor)fractionColor;
                 Console.ForegroundColor = starSystemObjects.Find(obj => obj.Fractions.Count > 0)?.Fractions.ElementAt(0).Color ?? ConsoleColor.DarkGray;
+                //Console.ForegroundColor = temp ?? ConsoleColor.DarkGray;
             }
             else
             {
@@ -133,26 +111,28 @@ namespace SoulUniverse
                 Console.SetCursorPosition(universe_x + 2, ++row);
                 Console.Write("Информация об объектах системы:");
                 Console.SetCursorPosition(universe_x + 2, ++row);
-                Console.Write("------------------------------------------");
+                Console.Write("-----------------------------------------");
                 Console.SetCursorPosition(universe_x + 2, ++row);
-                Console.Write("| № | Расстояние до звезды | Класс       |");
+                Console.Write(String.Format("| № | Расстояние | {0, 11} | Размер |", "Класс"));
                 Console.SetCursorPosition(universe_x + 2, ++row);
-                Console.Write("------------------------------------------");
+                Console.Write("-----------------------------------------");
                 int planetNumber = 0;
                 foreach (StarSystemObject starSystemObject in this.starSystemObjects)
                 {
                     Console.SetCursorPosition(universe_x + 2, ++row);
-                    string planetClass;
+                    //string planetClass;
                     if (starSystemObject is Planet planet)
                     {
-                        planetClass = planet.PlanetClass.ToString();
-
-                    }
-                    else planetClass = "";
-                    Console.Write(string.Format("|{0, 2} | {1, 16} а.е | {2, 11} |", ++planetNumber, starSystemObject.Distance, planetClass));
+                        //planetClass = planet.PlanetClass.ToString();
+                        Console.Write(string.Format("|{0, 2} | {1, 6} а.е | ", ++planetNumber, starSystemObject.Distance));
+                        Console.ForegroundColor = planet.GetColor();
+                        Console.Write(string.Format("{0, 11}", planet.PlanetClass.ToString()));
+                        Console.ResetColor();
+                        Console.Write(string.Format(" | {0, 6} |",starSystemObject.Size));
+                    }   
                 }
                 Console.SetCursorPosition(universe_x + 2, ++row);
-                Console.Write("------------------------------------------");
+                Console.Write("-----------------------------------------");
 
                 //Информация о присутствующих фракциях
                 Console.SetCursorPosition(universe_x + 2, ++row);
@@ -166,7 +146,7 @@ namespace SoulUniverse
                 }
                 if (fractionsInSystem.Count > 0)
                 {
-                    Console.Write("Присутствующие фракции:");
+                    Console.Write("Присутствующие фракции в системе:");
                     foreach (Fraction fraction in fractionsInSystem)
                     {
                         Console.SetCursorPosition(universe_x + 2, ++row);
@@ -183,33 +163,6 @@ namespace SoulUniverse
             //Возвращение курсора
             Console.SetCursorPosition(current_cursor_x, current_cursor_y);
         }
-
-        //public void WriteSystemInfo(int row)
-        //{
-        //    Console.SetCursorPosition(universe_x + 2, ++row);
-        //    Console.Write("Информация об объектах системы:");
-        //    Console.SetCursorPosition(universe_x + 2, ++row);
-        //    Console.Write("------------------------------------------");
-        //    Console.SetCursorPosition(universe_x + 2, ++row);
-        //    Console.Write("| № | Расстояние до звезды | Класс       |");
-        //    Console.SetCursorPosition(universe_x + 2, ++row);
-        //    Console.Write("------------------------------------------");
-        //    int planetNumber = 0;
-        //    foreach (StarSystemObject starSystemObject in this.starSystemObjects)
-        //    {
-        //        Console.SetCursorPosition(universe_x + 2, ++row);
-        //        string planetClass;
-        //        if (starSystemObject is Planet planet)
-        //        {
-        //            planetClass = planet.PlanetClass.ToString();
-
-        //        }
-        //        else planetClass = "";
-        //        Console.Write(string.Format("|{0, 2} | {1, 16} а.е | {2, 11} |", ++planetNumber, starSystemObject.Distance, planetClass));
-        //    }
-        //    Console.SetCursorPosition(universe_x + 2, ++row);
-        //    Console.Write("------------------------------------------");
-        //}
 
         private ConsoleColor GetColor()
         {

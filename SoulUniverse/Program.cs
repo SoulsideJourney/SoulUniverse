@@ -1,7 +1,7 @@
 ﻿using static SoulUniverse.Enums;
 
 namespace SoulUniverse
-{    
+{
     class Program
     {
         //Границы генерации мира
@@ -14,6 +14,7 @@ namespace SoulUniverse
 
         //
         internal static bool infoIsClear = false;
+        internal static bool isPaused = false;
         internal static int current_cursor_x = 0;
         internal static int current_cursor_y = 0;
         internal static DisplayMode UniverseDisplayMode = DisplayMode.Universe;
@@ -31,6 +32,7 @@ namespace SoulUniverse
 
         //Выбранные объекты
         internal static VoidObject checkedVoidObject;
+        internal static StarSystemObject checkedStarSystemObject;
 
         static DateTime date = DateTime.Today.Date;
 
@@ -39,10 +41,10 @@ namespace SoulUniverse
             //Настройка консоли
             Console.Title = "Консольная Вселенная";
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            #pragma warning disable CA1416 // Проверка совместимости платформы
+#pragma warning disable CA1416 // Проверка совместимости платформы
             Console.SetWindowSize(console_x, console_y);
             Console.SetBufferSize(console_x, console_y);
-            #pragma warning restore CA1416 // Проверка совместимости платформы
+#pragma warning restore CA1416 // Проверка совместимости платформы
 
             //Создание фракций
             foreach (FractionName fraction in Enum.GetValues(typeof(FractionName)))
@@ -54,7 +56,7 @@ namespace SoulUniverse
             GenerateObjects<Star>(voidObjects, 100);
             GenerateObjects<Wormhole>(voidObjects, 10);
             GenerateObjects<BlackHole>(voidObjects, 10);
-            
+
             //Нахождение рандомной планеты континентального типа и выбор её в качестве родной
             Random random = new Random();
             while (true)
@@ -72,11 +74,12 @@ namespace SoulUniverse
             Thread timeThread = new(SimulateTime);
 
             //Поток управления
-            Thread mainThread = new(Navigate);
-             
+            Thread navigateThread = new(Navigate);
+
+            //ВКЛЮЧАЕМ ВСЁ
             timeThread.Start();
             OpenUniverse();
-            mainThread.Start();
+            navigateThread.Start();
         }
 
         static void Navigate()
@@ -96,46 +99,97 @@ namespace SoulUniverse
                 {
                     //Информация об объекте
                     Star star = (Star)checkedVoidObject;
-                    foreach (StarSystemObject starSystemObject in star.starSystemObjects)
+                    if (current_cursor_x == 20 && current_cursor_y == 20)
                     {
-                        if (current_cursor_x == 20 && current_cursor_y == 20)
-                        {
-                            int row = 2;
-                            Console.ResetColor();
-                            Console.SetCursorPosition(universe_x + 2, row);
-                            Console.Write("Информация об объекте: ");
-                            star.WriteStarInfo();
-                            break;
-                        }
-                        if (starSystemObject.Coordinates.x == current_cursor_x - 20 && starSystemObject.Coordinates.y == current_cursor_y - 20)
-                        {
-                            starSystemObject.WriteInfo();
-                            break;
-                        }
-                        else
-                        {
-                            ClearInfo();
-                        }
-                    }
+                        int row = 2;
+                        Console.ResetColor();
+                        Console.SetCursorPosition(universe_x + 2, row);
+                        Console.Write("Информация об объекте: ");
+                        star?.WriteStarInfo();
 
+                    }
+                    else
+                    {
+                        checkedStarSystemObject = star.starSystemObjects.Find(o => (o.Coordinates.x == current_cursor_x - 20 && o.Coordinates.y == current_cursor_y - 20));
+                        ClearInfo();
+                        checkedStarSystemObject?.WriteInfo();
+                    }
                 }
             }
         }
 
         static void SimulateTime()
         {
+            Thread.Sleep(1000);
             while (true)
             {
-                System.Threading.Thread.Sleep(1000);
-                date = date.AddDays(1);
-                Console.Title = date.ToString();
-            }          
+                string title;
+                if (UniverseDisplayMode == DisplayMode.Universe)
+                {
+                    title = "Консольная Вселенная: звездная карта";
+                }
+                else if (UniverseDisplayMode == DisplayMode.StarSystem)
+                {
+                    title = "Консольная Вселенная: карта звездной системы";
+                }
+                else //if (UniverseDisplayMode == DisplayMode.Planet)
+                {
+                    title = "Консольная Вселенная: карта планеты";
+                }
+                title += string.Format(" {0}", date.ToString());
+                //Пауза отключена -- симуляция времени и действий
+                if (!isPaused)
+                {
+                    date = date.AddDays(1);
+
+                    //Расчет точек отбит планет
+                    foreach (VoidObject? voidObject in voidObjects)
+                    {
+                        if (voidObject is Star star)
+                        {
+                            foreach (StarSystemObject? starSystemObject in star.starSystemObjects)
+                            {
+                                if (starSystemObject is Planet planet)
+                                {
+                                    planet.Move();
+                                }
+                            }
+                        }
+                    }
+                    //Перерисовка планет
+                    if (UniverseDisplayMode == DisplayMode.StarSystem)
+                    {
+                        if (checkedVoidObject is Star star)
+                        {
+                            foreach (StarSystemObject? starSystemObject in star.starSystemObjects)
+                            {
+                                if (starSystemObject is Planet planet && planet.isNeedToRedraw)
+                                {
+                                    planet.Erase();
+                                    planet.Draw();
+                                }      
+                            }
+                        }
+                        //OpenSystem(checkedVoidObject);
+                    }
+
+                    //Действия фракций
+                    foreach (var fraction in NPCFractions)
+                    {
+                        fraction.DoSomething();
+                    }
+                }
+                else title += " пауза";
+                Console.Title = title;
+                Thread.Sleep(100);
+            }
         }
 
         private static void OpenUniverse()
         {
             UniverseDisplayMode = DisplayMode.Universe;
-            Console.Title = "Консольная Вселенная: звездная карта";
+            checkedStarSystemObject = null;
+            Console.Title = string.Format("Консольная Вселенная: звездная карта {0}", date.ToString());
             Console.Clear();
             DrawFrames();
             WriteLegend();
@@ -145,26 +199,6 @@ namespace SoulUniverse
             current_cursor_y = checkedVoidObject?.Coordinates.y ?? 0;
             //Первоначальная установка соответствия курсора и переменных
             Console.SetCursorPosition(current_cursor_x, current_cursor_y);
-            //while (true)
-            //{
-            //    //Информация об объекте
-
-            //    checkedVoidObject = voidObjects.Find(o => (o.Coordinates.x == current_cursor_x && o.Coordinates.y == current_cursor_y));
-            //    ClearInfo();
-            //    checkedVoidObject?.WriteInfo();
-
-            //    //Считывание нажатий
-            //    ConsoleKey consoleKey = ReadButtons();
-            //    //Enter -- отрисовка системы
-            //    if (consoleKey == ConsoleKey.Enter && checkedVoidObject != null && checkedVoidObject is Star)
-            //    {
-            //        OpenSystem(checkedVoidObject);
-            //        current_cursor_x = checkedVoidObject.Coordinates.x;
-            //        current_cursor_y = checkedVoidObject.Coordinates.y;
-            //        Console.SetCursorPosition(current_cursor_x, current_cursor_y);
-            //        return;
-            //    }
-            //}
         }
 
         private static void DrawVoidObjects()
@@ -179,46 +213,28 @@ namespace SoulUniverse
         private static void OpenSystem(VoidObject checkedVoidObject)
         {
             UniverseDisplayMode = DisplayMode.StarSystem;
-            Console.Title = "Консольная Вселенная: карта завездной системы";
+            Console.Title = string.Format("Консольная Вселенная: карта звездной системы {0}", date.ToString());
             Console.Clear();
             WriteLegend();
             infoIsClear = true;
             DrawFrames();
             Star star = (Star)checkedVoidObject;
             DrawStarSystemObjects(star);
-            current_cursor_x = 20;
-            current_cursor_y = 20;
-            //StarSystemObject? checkedStarSystemObject = null;
+            current_cursor_x = checkedStarSystemObject?.Coordinates.x + 20 ?? 20;
+            current_cursor_y = checkedStarSystemObject?.Coordinates.y + 20 ?? 20;
             Console.SetCursorPosition(current_cursor_x, current_cursor_y);
-            //while (true)
-            //{                
-            //    //Информация об объекте
+        }
 
-            //    foreach (StarSystemObject starSystemObject in star.starSystemObjects)
-            //    {
-            //        if (current_cursor_x == starPoint && current_cursor_y == starPoint)
-            //        {
-            //            int row = 2;
-            //            Console.ResetColor();
-            //            Console.SetCursorPosition(universe_x + 2, row);
-            //            Console.Write("Информация об объекте: ");
-            //            star.WriteStarInfo();
-            //            break;
-            //        }
-            //        if (starSystemObject.Coordinates.x == current_cursor_x - starPoint && starSystemObject.Coordinates.y == current_cursor_y - starPoint)
-            //        {
-            //            starSystemObject.WriteInfo();
-            //            break;
-            //        }
-            //        else
-            //        {
-            //            ClearInfo();
-            //        }
-            //    }
-
-            //    //Считывание нажатий
-            //    if (ReadButtons() == ConsoleKey.Escape) return;
-            //}
+        private static void OpenPlanet(StarSystemObject starSystemObject)
+        {
+            UniverseDisplayMode = DisplayMode.Planet;
+            Console.Title = string.Format("Консольная Вселенная: карта планеты {0}", date.ToString());
+            Console.Clear();
+            WriteLegend();
+            infoIsClear = true;
+            DrawFrames();
+            Planet planet = (Planet)starSystemObject;
+            planet.DrawMacro();
         }
 
         private static void GoHome()
@@ -303,7 +319,7 @@ namespace SoulUniverse
                         break;
                     }
                 }
-            }            
+            }
         }
 
         static void ClearInfo()
@@ -349,6 +365,8 @@ namespace SoulUniverse
             Console.Write("H -- к родной планете");
             if (UniverseDisplayMode == DisplayMode.Universe) Console.Write(", Esc -- выход");
             else if (UniverseDisplayMode == DisplayMode.StarSystem) Console.Write(", Esc -- к звездной карте");
+            Console.SetCursorPosition(universe_x + 2, universe_y - --offset);
+            Console.Write("P -- пауза");
         }
 
         static void ReadButtons()
@@ -426,6 +444,19 @@ namespace SoulUniverse
                         OpenSystem(checkedVoidObject);
                     }
                 }
+                else if (UniverseDisplayMode == DisplayMode.StarSystem)
+                {
+                    if (checkedVoidObject != null && checkedStarSystemObject is Planet)
+                    {
+                        OpenPlanet(checkedStarSystemObject);
+                    }
+                }
+            }
+
+            //P -- пауза
+            else if (consoleKey == ConsoleKey.P || consoleKey == ConsoleKey.Pause)
+            {
+                isPaused = !isPaused;
             }
 
             //Выход
@@ -434,6 +465,10 @@ namespace SoulUniverse
                 if (UniverseDisplayMode == DisplayMode.StarSystem)
                 {
                     OpenUniverse();
+                }
+                else if (UniverseDisplayMode == DisplayMode.Planet)
+                {
+                    OpenSystem(checkedVoidObject);
                 }
                 else Environment.Exit(0);
             }
