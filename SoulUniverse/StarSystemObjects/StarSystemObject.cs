@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SoulUniverse.PlanetObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,67 +19,79 @@ namespace SoulUniverse
         protected double Phi = 0;
         public Coordinates DrawedCoordinates = new();
         public Coordinates Coordinates = new();
-        protected List<KeyValuePair<Recource, int>> recources { get; } = new();
+        public List<GroundObject> GroundObjects = new();
+        public Dictionary<ResourceName, int> Recources { get; } = new();
 
         //Присутствующие фракции
         public List<Fraction> Fractions { get; } = new();
         public abstract void Draw();
 
+        public void DrawObjects()
+        {
+            foreach (var obj in GroundObjects)
+            {
+                obj.Draw();
+            }
+        }
+
         public void WriteInfo()
         {
-            int row = 2;
-            Console.ResetColor();
-
-            //Общая информация
-            Console.SetCursorPosition(universe_x + 2, row);
-            Console.Write("Информация об объекте: ");
-            Console.SetCursorPosition(universe_x + 2, ++row);
-            if (this is Planet planet)
+            lock (locker)
             {
-                //string planetClass = planet.PlanetClass.ToString();
-                Console.Write("Планета класса ");
-                Console.ForegroundColor = planet.GetColor();
-                Console.Write(planet.PlanetClass);
-                //Console.Write(string.Format("Планета класса {0}", planetClass));
+                int row = 2;
                 Console.ResetColor();
-                Console.SetCursorPosition(universe_x + 2, ++row);
-                Console.Write(string.Format("Размер: {0} км", planet.Size));
-                Console.SetCursorPosition(universe_x + 2, ++row);
-                Console.Write(string.Format("Расстояние до родительского тела: {0} а.е. ", planet.Distance));
-            }
-            else Console.Write("Неизвестный объект");
 
-            //Информация о ресурсах
-            Console.SetCursorPosition(universe_x + 2, ++row);
-            Console.Write("Имеющиеся ресурсы:");
-            foreach (var resource in this.recources)
-            {
+                //Общая информация
+                Console.SetCursorPosition(universe_x + 2, row);
+                Console.Write("Информация об объекте: ");
                 Console.SetCursorPosition(universe_x + 2, ++row);
-                Console.Write("{0}: {1}", resource.Key.ToString(), resource.Value.ToString());
-            }
-            infoIsClear = false;
+                if (this is Planet planet)
+                {
+                    //string planetClass = planet.PlanetClass.ToString();
+                    Console.Write("Планета класса ");
+                    Console.ForegroundColor = planet.GetColor();
+                    Console.Write(planet.PlanetClass);
+                    //Console.Write(string.Format("Планета класса {0}", planetClass));
+                    Console.ResetColor();
+                    Console.SetCursorPosition(universe_x + 2, ++row);
+                    Console.Write(string.Format("Размер: {0} км", planet.Size));
+                    Console.SetCursorPosition(universe_x + 2, ++row);
+                    Console.Write(string.Format("Расстояние до родительского тела: {0} а.е. ", planet.Distance));
+                }
+                else Console.Write("Неизвестный объект");
 
-            //Информация о фракциях
-            if (Fractions.Count > 0)
-            {
+                //Информация о ресурсах
                 Console.SetCursorPosition(universe_x + 2, ++row);
-                Console.Write("Фракции:");
-                foreach (var fraction in Fractions)
+                Console.Write("Имеющиеся ресурсы:");
+                foreach (var resource in this.Recources)
                 {
                     Console.SetCursorPosition(universe_x + 2, ++row);
-                    Console.ForegroundColor = fraction.Color;
-                    Console.Write(fraction.Name);
+                    Console.Write("{0}: {1}", resource.Key.ToString(), resource.Value.ToString());
                 }
-                Console.ResetColor();
-            }
-            else
-            {
-                Console.SetCursorPosition(universe_x + 2, ++row);
-                Console.Write("На планете нет фракций");
-            }
+                infoIsClear = false;
 
-            //Возвращение курсора
-            Console.SetCursorPosition(current_cursor_x, current_cursor_y);
+                //Информация о фракциях
+                if (Fractions.Count > 0)
+                {
+                    Console.SetCursorPosition(universe_x + 2, ++row);
+                    Console.Write("Фракции:");
+                    foreach (var fraction in Fractions)
+                    {
+                        Console.SetCursorPosition(universe_x + 2, ++row);
+                        Console.ForegroundColor = fraction.Color;
+                        Console.Write(fraction.Name);
+                    }
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.SetCursorPosition(universe_x + 2, ++row);
+                    Console.Write("На планете нет фракций");
+                }
+
+                //Возвращение курсора
+                Console.SetCursorPosition(current_cursor_x, current_cursor_y);
+            }
         }
 
         public int CompareTo(StarSystemObject? other)

@@ -43,7 +43,7 @@ namespace SoulUniverse
             Barren, Continental, GasGiant, Ocean
         }
 
-        public enum Recource
+        public enum ResourceName
         {
             Iron, Oil, Uranium, 
         }
