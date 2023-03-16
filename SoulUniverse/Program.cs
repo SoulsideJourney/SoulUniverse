@@ -37,13 +37,13 @@ namespace SoulUniverse
         internal static List<Fraction> NPCFractions = new();
 
         //Ссылки на родной мир
-        static Star? HomeStar;
-        static Planet? HomePlanet;
+        static Star HomeStar;
+        static Planet HomePlanet;
 
         //Выбранные объекты
-        internal static VoidObject? checkedVoidObject;
-        internal static StarSystemObject? checkedStarSystemObject;
-        internal static GroundObject? checkedGroundObject;
+        internal static VoidObject checkedVoidObject;
+        internal static StarSystemObject checkedStarSystemObject;
+        internal static GroundObject checkedGroundObject;
 
         static DateTime date = DateTime.Today.Date;
         //Великий рандом
@@ -114,10 +114,16 @@ namespace SoulUniverse
             }
 
             //Поток времени
-            Thread timeThread = new(SimulateTime);
+            Thread timeThread = new(SimulateTime)
+            {
+                Name = "Time Thread"
+            };
 
             //Поток управления
-            Thread navigateThread = new(Navigate);
+            Thread navigateThread = new(Navigate)
+            {
+                Name = "Navigate Thread"
+            };
 
             //ВКЛЮЧАЕМ ВСЁ
             timeThread.Start();
@@ -322,27 +328,27 @@ namespace SoulUniverse
         private static void OpenPlanet(StarSystemObject starSystemObject)
         {
             UniverseDisplayMode = DisplayMode.Planet;
-            Console.Title = string.Format("Консольная Вселенная: карта планеты {0}", date.ToString());
-            Console.Clear();
-            WriteLegend();
-            infoIsClear = true;
-            DrawFrames();
-            for (int i = 0; i < starSystemObject.Size; i++)
+            Console.Title = $"Консольная Вселенная: карта планеты {date}";
+            lock(locker)
             {
-                Console.SetCursorPosition(starSystemObject.Size, i);
-                Console.Write('|');
+                Console.Clear();
+                WriteLegend();
+                infoIsClear = true;
+                DrawFrames();
+                for (int i = 0; i < starSystemObject.Size; i++)
+                {
+                    Console.SetCursorPosition(starSystemObject.Size, i);
+                    Console.Write('|');
+                }
+                for (int i = 0; i < starSystemObject.Size; i++)
+                {
+                    Console.SetCursorPosition(i, starSystemObject.Size);
+                    Console.Write('-');
+                }
+                starSystemObject.DrawObjects();
+                SetCursor(0, 0);
             }
-            for (int i = 0; i < starSystemObject.Size; i++)
-            {
-                Console.SetCursorPosition(i, starSystemObject.Size);
-                Console.Write('-');
-            }
-            starSystemObject.DrawObjects();
-            //foreach (var obj in starSystemObject.GroundObjects)
-            //{
-            //    obj.Draw();
-            //}
-            //planet.DrawMacro();
+            
         }
 
         private static void GoHome()
@@ -363,6 +369,7 @@ namespace SoulUniverse
                 star.Draw(20, 20);
                 foreach (StarSystemObject starSystemObject in star.starSystemObjects)
                 {
+                    if (UniverseDisplayMode != DisplayMode.StarSystem) return;
                     starSystemObject.Draw();
                 }
             }

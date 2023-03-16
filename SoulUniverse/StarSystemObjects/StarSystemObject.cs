@@ -28,10 +28,13 @@ namespace SoulUniverse
 
         public void DrawObjects()
         {
-            foreach (var obj in GroundObjects)
+            lock(locker)
             {
-                obj.Draw();
-            }
+                foreach (var obj in GroundObjects)
+                {
+                    obj.Draw();
+                }
+            }            
         }
 
         public void WriteInfo()
