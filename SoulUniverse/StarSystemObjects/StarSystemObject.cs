@@ -9,13 +9,13 @@ using static SoulUniverse.Program;
 
 namespace SoulUniverse
 {
-    internal abstract class StarSystemObject :IComparable<StarSystemObject>
+    internal abstract class StarSystemObject : IComparable<StarSystemObject>
     {
         protected abstract char Symbol { get; }
         public abstract int Size { get; }
         public abstract double OrbitalSpeed { get; }
         public bool isNeedToRedraw = false;
-        public int Distance { get; protected set;  }
+        public int Distance { get; protected set; }
         protected double Phi = 0;
         public Coordinates DrawedCoordinates = new();
         public Coordinates Coordinates = new();
@@ -28,13 +28,12 @@ namespace SoulUniverse
 
         public void DrawObjects()
         {
-            lock(locker)
+            mutex.WaitOne();
+            foreach (var obj in GroundObjects)
             {
-                foreach (var obj in GroundObjects)
-                {
-                    obj.Draw();
-                }
-            }            
+                obj.Draw();
+            }
+            mutex.ReleaseMutex();
         }
 
         public void WriteInfo()

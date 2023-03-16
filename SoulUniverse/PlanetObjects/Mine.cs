@@ -14,12 +14,14 @@ namespace SoulUniverse.PlanetObjects
         protected override string Name { get; } = "Шахта";
         public override Fraction Owner { get; }
         public override StarSystemObject Location { get; }
+
         static public List<KeyValuePair<ResourceName, int>> Cost { get; } = new()
         {
             new KeyValuePair<ResourceName, int>(ResourceName.Iron, 100),
             new KeyValuePair<ResourceName, int>(ResourceName.Uranium, 0),
             new KeyValuePair<ResourceName, int>(ResourceName.Oil, 0),
         };
+
         public Mine(int x, int y, Fraction fraction, StarSystemObject starSystemObject)
         {
             Coordinates.x = x;

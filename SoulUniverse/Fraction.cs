@@ -32,7 +32,8 @@ namespace SoulUniverse
             Name = Fraction.ToString();
             Random rnd = new();
             //Рандомный цвет фракции
-            Color = (ConsoleColor)Enum.GetValues(typeof(FractionColor)).GetValue(rnd.Next(Enum.GetValues(typeof(FractionColor)).Length));
+            //Color = (ConsoleColor)Enum.GetValues(typeof(FractionColor)).GetValue(rnd.Next(Enum.GetValues(typeof(FractionColor)).Length));
+            Color = (ConsoleColor)rnd.Next(Enum.GetValues(typeof(FractionColor)).Length);
             foreach (ResourceName resource in Enum.GetValues(typeof(ResourceName)))
             {
                 //Recources.Add(new KeyValuePair<ResourceName, int>(resource, 1000));
@@ -45,18 +46,21 @@ namespace SoulUniverse
             if (IsEnoughToBuildMine())
             {
                 BuildMine(this.Colonies.ElementAt(rnd.Next(Colonies.Count)));
-                #if DEBUG
                 Debug.WriteLine(string.Format("Насекомые из {0} построили шахту", Name));
-                #endif
             }
+
+            if (IsEnoughToBuildTank())
+            {
+                BuildTank(this.Colonies.ElementAt(rnd.Next(Colonies.Count)));
+                Debug.WriteLine(string.Format("Насекомые из {0} построили ТАНК! Будет война", Name));
+            }
+
             if (IsEnoughToBuildMilitaryBase())
             {
                 BuildMilitaryBase(this.Colonies.ElementAt(rnd.Next(Colonies.Count)));
-                #if DEBUG
                 Debug.WriteLine(string.Format("Насекомые из {0} построили базу", Name));
-                #endif
             }
-            
+
             else Debug.WriteLine(string.Format("Насекомые из {0} обнищали", Name));
         }
 
@@ -71,11 +75,24 @@ namespace SoulUniverse
             }
             return true;
         }
+
         public bool IsEnoughToBuildMilitaryBase()
         {
             foreach (var kvp in Recources)
             {
                 if (kvp.Value < MilitaryBase.Cost.Find(k => k.Key == kvp.Key).Value)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool IsEnoughToBuildTank()
+        {
+            foreach (var kvp in Recources)
+            {
+                if (kvp.Value < Tank.Cost.Find(k => k.Key == kvp.Key).Value)
                 {
                     return false;
                 }
@@ -95,7 +112,9 @@ namespace SoulUniverse
             {
                 Recources[res.Key] = res.Value - MilitaryBase.Cost.Find(r => r.Key == res.Key).Value;
             }
+            mutex.WaitOne();
             starSystemObject.GroundObjects.Add(new MilitaryBase(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this));
+            mutex.ReleaseMutex();
         }
 
         public void BuildMine(StarSystemObject starSystemObject)
@@ -104,7 +123,20 @@ namespace SoulUniverse
             {
                 Recources[res.Key] = res.Value - Mine.Cost.Find(r => r.Key == res.Key).Value;
             }
+            mutex.WaitOne();
             starSystemObject.GroundObjects.Add(new Mine(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this, starSystemObject));
+            mutex.ReleaseMutex();
+        }
+
+        public void BuildTank(StarSystemObject starSystemObject)
+        {
+            foreach (var res in Recources)
+            {
+                Recources[res.Key] = res.Value - Tank.Cost.Find(r => r.Key == res.Key).Value;
+            }
+                mutex.WaitOne();
+            starSystemObject.GroundObjects.Add(new Tank(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this, starSystemObject));
+            mutex.ReleaseMutex();
         }
     }
 }

@@ -10,8 +10,8 @@ namespace SoulUniverse.PlanetObjects
 {
     internal class MilitaryBase : GroundObject
     {
-        protected override char Symbol { get;  } = '#';
-        protected override string Name { get; } = "Военная база";
+        protected override char Symbol => '#';
+        protected override string Name => "Военная база";
         public override Fraction Owner { get; }
         public override StarSystemObject Location { get; }
         static public List<KeyValuePair<ResourceName, int>> Cost { get; } = new()

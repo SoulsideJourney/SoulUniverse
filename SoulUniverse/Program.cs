@@ -7,6 +7,7 @@ namespace SoulUniverse
     class Program
     {
         public static object locker = new();
+        public static Mutex mutex = new();
 
         //Границы генерации мира
         public const int universe_x = 100;
@@ -84,7 +85,10 @@ namespace SoulUniverse
                     HomeStar = star;
                     HomePlanet = (Planet)star.starSystemObjects.Find(obj => obj is Planet && (obj as Planet)?.PlanetClass == PlanetClass.Continental);
                     HomePlanet.Fractions.Add(playerFraction);
+
+                    mutex.WaitOne();
                     HomePlanet.GroundObjects.Add(new MilitaryBase(rnd.Next(HomePlanet.Size), rnd.Next(HomePlanet.Size), playerFraction));
+                    mutex.ReleaseMutex();
                     break;
                 }
             }
@@ -108,7 +112,7 @@ namespace SoulUniverse
                                 }
                                 else break;
                             }
-                        }                        
+                        }
                     }
                 }
             }
@@ -153,7 +157,7 @@ namespace SoulUniverse
                     Star star = (Star)checkedVoidObject;
                     if (current_cursor_x == 20 && current_cursor_y == 20)
                     {
-                        lock(locker)
+                        lock (locker)
                         {
                             int row = 2;
                             Console.ResetColor();
@@ -172,10 +176,10 @@ namespace SoulUniverse
                         }
                     }
                 }
-                else if(UniverseDisplayMode == DisplayMode.Planet)
+                else if (UniverseDisplayMode == DisplayMode.Planet)
                 {
                     checkedGroundObject = checkedStarSystemObject?.GroundObjects.Find(o => (o.Coordinates.x == current_cursor_x && o.Coordinates.y == current_cursor_y));
-                    lock(locker)
+                    lock (locker)
                     {
                         ClearInfo();
                         checkedGroundObject?.WriteInfo();
@@ -236,7 +240,7 @@ namespace SoulUniverse
                                 {
                                     planet.Erase();
                                     planet.Draw();
-                                }      
+                                }
                             }
                         }
                         //OpenSystem(checkedVoidObject);
@@ -249,7 +253,7 @@ namespace SoulUniverse
                     }
 
                     //Работа шахт
-                    foreach(var mine in mines)
+                    foreach (var mine in mines)
                     {
                         mine.Excavate();
                     }
@@ -268,7 +272,7 @@ namespace SoulUniverse
             UniverseDisplayMode = DisplayMode.Universe;
             checkedStarSystemObject = null;
             Console.Title = string.Format("Консольная Вселенная: звездная карта {0}", date.ToString());
-            lock(locker)
+            lock (locker)
             {
                 Console.Clear();
                 DrawFrames();
@@ -296,7 +300,7 @@ namespace SoulUniverse
 
         private static void DrawVoidObjects()
         {
-            lock(locker)
+            lock (locker)
             {
                 foreach (VoidObject voidObject in voidObjects)
                 {
@@ -329,7 +333,7 @@ namespace SoulUniverse
         {
             UniverseDisplayMode = DisplayMode.Planet;
             Console.Title = $"Консольная Вселенная: карта планеты {date}";
-            lock(locker)
+            lock (locker)
             {
                 Console.Clear();
                 WriteLegend();
@@ -348,7 +352,7 @@ namespace SoulUniverse
                 starSystemObject.DrawObjects();
                 SetCursor(0, 0);
             }
-            
+
         }
 
         private static void GoHome()
@@ -403,7 +407,7 @@ namespace SoulUniverse
                 {
                     Console.Write("-");
                 }
-            }  
+            }
         }
 
         static void GenerateObjects<T>(List<VoidObject> voidObjects, int number) where T : VoidObject, new()
@@ -443,7 +447,7 @@ namespace SoulUniverse
 
         static void ClearInfo()
         {
-            lock(locker)
+            lock (locker)
             {
                 int offset = 9;
                 //Очистка инфо, если ничего не найдено
@@ -588,7 +592,7 @@ namespace SoulUniverse
                     }
                 }
             }
-            
+
             //+- -- регулирование скорости течения времени
             else if (consoleKey == ConsoleKey.Subtract)
             {
