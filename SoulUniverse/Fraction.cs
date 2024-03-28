@@ -10,13 +10,14 @@ using static SoulUniverse.Enums;
 
 namespace SoulUniverse
 {
-    internal class Fraction
+    public class Fraction
     {
         public string Name { get; protected set; }
 
         public ConsoleColor Color { get; protected set; }
         //public FractionColor Color { get; protected set; }
-        public List<GroundObject> Property { get; } = new();
+        //public List<GroundObject> Property { get; } = new();
+        public List<GroundObject> Property => Colonies.SelectMany(_ => _.GroundObjects).ToList();
         public List<StarSystemObject> Colonies { get; protected set; } = new();
         public Dictionary<ResourceName, int> Recources { get; } = new();
 
@@ -41,29 +42,37 @@ namespace SoulUniverse
             }
         }
 
+        /// <summary>Фракция что-нибудь делает</summary>
         public void DoSomething()
         {
             if (IsEnoughToBuildMine())
             {
-                BuildMine(this.Colonies.ElementAt(rnd.Next(Colonies.Count)));
-                Debug.WriteLine(string.Format("Насекомые из {0} построили шахту", Name));
+                if (TryBuildMine(this.Colonies.ElementAt(rnd.Next(Colonies.Count))))
+                {
+                    Debug.WriteLine($"Насекомые из {Name} построили шахту");
+                };
+
+                if (IsEnoughToBuildFactory())
+                {
+                    if (TryBuildFactory(this.Colonies.ElementAt(rnd.Next(Colonies.Count))))
+                    {
+                        Debug.WriteLine($"Насекомые из {Name} построили завод! Работягам будет, где работать");
+                    }
+                }
+
+                if (IsEnoughToBuildMilitaryBase())
+                {
+                    if (TryBuildMilitaryBase(this.Colonies.ElementAt(rnd.Next(Colonies.Count))))
+                    {
+                        Debug.WriteLine($"Насекомые из {Name} построили базу");
+                    }
+                }
             }
 
-            if (IsEnoughToBuildTank())
-            {
-                BuildTank(this.Colonies.ElementAt(rnd.Next(Colonies.Count)));
-                Debug.WriteLine(string.Format("Насекомые из {0} построили ТАНК! Будет война", Name));
-            }
-
-            if (IsEnoughToBuildMilitaryBase())
-            {
-                BuildMilitaryBase(this.Colonies.ElementAt(rnd.Next(Colonies.Count)));
-                Debug.WriteLine(string.Format("Насекомые из {0} построили базу", Name));
-            }
-
-            else Debug.WriteLine(string.Format("Насекомые из {0} обнищали", Name));
+            else Debug.WriteLine($"Насекомые из {Name} обнищали");
         }
 
+        /// <summary>Достаточно ли ресурсов на шахту</summary>
         public bool IsEnoughToBuildMine()
         {
             foreach (var kvp in Recources)
@@ -76,6 +85,7 @@ namespace SoulUniverse
             return true;
         }
 
+        /// <summary>Достаточно ли ресурсов на военную базу</summary>
         public bool IsEnoughToBuildMilitaryBase()
         {
             foreach (var kvp in Recources)
@@ -88,6 +98,7 @@ namespace SoulUniverse
             return true;
         }
 
+        /// <summary>Достаточно ли ресурсов на танк</summary>
         public bool IsEnoughToBuildTank()
         {
             foreach (var kvp in Recources)
@@ -100,43 +111,73 @@ namespace SoulUniverse
             return true;
         }
 
-        //public void Build<T>(StarSystemObject starSystemObject, T groundObject) where T : GroundObject, new()
-        //{
-        //    starSystemObject.GroundObjects.Add(new T());
+        /// <summary>Достаточно ли ресурсов на завод</summary>
+        public bool IsEnoughToBuildFactory()
+        {
+            foreach (var kvp in Recources)
+            {
+                if (kvp.Value < Factory.Cost.Find(k => k.Key == kvp.Key).Value)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
 
+        //public void BuildMilitaryBase(StarSystemObject starSystemObject)
+        //{
+        //    new MilitaryBase(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this, starSystemObject);
         //}
 
-        public void BuildMilitaryBase(StarSystemObject starSystemObject)
+        public bool TryBuildMilitaryBase(StarSystemObject starSystemObject)
         {
-            foreach (var res in Recources)
+            int x = rnd.Next(starSystemObject.Size);
+            int y = rnd.Next(starSystemObject.Size);
+            if (!starSystemObject.IsPlaceOccupied(x, y))
             {
-                Recources[res.Key] = res.Value - MilitaryBase.Cost.Find(r => r.Key == res.Key).Value;
+                new MilitaryBase(x, y, this, starSystemObject);
+                return true;
             }
-            mutex.WaitOne();
-            starSystemObject.GroundObjects.Add(new MilitaryBase(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this));
-            mutex.ReleaseMutex();
+            return false;
         }
 
-        public void BuildMine(StarSystemObject starSystemObject)
+        //public void BuildMine(StarSystemObject starSystemObject)
+        //{
+        //    new Mine(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this, starSystemObject);
+        //}
+
+        public bool TryBuildMine(StarSystemObject starSystemObject)
         {
-            foreach (var res in Recources)
+            int x = rnd.Next(starSystemObject.Size);
+            int y = rnd.Next(starSystemObject.Size);
+            if (!starSystemObject.IsPlaceOccupied(x, y))
             {
-                Recources[res.Key] = res.Value - Mine.Cost.Find(r => r.Key == res.Key).Value;
+                new Mine(x, y, this, starSystemObject);
+                return true;
             }
-            mutex.WaitOne();
-            starSystemObject.GroundObjects.Add(new Mine(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this, starSystemObject));
-            mutex.ReleaseMutex();
+            return false;
         }
 
-        public void BuildTank(StarSystemObject starSystemObject)
+        //public void BuildTank(StarSystemObject starSystemObject)
+        //{
+        //    new Tank(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this, starSystemObject);
+        //}
+
+        public void BuildFactory(StarSystemObject starSystemObject)
         {
-            foreach (var res in Recources)
+            new Factory(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this, starSystemObject);
+        }
+
+        public bool TryBuildFactory(StarSystemObject starSystemObject)
+        {
+            int x = rnd.Next(starSystemObject.Size);
+            int y = rnd.Next(starSystemObject.Size);
+            if (!starSystemObject.IsPlaceOccupied(x, y))
             {
-                Recources[res.Key] = res.Value - Tank.Cost.Find(r => r.Key == res.Key).Value;
+                new Factory(x, y, this, starSystemObject);
+                return true;
             }
-                mutex.WaitOne();
-            starSystemObject.GroundObjects.Add(new Tank(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this, starSystemObject));
-            mutex.ReleaseMutex();
+            return false;
         }
     }
 }

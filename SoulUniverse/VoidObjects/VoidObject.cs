@@ -8,12 +8,12 @@ using static SoulUniverse.Program;
 
 namespace SoulUniverse
 {
-    internal abstract class VoidObject
+    internal abstract class VoidObject : UniverseObject
     {
         protected abstract char Symbol { get; }
         protected abstract ConsoleColor Color { get; }
         public Coordinates Coordinates = new();
-        public abstract void Draw();
+        //public abstract void Draw();
 
         public void WriteInfo()
         {

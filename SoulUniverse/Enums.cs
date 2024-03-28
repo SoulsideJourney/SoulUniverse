@@ -47,10 +47,5 @@ namespace SoulUniverse
         {
             Iron, Oil, Uranium, 
         }
-
-        public enum StarClass
-        {
-            W, O, B, A, F, G, K, M, L
-        }
     }
 }

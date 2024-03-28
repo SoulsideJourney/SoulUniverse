@@ -1,46 +1,42 @@
 ﻿using SoulUniverse.PlanetObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
 namespace SoulUniverse
 {
-    internal class Planet : StarSystemObject
+    public class Planet : StarSystemObject
     {
+        public const int minSize = 10;
+        public const int maxSize = 25;
         protected override char Symbol { get; } = '\u25CF'; //●
-        public override int Size { get; }
-        public override double OrbitalSpeed { get; } = 107_000; //км*ч
-        public PlanetClass PlanetClass { get; protected set; }
-
-        //public bool IsColonized { get; protected set; } = false;
+        public override int Size { get; init; } = rnd.Next(minSize, maxSize);
+        public override double OrbitalSpeed => 107_000;
+        public PlanetClass PlanetClass { get; init; }
 
         //List<KeyValuePair<Recource, int>> recources = new();
-        private int universe_x;
+        //private int universe_x;
 
-        public Planet(int distance)
+        public Planet(int distance) : base(distance)
         {
-            Distance = distance;
-            Random rnd = new();
-            PlanetClass = (PlanetClass)Enum.GetValues(typeof(PlanetClass)).GetValue(rnd.Next(Enum.GetValues(typeof(PlanetClass)).Length));
+            //Distance = distance;
+            //Random rnd = new();
+            ////PlanetClass = (PlanetClass)Enum.GetValues(typeof(PlanetClass)).GetValue(rnd.Next(Enum.GetValues(typeof(PlanetClass)).Length));
 
-            //int absoluteX = (int)Math.Round(Math.Sqrt(Math.Pow(Distance, 2) - rnd.Next((int)Math.Pow(Distance, 2))));
-            //int absoluteY = (int)Math.Round(Math.Sqrt(Math.Pow(Distance, 2) - Math.Pow(absoluteX, 2)));
-            //Coordinates.x = absoluteX * (int)Math.Pow(-1, rnd.Next(2));
-            //Coordinates.y = absoluteY * (int)Math.Pow(-1, rnd.Next(2));
+            ////int absoluteX = (int)Math.Round(Math.Sqrt(Math.Pow(Distance, 2) - rnd.Next((int)Math.Pow(Distance, 2))));
+            ////int absoluteY = (int)Math.Round(Math.Sqrt(Math.Pow(Distance, 2) - Math.Pow(absoluteX, 2)));
+            ////Coordinates.x = absoluteX * (int)Math.Pow(-1, rnd.Next(2));
+            ////Coordinates.y = absoluteY * (int)Math.Pow(-1, rnd.Next(2));
 
-            Phi = rnd.NextDouble() * 2 * Math.PI;
-            Coordinates.x = (int)Math.Round(Distance * Math.Cos(Phi));
-            Coordinates.y = (int)Math.Round(Distance * Math.Sin(Phi));
+            //Phi = rnd.NextDouble() * 2 * Math.PI;
+            //Coordinates.x = (int)Math.Round(Distance * Math.Cos(Phi));
+            //Coordinates.y = (int)Math.Round(Distance * Math.Sin(Phi));
 
-            Size = rnd.Next(10, 25);
+            //Size = rnd.Next(minSize, maxSize);
             foreach (ResourceName res in Enum.GetValues(typeof(ResourceName)))
             {
                 Recources.Add(res, rnd.Next(100000000));
             }
+            PlanetClass = (PlanetClass)rnd.Next(Enum.GetValues(typeof(PlanetClass)).Length);
         }
 
         public override void Draw()
@@ -69,7 +65,7 @@ namespace SoulUniverse
                 //Отрисовка планеты
                 if (FractionDisplayMode == DisplayMode.Fractions)
                 {
-                    if (Fractions.Count > 0) Console.ForegroundColor = Fractions.ElementAt(0).Color;
+                    if (IsColonized) Console.ForegroundColor = Fractions.ElementAt(0).Color;
                     else Console.ForegroundColor = ConsoleColor.DarkGray;
                 }
                 else
@@ -81,39 +77,29 @@ namespace SoulUniverse
                 DrawedCoordinates.x = Coordinates.x;
                 DrawedCoordinates.y = Coordinates.y;
                 Console.SetCursorPosition(current_cursor_x, current_cursor_y);
-                isNeedToRedraw = false;
+                IsNeedToRedraw = false;
             }
         }
 
-        public void Erase()
-        {
-            lock (locker)
-            {
-                Console.SetCursorPosition(20 + DrawedCoordinates.x, 20 + DrawedCoordinates.y);
-                Console.Write(' ');
-                Console.SetCursorPosition(current_cursor_x, current_cursor_y);
-            }
-        }
+        //public void DrawMacro()
+        //{
+        //    int center = 20;
+        //    Console.ForegroundColor = this.GetColor();
+        //    for (int i = center - 12; i <= center + 12; i++)
+        //    {
+        //        Console.SetCursorPosition(i, center);
+        //        Console.Write('*');
+        //    }
+        //    Console.SetCursorPosition(center, center - 6);
+        //    for (int i = center - 6; i <= center + 6; i++)
+        //    {
+        //        Console.SetCursorPosition(center, i);
+        //        Console.Write('*');
+        //    }
+        //    Console.ResetColor();
+        //}
 
-        public void DrawMacro()
-        {
-            int center = 20;
-            Console.ForegroundColor = this.GetColor();
-            for (int i = center - 12; i <= center + 12; i++)
-            {
-                Console.SetCursorPosition(i, center);
-                Console.Write('*');
-            }
-            Console.SetCursorPosition(center, center - 6);
-            for (int i = center - 6; i <= center + 6; i++)
-            {
-                Console.SetCursorPosition(center, i);
-                Console.Write('*');
-            }
-            Console.ResetColor();
-        }
-
-        public ConsoleColor GetColor()
+        public override ConsoleColor GetColor()
         {
             switch (PlanetClass)
             {
@@ -130,35 +116,29 @@ namespace SoulUniverse
             }
         }
 
-        public void Move()
-        {
-            //Угловая скорость
-            double w = OrbitalSpeed / ((double)Distance * 150_000_000); // рад/ч
-            double t = 24; //часов
-            Phi = (Phi + w * t) % (2 * Math.PI);
-            int newX = (int)Math.Round(Distance * Math.Cos(Phi)); // а. е.
-            int newY = (int)Math.Round(Distance * Math.Sin(Phi)); // а. е.
-            if (Coordinates.x != newX || Coordinates.y != newY)
-            {
-                Coordinates.x = newX;
-                Coordinates.y = newY;
-                isNeedToRedraw = true;
-            }
+        //public void Move()
+        //{
+        //    //Угловая скорость
+        //    double w = OrbitalSpeed / ((double)Distance * 150_000_000); // рад/ч
+        //    double t = 24; //часов
+        //    Phi = (Phi + w * t) % (2 * Math.PI);
+        //    int newX = (int)Math.Round(Distance * Math.Cos(Phi)); // а. е.
+        //    int newY = (int)Math.Round(Distance * Math.Sin(Phi)); // а. е.
+        //    if (Coordinates.x != newX || Coordinates.y != newY)
+        //    {
+        //        Coordinates.x = newX;
+        //        Coordinates.y = newY;
+        //        IsNeedToRedraw = true;
+        //    }
 
-        }
-
-        public bool isOccupied (int x, int y)
-        {
-            if (GroundObjects.Any(o => o.Coordinates.x == x && o.Coordinates.y == y)) return true;
-            else return false;
-        }
+        //}
 
         public void AddGroundObjects(Fraction fraction)
         {
             Random rnd = new();
             int x = rnd.Next(Size);
             int y = rnd.Next(Size);
-            if (!isOccupied(x, y)) GroundObjects.Add(new MilitaryBase(x, y, fraction));
+            if (!IsPlaceOccupied(x, y)) new MilitaryBase(x, y, fraction, this);
         }
     }
 }

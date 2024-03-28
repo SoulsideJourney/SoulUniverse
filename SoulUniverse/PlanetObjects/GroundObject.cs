@@ -8,15 +8,29 @@ using static SoulUniverse.Enums;
 
 namespace SoulUniverse.PlanetObjects
 {
-    internal abstract class GroundObject
+    public abstract class GroundObject : UniverseObject
     {
         protected abstract char Symbol { get; }
         protected abstract string Name { get; }
         public Coordinates Coordinates { get; } = new();
-        public abstract Fraction Owner { get; }
-        public abstract StarSystemObject Location { get; }
+        public Fraction Owner { get; }
+        public StarSystemObject Location { get; }
+        public bool IsNeedToDraw { get; set; } = true;
         //static public abstract List<KeyValuePair<ResourceName, int>> Cost { get; }
         //public abstract void Draw();
+
+
+        public virtual void Lol()
+        {
+
+        }
+        public GroundObject(int x, int y, Fraction fraction, StarSystemObject starSystemObject)
+        {
+            Coordinates.x = x;
+            Coordinates.y = y;
+            Owner = fraction;
+            Location = starSystemObject;
+        }
 
         public void WriteInfo()
         {
@@ -41,7 +55,8 @@ namespace SoulUniverse.PlanetObjects
                 ResetCursor();
             }
         }
-        public virtual void Draw()
+
+        public override void Draw()
         {
             lock(locker)
             {
@@ -51,6 +66,7 @@ namespace SoulUniverse.PlanetObjects
                 Console.Write(Symbol);
                 Console.ResetColor();
                 Console.SetCursorPosition(current_cursor_x, current_cursor_y);
+                IsNeedToDraw = false;
             }  
         }
     }

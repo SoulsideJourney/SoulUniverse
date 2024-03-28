@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SoulUniverse.StarSystemObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,7 @@ namespace SoulUniverse
             Random rnd = new();
             Coordinates.x = rnd.Next(universe_x);
             Coordinates.y = rnd.Next(universe_y);
-            starClass = (StarClass)Enum.GetValues(typeof(StarClass)).GetValue(rnd.Next(Enum.GetValues(typeof(StarClass)).Length - 1));
+            starClass = (StarClass)rnd.Next(Enum.GetValues(typeof(StarClass)).Length - 1);
             Color = GetColor(starClass);
             GenerateStarSystemObjects();
         }
@@ -36,10 +37,10 @@ namespace SoulUniverse
                 bool isPositionOccupied = false;
                 while (!isPositionOccupied)
                 {
-                    int x = rnd.Next(2, universe_y / 2 - 1);
+                    int distance = rnd.Next(2, universe_y / 2 - 1);
                     foreach (StarSystemObject obj in starSystemObjects)
                     {
-                        if (obj.Distance == x)
+                        if (obj.Distance == distance)
                         {
                             isPositionOccupied = true;
                             break;
@@ -47,10 +48,11 @@ namespace SoulUniverse
                     }
                     if (isPositionOccupied) continue;
 
-                    //Позиция свободна -- добавляем планету
+                    //Орбита свободна -- добавляем планету
                     else
                     {
-                        Planet planet = new(x);
+                        Planet planet = new(distance);
+                        Asteroid asteroid = new(distance);
                         //Добавляем фракцию на планету с небольшой долей вероятности
                         while (true)
                         {
@@ -213,6 +215,11 @@ namespace SoulUniverse
                 default:
                     return ConsoleColor.White;
             }
+        }
+
+        public enum StarClass
+        {
+            W, O, B, A, F, G, K, M, L
         }
     }
 }

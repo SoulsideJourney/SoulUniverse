@@ -1,5 +1,6 @@
 ﻿using SoulUniverse.PlanetObjects;
 using System.Diagnostics;
+using System.Xml.Linq;
 using static SoulUniverse.Enums;
 
 namespace SoulUniverse
@@ -33,6 +34,12 @@ namespace SoulUniverse
 
         //Шахты
         internal static List<Mine> mines = new();
+
+        //Танки
+        internal static List<Tank> tanks = new();
+
+        //Заводы
+        internal static List<Factory> factories = new();
 
         //Список фракций
         internal static List<Fraction> NPCFractions = new();
@@ -86,9 +93,7 @@ namespace SoulUniverse
                     HomePlanet = (Planet)star.starSystemObjects.Find(obj => obj is Planet && (obj as Planet)?.PlanetClass == PlanetClass.Continental);
                     HomePlanet.Fractions.Add(playerFraction);
 
-                    mutex.WaitOne();
-                    HomePlanet.GroundObjects.Add(new MilitaryBase(rnd.Next(HomePlanet.Size), rnd.Next(HomePlanet.Size), playerFraction));
-                    mutex.ReleaseMutex();
+                    new MilitaryBase(rnd.Next(HomePlanet.Size), rnd.Next(HomePlanet.Size), playerFraction, HomePlanet);
                     break;
                 }
             }
@@ -188,6 +193,7 @@ namespace SoulUniverse
             }
         }
 
+        /// <summary>Симуляция времени</summary>
         static void SimulateTime()
         {
             Thread.Sleep(time[timeSelector]);
@@ -206,7 +212,7 @@ namespace SoulUniverse
                 {
                     title = "Консольная Вселенная: карта планеты";
                 }
-                title += string.Format(" {0}", date.ToString());
+                title += $" {date} танков: {tanks.Count}, шахт: {mines.Count}, заводов: {factories.Count}";
                 //Пауза отключена -- симуляция времени и действий
                 if (!isPaused)
                 {
@@ -234,9 +240,9 @@ namespace SoulUniverse
                     {
                         if (checkedVoidObject is Star star)
                         {
-                            foreach (StarSystemObject? starSystemObject in star.starSystemObjects)
+                            foreach (StarSystemObject starSystemObject in star.starSystemObjects)
                             {
-                                if (starSystemObject is Planet planet && planet.isNeedToRedraw)
+                                if (starSystemObject is Planet planet && planet.IsNeedToRedraw)
                                 {
                                     planet.Erase();
                                     planet.Draw();
@@ -244,6 +250,27 @@ namespace SoulUniverse
                             }
                         }
                         //OpenSystem(checkedVoidObject);
+                    }
+
+                    if (UniverseDisplayMode == DisplayMode.Planet)
+                    {
+                        //if (checkedStarSystemObject is Planet planet)
+                        //{
+                        foreach (GroundObject groundObject in checkedStarSystemObject.GroundObjects)
+                        {
+                            //Отрисовка новых объектов
+                            if (groundObject.IsNeedToDraw)
+                            {
+                                groundObject.Draw();
+                            }
+                            //Перерисовка движущихся наземных объектов
+                            if (groundObject is Tank tank && tank.IsNeedToRedraw)
+                            {
+                                tank.Erase();
+                                tank.Draw();
+                            }
+                        }
+                        //}
                     }
 
                     //Действия фракций
@@ -257,6 +284,24 @@ namespace SoulUniverse
                     {
                         mine.Excavate();
                     }
+
+                    //Работа заводов
+                    foreach (var factory in factories)
+                    {
+                        if (factory.Owner.IsEnoughToBuildTank()
+                            && factory.Location.GroundObjects.Where(_ => _ is Tank && _.Owner == factory.Owner).Count() < 10
+                            && !factory.Location.IsPlaceOccupied(factory.Coordinates.x + 1, factory.Coordinates.y))
+                        {
+                            factory.BuildTank();
+                            Debug.WriteLine(string.Format($"Насекомые из {factory.Owner.Name} построили ТАНК! Будет война"));
+                        }
+                    }
+
+                    //Движение танков
+                    foreach (var tank in tanks)
+                    {
+                        tank.Move();
+                    }
 #if DEBUG
                     Debug.Write("-------------------------------");
 #endif
@@ -267,6 +312,7 @@ namespace SoulUniverse
             }
         }
 
+        /// <summary>Просмотр Вселенной</summary>
         private static void OpenUniverse()
         {
             UniverseDisplayMode = DisplayMode.Universe;
@@ -339,14 +385,14 @@ namespace SoulUniverse
                 WriteLegend();
                 infoIsClear = true;
                 DrawFrames();
-                for (int i = 0; i < starSystemObject.Size; i++)
+                for (int i = 0; i <= starSystemObject.Size; i++)
                 {
-                    Console.SetCursorPosition(starSystemObject.Size, i);
+                    Console.SetCursorPosition(starSystemObject.Size + 1, i);
                     Console.Write('|');
                 }
-                for (int i = 0; i < starSystemObject.Size; i++)
+                for (int i = 0; i <= starSystemObject.Size; i++)
                 {
-                    Console.SetCursorPosition(i, starSystemObject.Size);
+                    Console.SetCursorPosition(i, starSystemObject.Size + 1);
                     Console.Write('-');
                 }
                 starSystemObject.DrawObjects();

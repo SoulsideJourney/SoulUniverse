@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static SoulUniverse.Enums;
+using static SoulUniverse.Program;
 
 namespace SoulUniverse.PlanetObjects
 {
-    internal class Mine : GroundObject
+    internal class Mine : GroundObject//, IImmovable
     {
         protected override char Symbol { get; } = '^';
         protected override string Name { get; } = "Шахта";
-        public override Fraction Owner { get; }
-        public override StarSystemObject Location { get; }
 
         static public List<KeyValuePair<ResourceName, int>> Cost { get; } = new()
         {
@@ -22,20 +22,25 @@ namespace SoulUniverse.PlanetObjects
             new KeyValuePair<ResourceName, int>(ResourceName.Oil, 0),
         };
 
-        public Mine(int x, int y, Fraction fraction, StarSystemObject starSystemObject)
+        //public bool IsNeedToDraw { get; set; } = true;
+
+        public Mine(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, fraction, starSystemObject)
         {
-            Coordinates.x = x;
-            Coordinates.y = y;
-            Owner = fraction;
-            Location = starSystemObject;
+            foreach (var res in fraction.Recources)
+            {
+                fraction.Recources[res.Key] = res.Value - Mine.Cost.Find(r => r.Key == res.Key).Value;
+            }
+
+            mutex.WaitOne();
             Program.mines.Add(this);
+            starSystemObject.GroundObjects.Add(this);
+            mutex.ReleaseMutex();
         }
 
         public void Excavate()
         {
             Location.Recources[ResourceName.Iron] -= 1;
             Owner.Recources[ResourceName.Iron] += 1;
-            //Debug.WriteLine("Шахта {0} работает", this.ToString());
         }
     }
 }
