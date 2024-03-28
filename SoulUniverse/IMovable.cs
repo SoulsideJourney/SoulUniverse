@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace SoulUniverse
 {
+    /// <summary> Движущиеся объекты </summary>
     public interface IMovable
     {
         bool IsNeedToRedraw { get; set; }

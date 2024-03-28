@@ -17,7 +17,7 @@ namespace SoulUniverse.PlanetObjects
 
         public Factory(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, fraction, starSystemObject)
         {
-            Program.factories.Add(this);
+            Universe.Factories.Add(this);
             starSystemObject.GroundObjects.Add(this);
         }
 

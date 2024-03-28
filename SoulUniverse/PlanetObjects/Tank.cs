@@ -31,7 +31,7 @@ namespace SoulUniverse.PlanetObjects
             }
 
             mutex.WaitOne();
-            Program.tanks.Add(this);
+            Universe.Tanks.Add(this);
             starSystemObject.GroundObjects.Add(this);
             mutex.ReleaseMutex();
         }

@@ -9,7 +9,7 @@ namespace SoulUniverse
         public const int minSize = 10;
         public const int maxSize = 25;
         protected override char Symbol => '\u25CF'; //●
-        public override int Size { get; init; } = rnd.Next(minSize, maxSize);
+        public override int Size { get; init; } = Rnd.Next(minSize, maxSize);
         public override double OrbitalSpeed => 107_000;
         public PlanetClass PlanetClass { get; init; }
 
@@ -45,9 +45,9 @@ namespace SoulUniverse
             //Size = rnd.Next(minSize, maxSize);
             foreach (ResourceName res in Enum.GetValues(typeof(ResourceName)))
             {
-                Recources.Add(res, rnd.Next(100000000));
+                Recources.Add(res, Rnd.Next(100000000));
             }
-            PlanetClass = (PlanetClass)rnd.Next(Enum.GetValues(typeof(PlanetClass)).Length);
+            PlanetClass = (PlanetClass)Rnd.Next(Enum.GetValues(typeof(PlanetClass)).Length);
         }
 
         public override void Draw()

@@ -47,14 +47,14 @@ namespace SoulUniverse
         {
             if (IsEnoughToBuildMine())
             {
-                if (TryBuildMine(this.Colonies.ElementAt(rnd.Next(Colonies.Count))))
+                if (TryBuildMine(this.Colonies.ElementAt(Rnd.Next(Colonies.Count))))
                 {
                     Debug.WriteLine($"Насекомые из {Name} построили шахту");
                 };
 
                 if (IsEnoughToBuildFactory())
                 {
-                    if (TryBuildFactory(this.Colonies.ElementAt(rnd.Next(Colonies.Count))))
+                    if (TryBuildFactory(this.Colonies.ElementAt(Rnd.Next(Colonies.Count))))
                     {
                         Debug.WriteLine($"Насекомые из {Name} построили завод! Работягам будет, где работать");
                     }
@@ -62,7 +62,7 @@ namespace SoulUniverse
 
                 if (IsEnoughToBuildMilitaryBase())
                 {
-                    if (TryBuildMilitaryBase(this.Colonies.ElementAt(rnd.Next(Colonies.Count))))
+                    if (TryBuildMilitaryBase(this.Colonies.ElementAt(Rnd.Next(Colonies.Count))))
                     {
                         Debug.WriteLine($"Насекомые из {Name} построили базу");
                     }
@@ -77,7 +77,7 @@ namespace SoulUniverse
         {
             foreach (var kvp in Recources)
             {
-                if (kvp.Value < Mine.Cost.Find(k => k.Key == kvp.Key).Value)
+                if (kvp.Value < Mine.BuildCost.Find(k => k.Key == kvp.Key).Value)
                 {
                     return false;
                 }
@@ -131,8 +131,8 @@ namespace SoulUniverse
 
         public bool TryBuildMilitaryBase(StarSystemObject starSystemObject)
         {
-            int x = rnd.Next(starSystemObject.Size);
-            int y = rnd.Next(starSystemObject.Size);
+            int x = Rnd.Next(starSystemObject.Size);
+            int y = Rnd.Next(starSystemObject.Size);
             if (!starSystemObject.IsPlaceOccupied(x, y))
             {
                 new MilitaryBase(x, y, this, starSystemObject);
@@ -148,8 +148,8 @@ namespace SoulUniverse
 
         public bool TryBuildMine(StarSystemObject starSystemObject)
         {
-            int x = rnd.Next(starSystemObject.Size);
-            int y = rnd.Next(starSystemObject.Size);
+            int x = Rnd.Next(starSystemObject.Size);
+            int y = Rnd.Next(starSystemObject.Size);
             if (!starSystemObject.IsPlaceOccupied(x, y))
             {
                 new Mine(x, y, this, starSystemObject);
@@ -165,13 +165,13 @@ namespace SoulUniverse
 
         public void BuildFactory(StarSystemObject starSystemObject)
         {
-            new Factory(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this, starSystemObject);
+            new Factory(Rnd.Next(starSystemObject.Size), Rnd.Next(starSystemObject.Size), this, starSystemObject);
         }
 
         public bool TryBuildFactory(StarSystemObject starSystemObject)
         {
-            int x = rnd.Next(starSystemObject.Size);
-            int y = rnd.Next(starSystemObject.Size);
+            int x = Rnd.Next(starSystemObject.Size);
+            int y = Rnd.Next(starSystemObject.Size);
             if (!starSystemObject.IsPlaceOccupied(x, y))
             {
                 new Factory(x, y, this, starSystemObject);

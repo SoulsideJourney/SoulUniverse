@@ -15,8 +15,8 @@ namespace SoulUniverse
         public Wormhole()
         {
             Random rnd = new();
-            Coordinates.x = rnd.Next(universe_x);
-            Coordinates.y = rnd.Next(universe_y);
+            Coordinates.x = rnd.Next(Universe.UniverseX);
+            Coordinates.y = rnd.Next(Universe.UniverseY);
         }
 
         public Wormhole(int x, int y)

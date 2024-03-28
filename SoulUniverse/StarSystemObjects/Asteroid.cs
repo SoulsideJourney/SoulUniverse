@@ -15,7 +15,7 @@ namespace SoulUniverse.StarSystemObjects
 
         public override double OrbitalSpeed => 107_000;
 
-        public override int Size { get; init; } = rnd.Next(minSize, maxSize);
+        public override int Size { get; init; } = Rnd.Next(minSize, maxSize);
 
         protected override char Symbol => '.'; //\u00B7
 
@@ -26,7 +26,7 @@ namespace SoulUniverse.StarSystemObjects
             //Size = rnd.Next(minSize, maxSize);
             foreach (ResourceName res in Enum.GetValues(typeof(ResourceName)))
             {
-                Recources.Add(res, rnd.Next(100000000));
+                Recources.Add(res, Rnd.Next(100000000));
             }
         }
     }

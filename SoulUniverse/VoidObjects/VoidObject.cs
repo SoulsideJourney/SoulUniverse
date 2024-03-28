@@ -19,7 +19,7 @@ namespace SoulUniverse
         {
             int row = 2;
             Console.ResetColor();
-            Console.SetCursorPosition(universe_x + 2, row);
+            Console.SetCursorPosition(Universe.UniverseX + 2, row);
             Console.Write("Информация об объекте: ");
             if (this is Star star)
             {

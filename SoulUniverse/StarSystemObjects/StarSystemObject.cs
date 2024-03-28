@@ -18,7 +18,7 @@ namespace SoulUniverse
         public abstract double OrbitalSpeed { get; }
         public bool IsNeedToRedraw { get; set; } = false;
         //blic bool isNeedToRedraw = false;
-        public int Distance { get; init; }
+        public int Distance { get; }
         protected double Phi = 0;
         //public Coordinates DrawedCoordinates = new();
         public Coordinates DrawedCoordinates { get; set; } = new();
@@ -59,9 +59,9 @@ namespace SoulUniverse
                 Console.ResetColor();
 
                 //Общая информация
-                Console.SetCursorPosition(universe_x + 2, row);
+                Console.SetCursorPosition(Universe.UniverseX + 2, row);
                 Console.Write("Информация об объекте: ");
-                Console.SetCursorPosition(universe_x + 2, ++row);
+                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                 if (this is Planet planet)
                 {
                     //string planetClass = planet.PlanetClass.ToString();
@@ -70,20 +70,20 @@ namespace SoulUniverse
                     Console.Write(planet.PlanetClass);
                     //Console.Write(string.Format("Планета класса {0}", planetClass));
                     Console.ResetColor();
-                    Console.SetCursorPosition(universe_x + 2, ++row);
+                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                     Console.Write(string.Format("Размер: {0} км", planet.Size));
-                    Console.SetCursorPosition(universe_x + 2, ++row);
+                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                     Console.Write(string.Format("Расстояние до родительского тела: {0} а.е. ", planet.Distance));
-                    Console.SetCursorPosition(universe_x + 2, ++row);              
+                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);              
                 }
                 else Console.Write("Неизвестный объект");
 
                 //Информация о ресурсах
-                Console.SetCursorPosition(universe_x + 2, ++row);
+                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                 Console.Write("Имеющиеся ресурсы:");
                 foreach (var resource in this.Recources)
                 {
-                    Console.SetCursorPosition(universe_x + 2, ++row);
+                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                     Console.Write("{0}: {1}", resource.Key.ToString(), resource.Value.ToString());
                 }
                 infoIsClear = false;
@@ -91,11 +91,11 @@ namespace SoulUniverse
                 //Информация о фракциях
                 if (Fractions.Count > 0)
                 {
-                    Console.SetCursorPosition(universe_x + 2, ++row);
+                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                     Console.Write("Фракции:");
                     foreach (var fraction in Fractions)
                     {
-                        Console.SetCursorPosition(universe_x + 2, ++row);
+                        Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                         Console.ForegroundColor = fraction.Color;
                         Console.Write($"{fraction.Name} ({fraction.Property.Where( _ => _.Location == this).Count()} объектов)");
                     }
@@ -103,7 +103,7 @@ namespace SoulUniverse
                 }
                 else
                 {
-                    Console.SetCursorPosition(universe_x + 2, ++row);
+                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                     Console.Write("На планете нет фракций");
                 }
 

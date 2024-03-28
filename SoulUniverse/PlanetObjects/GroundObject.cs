@@ -40,9 +40,9 @@ namespace SoulUniverse.PlanetObjects
                 Console.ResetColor();
 
                 //Общая информация
-                Console.SetCursorPosition(universe_x + 2, row);
+                Console.SetCursorPosition(Universe.UniverseX + 2, row);
                 Console.Write("Информация об объекте: ");
-                Console.SetCursorPosition(universe_x + 2, ++row);
+                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                 if (Name != null)
                 {
                     Console.Write(Name + " фракции ");

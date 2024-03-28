@@ -20,8 +20,8 @@ namespace SoulUniverse
         public Star()
         {
             Random rnd = new();
-            Coordinates.x = rnd.Next(universe_x);
-            Coordinates.y = rnd.Next(universe_y);
+            Coordinates.x = rnd.Next(Universe.UniverseX);
+            Coordinates.y = rnd.Next(Universe.UniverseY);
             starClass = (StarClass)rnd.Next(Enum.GetValues(typeof(StarClass)).Length - 1);
             Color = GetColor(starClass);
             GenerateStarSystemObjects();
@@ -37,7 +37,7 @@ namespace SoulUniverse
                 bool isPositionOccupied = false;
                 while (!isPositionOccupied)
                 {
-                    int distance = rnd.Next(2, universe_y / 2 - 1);
+                    int distance = rnd.Next(2, Universe.UniverseY / 2 - 1);
                     foreach (StarSystemObject obj in starSystemObjects)
                     {
                         if (obj.Distance == distance)
@@ -58,7 +58,7 @@ namespace SoulUniverse
                         {
                             if (rnd.Next(100) < 10)
                             {
-                                Fraction fraction = NPCFractions.ElementAt(rnd.Next(NPCFractions.Count));
+                                Fraction fraction = Universe.NPCFractions.ElementAt(rnd.Next(Universe.NPCFractions.Count));
                                 planet.Fractions.Add(fraction);
                                 fraction.Colonies.Add(planet);
                             }
@@ -121,25 +121,25 @@ namespace SoulUniverse
                 int row = 2;
                 string starClass = this.starClass.ToString();
                 Console.Write(string.Format("Звезда класса {0}", starClass));
-                Console.SetCursorPosition(universe_x + 2, ++row);
+                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                 int planets = this.starSystemObjects.Count;
                 Console.Write(string.Format("Количество планетарных тел: {0}", planets));
 
                 //Информация о планетах
                 if (planets > 0)
                 {
-                    Console.SetCursorPosition(universe_x + 2, ++row);
+                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                     Console.Write("Информация об объектах системы:");
-                    Console.SetCursorPosition(universe_x + 2, ++row);
+                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                     Console.Write("-----------------------------------------");
-                    Console.SetCursorPosition(universe_x + 2, ++row);
+                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                     Console.Write(String.Format("| № | Расстояние | {0, 11} | Размер |", "Класс"));
-                    Console.SetCursorPosition(universe_x + 2, ++row);
+                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                     Console.Write("-----------------------------------------");
                     int planetNumber = 0;
                     foreach (StarSystemObject starSystemObject in this.starSystemObjects)
                     {
-                        Console.SetCursorPosition(universe_x + 2, ++row);
+                        Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                         //string planetClass;
                         if (starSystemObject is Planet planet)
                         {
@@ -151,11 +151,11 @@ namespace SoulUniverse
                             Console.Write(string.Format(" | {0, 6} |", starSystemObject.Size));
                         }
                     }
-                    Console.SetCursorPosition(universe_x + 2, ++row);
+                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                     Console.Write("-----------------------------------------");
 
                     //Информация о присутствующих фракциях
-                    Console.SetCursorPosition(universe_x + 2, ++row);
+                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                     List<Fraction> fractionsInSystem = new List<Fraction>();
                     foreach (StarSystemObject starSystemObject in this.starSystemObjects)
                     {
@@ -169,7 +169,7 @@ namespace SoulUniverse
                         Console.Write("Присутствующие фракции в системе:");
                         foreach (Fraction fraction in fractionsInSystem)
                         {
-                            Console.SetCursorPosition(universe_x + 2, ++row);
+                            Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                             Console.ForegroundColor = fraction.Color;
                             Console.Write(fraction.Name);
                         }

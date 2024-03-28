@@ -16,8 +16,8 @@ namespace SoulUniverse
         public BlackHole()
         {
             Random rnd = new Random();
-            Coordinates.x = rnd.Next(universe_x);
-            Coordinates.y = rnd.Next(universe_y);
+            Coordinates.x = rnd.Next(Universe.UniverseX);
+            Coordinates.y = rnd.Next(Universe.UniverseY);
         }
 
         public BlackHole(int x, int y)

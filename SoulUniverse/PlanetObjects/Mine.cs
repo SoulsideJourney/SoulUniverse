@@ -10,17 +10,17 @@ using static SoulUniverse.Program;
 
 namespace SoulUniverse.PlanetObjects
 {
-    internal class Mine : GroundObject//, IImmovable
+    internal class Mine : GroundObject/*, IBuildable*/
     {
-        protected override char Symbol { get; } = '^';
-        protected override string Name { get; } = "Шахта";
+        protected override char Symbol => '^';
+        protected override string Name => "Шахта";
 
-        static public List<KeyValuePair<ResourceName, int>> Cost { get; } = new()
-        {
+        public static List<KeyValuePair<ResourceName, int>> BuildCost { get; } =
+        [
             new KeyValuePair<ResourceName, int>(ResourceName.Iron, 100),
             new KeyValuePair<ResourceName, int>(ResourceName.Uranium, 0),
-            new KeyValuePair<ResourceName, int>(ResourceName.Oil, 0),
-        };
+            new KeyValuePair<ResourceName, int>(ResourceName.Oil, 0)
+        ];
 
         //public bool IsNeedToDraw { get; set; } = true;
 
@@ -28,19 +28,22 @@ namespace SoulUniverse.PlanetObjects
         {
             foreach (var res in fraction.Recources)
             {
-                fraction.Recources[res.Key] = res.Value - Mine.Cost.Find(r => r.Key == res.Key).Value;
+                fraction.Recources[res.Key] = res.Value - BuildCost.Find(r => r.Key == res.Key).Value;
             }
 
             mutex.WaitOne();
-            Program.mines.Add(this);
+            Universe.Mines.Add(this);
             starSystemObject.GroundObjects.Add(this);
             mutex.ReleaseMutex();
         }
 
         public void Excavate()
         {
-            Location.Recources[ResourceName.Iron] -= 1;
-            Owner.Recources[ResourceName.Iron] += 1;
+            if (Location.Recources[ResourceName.Iron] > 0)
+            {
+                Location.Recources[ResourceName.Iron] -= 1;
+                Owner.Recources[ResourceName.Iron] += 1;
+            }
         }
     }
 }
