@@ -10,7 +10,7 @@ using static SoulUniverse.Program;
 
 namespace SoulUniverse.PlanetObjects
 {
-    internal class Mine : GroundObject/*, IBuildable*/
+    internal class Mine : GroundProperty/*, IBuildable*/
     {
         protected override char Symbol => '^';
         protected override string Name => "Шахта";

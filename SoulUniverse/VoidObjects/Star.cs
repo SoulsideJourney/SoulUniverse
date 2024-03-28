@@ -90,7 +90,7 @@ namespace SoulUniverse
                     //Фракционный цвет звезды по цвету первой попавшейся фракции в системе окда?
                     //FractionColor? fractionColor = starSystemObjects.Find(obj => obj.Fractions.Count > 0)?.Fractions.ElementAt(0).Color;
                     //ConsoleColor? temp = (ConsoleColor)fractionColor;
-                    Console.ForegroundColor = starSystemObjects.Find(obj => obj.Fractions.Count > 0)?.Fractions.ElementAt(0).Color ?? ConsoleColor.DarkGray;
+                    Console.ForegroundColor = starSystemObjects.Find(obj => obj.Fractions.Count > 0)?.Fractions.ElementAt(0).Color ?? ConsoleColor.Gray;
                     //Console.ForegroundColor = temp ?? ConsoleColor.DarkGray;
                 }
                 else
@@ -120,10 +120,13 @@ namespace SoulUniverse
             {
                 int row = 2;
                 string starClass = this.starClass.ToString();
-                Console.Write(string.Format("Звезда класса {0}", starClass));
+                Console.Write("Звезда класса ");
+                Console.ForegroundColor = GetColor();
+                Console.Write(starClass);
+                ResetConsoleColor();
                 Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                int planets = this.starSystemObjects.Count;
-                Console.Write(string.Format("Количество планетарных тел: {0}", planets));
+                int planets = starSystemObjects.Count;
+                Console.Write($"Количество планетарных тел: {planets}");
 
                 //Информация о планетах
                 if (planets > 0)
@@ -133,22 +136,22 @@ namespace SoulUniverse
                     Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                     Console.Write("-----------------------------------------");
                     Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                    Console.Write(String.Format("| № | Расстояние | {0, 11} | Размер |", "Класс"));
+                    Console.Write($"| № | Расстояние | {"Класс",11} | Размер |");
                     Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                     Console.Write("-----------------------------------------");
                     int planetNumber = 0;
-                    foreach (StarSystemObject starSystemObject in this.starSystemObjects)
+                    foreach (StarSystemObject starSystemObject in starSystemObjects)
                     {
                         Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                         //string planetClass;
                         if (starSystemObject is Planet planet)
                         {
                             //planetClass = planet.PlanetClass.ToString();
-                            Console.Write(string.Format("|{0, 2} | {1, 6} а.е | ", ++planetNumber, starSystemObject.Distance));
+                            Console.Write($"|{++planetNumber,2} | {starSystemObject.Distance,6} а.е | ");
                             Console.ForegroundColor = planet.Color;
-                            Console.Write(string.Format("{0, 11}", planet.PlanetClass.ToString()));
-                            Program.ResetConsoleColor();
-                            Console.Write(string.Format(" | {0, 6} |", starSystemObject.Size));
+                            Console.Write($"{planet.PlanetClass,11}");
+                            ResetConsoleColor();
+                            Console.Write($" | {starSystemObject.Size,6} |");
                         }
                     }
                     Console.SetCursorPosition(Universe.UniverseX + 2, ++row);

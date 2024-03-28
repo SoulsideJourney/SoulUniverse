@@ -17,8 +17,8 @@ namespace SoulUniverse
             DarkRed = ConsoleColor.DarkRed,
             DarkMagenta = ConsoleColor.DarkMagenta,
             DarkYellow = ConsoleColor.DarkYellow,
-            Gray = ConsoleColor.Gray,
-            //DarkGray = ConsoleColor.DarkGray,
+            //Gray = ConsoleColor.Gray,
+            DarkGray = ConsoleColor.DarkGray,
             Blue = ConsoleColor.Blue,
             //Green = ConsoleColor.Green,
             Cyan = ConsoleColor.Cyan,
@@ -33,9 +33,9 @@ namespace SoulUniverse
         }
         public enum FractionName
         {
-            Джедаи, КосмическиеБомжи, Пираты, Рептилоиды, Ситхи, 
+            Джедаи, КосмическиеБомжи, Пираты, Рептилоиды, Ситхи, ТретьяАкадемия,
             Бабки_с_РПГ, РогатыеТрупоеды, КакаяТоЖуткаяХуйня, ЧетвертыйРейх, РоботыЭкстерминаторы,
-            Салат, ФеечкиВинкс, СейлорМун, ОжившаяПротухшаяЕдаИзХолодильника
+            Салат, ФеечкиВинкс, СейлорМун, ОжившаяПротухшаяЕдаИзХолодильника, Плесень
         }
 
         public enum PlanetClass

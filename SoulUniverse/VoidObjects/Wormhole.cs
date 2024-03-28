@@ -29,7 +29,7 @@ namespace SoulUniverse
         {
             if (FractionDisplayMode == DisplayMode.Fractions)
             {
-                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.ForegroundColor = ConsoleColor.Gray;
             }
             else Console.ForegroundColor = Color;
             Console.SetCursorPosition(Coordinates.x, Coordinates.y);

@@ -16,10 +16,14 @@ namespace SoulUniverse
 
         /// <summary>Орбитальная скорость в км/ч</summary>
         public abstract double OrbitalSpeed { get; }
+
         public bool IsNeedToRedraw { get; set; } = false;
         //blic bool isNeedToRedraw = false;
         public int Distance { get; }
-        protected double Phi = 0;
+
+        /// <summary> Текущий угол орбиты </summary>
+        private double Phi = 0;
+
         //public Coordinates DrawedCoordinates = new();
         public Coordinates DrawedCoordinates { get; set; } = new();
         public Coordinates Coordinates = new();
@@ -84,7 +88,7 @@ namespace SoulUniverse
                 foreach (var resource in Recources)
                 {
                     Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                    Console.Write("{0}: {1}", resource.Key.ToString(), resource.Value.ToString());
+                    Console.Write($"{resource.Key}: {resource.Value}");
                 }
                 InfoIsClear = false;
 
@@ -97,7 +101,7 @@ namespace SoulUniverse
                     {
                         Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                         Console.ForegroundColor = fraction.Color;
-                        Console.Write($"{fraction.Name} ({fraction.Property.Where( _ => _.Location == this).Count()} объектов)");
+                        Console.Write($"{fraction.Name} ({fraction.Property.Count(_ => _.Location == this)} объектов)");
                     }
                     ResetConsoleColor();
                 }
@@ -136,7 +140,7 @@ namespace SoulUniverse
                 if (FractionDisplayMode == DisplayMode.Fractions)
                 {
                     if (IsColonized) Console.ForegroundColor = Fractions.ElementAt(0).Color;
-                    else Console.ForegroundColor = ConsoleColor.DarkGray;
+                    else Console.ForegroundColor = ConsoleColor.Gray;
                 }
                 else
                 {

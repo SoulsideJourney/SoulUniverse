@@ -12,27 +12,17 @@ namespace SoulUniverse.PlanetObjects
     {
         protected abstract char Symbol { get; }
         protected abstract string Name { get; }
-        public Coordinates Coordinates { get; } = new();
-        public Fraction Owner { get; }
         public StarSystemObject Location { get; }
-        public bool IsNeedToDraw { get; set; } = true;
-        //static public abstract List<KeyValuePair<ResourceName, int>> Cost { get; }
-        //public abstract void Draw();
+        public Coordinates Coordinates { get; } = new();
 
-
-        public virtual void Lol()
-        {
-
-        }
-        public GroundObject(int x, int y, Fraction fraction, StarSystemObject starSystemObject)
+        protected GroundObject(int x, int y, StarSystemObject starSystemObject)
         {
             Coordinates.x = x;
             Coordinates.y = y;
-            Owner = fraction;
             Location = starSystemObject;
         }
 
-        public void WriteInfo()
+        public virtual void WriteInfo()
         {
             lock(locker)
             {
@@ -43,14 +33,42 @@ namespace SoulUniverse.PlanetObjects
                 Console.SetCursorPosition(Universe.UniverseX + 2, row);
                 Console.Write("Информация об объекте: ");
                 Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                if (Name != null)
-                {
-                    Console.Write(Name + " фракции ");
-                    Console.ForegroundColor = Owner.Color;
-                    Console.Write(Owner.Name);
-                    ResetConsoleColor();
-                }
-                else Console.Write("Неизвестный объект");
+                Console.Write(Name);
+                InfoIsClear = false;
+                ResetCursor();
+            }
+        }
+    }
+
+    public abstract class GroundProperty : GroundObject
+    {
+
+        public bool IsNeedToDraw { get; set; } = true;
+        public Fraction Owner { get; }
+        //static public abstract List<KeyValuePair<ResourceName, int>> Cost { get; }
+        //public abstract void Draw();
+
+
+        protected GroundProperty(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, starSystemObject)
+        {
+            Owner = fraction;
+        }
+
+        public override void WriteInfo()
+        {
+            lock(locker)
+            {
+                int row = 2;
+                ResetConsoleColor();
+
+                //Общая информация
+                Console.SetCursorPosition(Universe.UniverseX + 2, row);
+                Console.Write("Информация об объекте: ");
+                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+                Console.Write(Name + " фракции ");
+                Console.ForegroundColor = Owner.Color;
+                Console.Write(Owner.Name);
+                ResetConsoleColor();
                 InfoIsClear = false;
                 ResetCursor();
             }

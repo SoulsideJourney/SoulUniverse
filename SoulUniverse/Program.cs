@@ -17,7 +17,7 @@ namespace SoulUniverse
         private const int ConsoleY = 50;
 
         private const int LegendOffsetFromBottom = 8;
-        
+
         public static bool InfoIsClear;
 
         private static bool _isPaused;
@@ -45,7 +45,7 @@ namespace SoulUniverse
             }
         }
 
-        public static int CurrentCursorY 
+        public static int CurrentCursorY
         {
             get => _currentCursorY;
             private set
@@ -202,7 +202,7 @@ namespace SoulUniverse
                 {
                     Universe.CurrentDate = Universe.CurrentDate.AddDays(1);
 #if DEBUG
-                    Debug.Write("---Новый день в галактике...---");
+                    Debug.WriteLine("------Новый день в галактике, как быстро летит время...------");
 #endif
 
                     //Расчет точек орбит планет
@@ -233,14 +233,11 @@ namespace SoulUniverse
                                 }
                             }
                         }
-                        //OpenSystem(checkedVoidObject);
                     }
 
                     if (UniverseDisplayMode == DisplayMode.Planet)
                     {
-                        //if (checkedStarSystemObject is Planet planet)
-                        //{
-                        foreach (GroundObject groundObject in checkedStarSystemObject.GroundObjects)
+                        foreach (GroundProperty groundObject in checkedStarSystemObject.GroundObjects)
                         {
                             //Отрисовка новых объектов
                             if (groundObject.IsNeedToDraw)
@@ -248,13 +245,12 @@ namespace SoulUniverse
                                 groundObject.Draw();
                             }
                             //Перерисовка движущихся наземных объектов
-                            if (groundObject is Tank tank && tank.IsNeedToRedraw)
+                            if (groundObject is Tank { IsNeedToRedraw: true } tank)
                             {
                                 tank.Erase();
                                 tank.Draw();
                             }
                         }
-                        //}
                     }
 
                     //Действия фракций
@@ -273,7 +269,7 @@ namespace SoulUniverse
                     foreach (var factory in Universe.Factories)
                     {
                         if (factory.Owner.IsEnoughToBuildTank()
-                            && factory.Location.GroundObjects.Where(_ => _ is Tank && _.Owner == factory.Owner).Count() < 10
+                            && factory.Location.GroundObjects.Count(o => o is Tank tank && tank.Owner == factory.Owner) < 10
                             && !factory.Location.IsPlaceOccupied(factory.Coordinates.x + 1, factory.Coordinates.y))
                         {
                             factory.BuildTank();
@@ -286,9 +282,6 @@ namespace SoulUniverse
                     {
                         tank.Move();
                     }
-#if DEBUG
-                    Debug.Write("-------------------------------");
-#endif
                 }
                 Thread.Sleep(_time[_timeSelector]);
             }
@@ -409,7 +402,7 @@ namespace SoulUniverse
         {
             lock (locker)
             {
-                Console.ForegroundColor = ConsoleColor.White;
+                ResetConsoleColor();
                 //Вертикальные рамки
                 for (int i = 0; i < Universe.UniverseY; i++)
                 {
@@ -471,7 +464,7 @@ namespace SoulUniverse
             lock (locker)
             {
                 int offset = 0;
-                Console.ForegroundColor = ConsoleColor.White;
+                ResetConsoleColor();
                 Console.SetCursorPosition(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom + 1));
                 for (int i = Universe.UniverseX + 2; i < Console.WindowWidth - 1; i++)
                 {

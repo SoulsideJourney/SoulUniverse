@@ -8,7 +8,7 @@ using static SoulUniverse.Program;
 
 namespace SoulUniverse.PlanetObjects
 {
-    internal class MilitaryBase : GroundObject//, IImmovable
+    internal class MilitaryBase : GroundProperty//, IImmovable
     {
         protected override char Symbol => '#';
         protected override string Name => "Военная база";

@@ -3,7 +3,7 @@ using static SoulUniverse.Program;
 
 namespace SoulUniverse.PlanetObjects
 {
-    internal class Tank : GroundObject, IMovable
+    internal class Tank : GroundProperty, IMovable
     {
         //public override Fraction Owner { get; }
 

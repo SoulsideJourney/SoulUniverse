@@ -17,7 +17,10 @@ namespace SoulUniverse
         public ConsoleColor Color { get; protected set; }
         //public FractionColor Color { get; protected set; }
         //public List<GroundObject> Property { get; } = new();
-        public List<GroundObject> Property => Colonies.SelectMany(_ => _.GroundObjects).ToList();
+        public List<GroundProperty> Property => Colonies
+            .SelectMany(o => o.GroundObjects)
+            .Where(go => go is GroundProperty property && property.Owner == this).Cast<GroundProperty>().ToList();
+
         public List<StarSystemObject> Colonies { get; protected set; } = new();
         public Dictionary<ResourceName, int> Recources { get; } = new();
 

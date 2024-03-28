@@ -26,11 +26,11 @@ namespace SoulUniverse
             Coordinates.y = y;
         }
 
-        override public void Draw()
+        public override void Draw()
         {
             if (FractionDisplayMode == DisplayMode.Fractions)
             {
-                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.ForegroundColor = ConsoleColor.Gray;
             }
             else Console.ForegroundColor = Color;
             Console.SetCursorPosition(Coordinates.x, Coordinates.y);

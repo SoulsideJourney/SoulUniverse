@@ -77,7 +77,7 @@ namespace SoulUniverse
                 if (FractionDisplayMode == DisplayMode.Fractions)
                 {
                     if (IsColonized) Console.ForegroundColor = Fractions.ElementAt(0).Color;
-                    else Console.ForegroundColor = ConsoleColor.DarkGray;
+                    else Console.ForegroundColor = ConsoleColor.Gray;
                 }
                 else
                 {
