@@ -37,7 +37,7 @@ namespace SoulUniverse.PlanetObjects
             lock(locker)
             {
                 int row = 2;
-                Console.ResetColor();
+                ResetConsoleColor();
 
                 //Общая информация
                 Console.SetCursorPosition(Universe.UniverseX + 2, row);
@@ -48,10 +48,10 @@ namespace SoulUniverse.PlanetObjects
                     Console.Write(Name + " фракции ");
                     Console.ForegroundColor = Owner.Color;
                     Console.Write(Owner.Name);
-                    Console.ResetColor();
+                    ResetConsoleColor();
                 }
                 else Console.Write("Неизвестный объект");
-                infoIsClear = false;
+                InfoIsClear = false;
                 ResetCursor();
             }
         }
@@ -62,10 +62,10 @@ namespace SoulUniverse.PlanetObjects
             {
                 Console.SetCursorPosition(Coordinates.x, Coordinates.y);
                 if (FractionDisplayMode == Enums.DisplayMode.Fractions) Console.ForegroundColor = Owner.Color;
-                else Console.ResetColor();
+                else ResetConsoleColor();
                 Console.Write(Symbol);
-                Console.ResetColor();
-                Console.SetCursorPosition(current_cursor_x, current_cursor_y);
+                ResetConsoleColor();
+                Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
                 IsNeedToDraw = false;
             }  
         }

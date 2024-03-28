@@ -18,7 +18,7 @@ namespace SoulUniverse
         public void WriteInfo()
         {
             int row = 2;
-            Console.ResetColor();
+            ResetConsoleColor();
             Console.SetCursorPosition(Universe.UniverseX + 2, row);
             Console.Write("Информация об объекте: ");
             if (this is Star star)
@@ -34,11 +34,11 @@ namespace SoulUniverse
                 Console.Write("Червоточина");
             }
             else Console.Write("Неизвестный объект");
-            infoIsClear = false;
+            InfoIsClear = false;
             checkedVoidObject = this;
 
             //Возвращение курсора
-            Console.SetCursorPosition(current_cursor_x, current_cursor_y);
+            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
         }
     }
 }

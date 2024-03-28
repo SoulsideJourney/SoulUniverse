@@ -53,7 +53,7 @@ namespace SoulUniverse
         public override void Draw()
         {
             ////Отрисовка орбиты
-            //Console.ResetColor();
+            //ResetConsoleColor();
             //int absoluteX;
             //int absoluteY;
 
@@ -87,7 +87,7 @@ namespace SoulUniverse
                 Console.Write(Symbol);
                 DrawedCoordinates.x = Coordinates.x;
                 DrawedCoordinates.y = Coordinates.y;
-                Console.SetCursorPosition(current_cursor_x, current_cursor_y);
+                Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
                 IsNeedToRedraw = false;
             }
         }
@@ -107,7 +107,7 @@ namespace SoulUniverse
         //        Console.SetCursorPosition(center, i);
         //        Console.Write('*');
         //    }
-        //    Console.ResetColor();
+        //    ResetConsoleColor();
         //}
 
 

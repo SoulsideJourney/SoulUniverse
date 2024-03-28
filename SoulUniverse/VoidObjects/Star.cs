@@ -147,7 +147,7 @@ namespace SoulUniverse
                             Console.Write(string.Format("|{0, 2} | {1, 6} а.е | ", ++planetNumber, starSystemObject.Distance));
                             Console.ForegroundColor = planet.Color;
                             Console.Write(string.Format("{0, 11}", planet.PlanetClass.ToString()));
-                            Console.ResetColor();
+                            Program.ResetConsoleColor();
                             Console.Write(string.Format(" | {0, 6} |", starSystemObject.Size));
                         }
                     }
@@ -173,15 +173,15 @@ namespace SoulUniverse
                             Console.ForegroundColor = fraction.Color;
                             Console.Write(fraction.Name);
                         }
-                        Console.ResetColor();
+                        ResetConsoleColor();
                     }
                     else Console.Write("Нет присутствующих фракций");
                 }
 
-                infoIsClear = false;
+                InfoIsClear = false;
 
                 //Возвращение курсора
-                Console.SetCursorPosition(current_cursor_x, current_cursor_y);
+                Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
             }
         }
 

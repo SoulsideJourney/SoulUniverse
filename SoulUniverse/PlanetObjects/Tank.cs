@@ -76,12 +76,12 @@ namespace SoulUniverse.PlanetObjects
             {
                 Console.SetCursorPosition(Coordinates.x, Coordinates.y);
                 if (FractionDisplayMode == Enums.DisplayMode.Fractions) Console.ForegroundColor = Owner.Color;
-                else Console.ResetColor();
+                else ResetConsoleColor();
                 Console.Write(Symbol);
                 DrawedCoordinates.x = Coordinates.x;
                 DrawedCoordinates.y = Coordinates.y;
-                Console.ResetColor();
-                Console.SetCursorPosition(current_cursor_x, current_cursor_y);
+                ResetConsoleColor();
+                Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
                 IsNeedToRedraw = false;
             }
         }
@@ -92,7 +92,7 @@ namespace SoulUniverse.PlanetObjects
             {
                 Console.SetCursorPosition(DrawedCoordinates.x, DrawedCoordinates.y);
                 Console.Write(' ');
-                Console.SetCursorPosition(current_cursor_x, current_cursor_y);
+                Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
             }
         }
     }

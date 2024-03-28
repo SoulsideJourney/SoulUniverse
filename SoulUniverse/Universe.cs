@@ -32,7 +32,17 @@ namespace SoulUniverse
         /// <summary> Список фракций </summary>
         internal static readonly List<Fraction> NPCFractions = new();
 
-        public static DateTime CurrentDate = DateTime.Today.Date;
+        private static DateTime _currentTime = DateTime.Today.Date;
+
+        public static DateTime CurrentDate
+        {
+            get => _currentTime;
+            set
+            {
+                _currentTime = value;
+                SetConsoleTitle();
+            }
+        }
 
         //Ссылки на родной мир
         public static Star HomeStar;

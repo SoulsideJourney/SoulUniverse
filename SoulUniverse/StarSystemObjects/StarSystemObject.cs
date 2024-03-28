@@ -56,7 +56,7 @@ namespace SoulUniverse
             lock (locker)
             {
                 int row = 2;
-                Console.ResetColor();
+                ResetConsoleColor();
 
                 //Общая информация
                 Console.SetCursorPosition(Universe.UniverseX + 2, row);
@@ -69,11 +69,11 @@ namespace SoulUniverse
                     Console.ForegroundColor = planet.Color;
                     Console.Write(planet.PlanetClass);
                     //Console.Write(string.Format("Планета класса {0}", planetClass));
-                    Console.ResetColor();
+                    ResetConsoleColor();
                     Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                    Console.Write(string.Format("Размер: {0} км", planet.Size));
+                    Console.Write($"Размер: {planet.Size} км");
                     Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                    Console.Write(string.Format("Расстояние до родительского тела: {0} а.е. ", planet.Distance));
+                    Console.Write($"Расстояние до родительского тела: {planet.Distance} а.е. ");
                     Console.SetCursorPosition(Universe.UniverseX + 2, ++row);              
                 }
                 else Console.Write("Неизвестный объект");
@@ -81,12 +81,12 @@ namespace SoulUniverse
                 //Информация о ресурсах
                 Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                 Console.Write("Имеющиеся ресурсы:");
-                foreach (var resource in this.Recources)
+                foreach (var resource in Recources)
                 {
                     Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                     Console.Write("{0}: {1}", resource.Key.ToString(), resource.Value.ToString());
                 }
-                infoIsClear = false;
+                InfoIsClear = false;
 
                 //Информация о фракциях
                 if (Fractions.Count > 0)
@@ -99,7 +99,7 @@ namespace SoulUniverse
                         Console.ForegroundColor = fraction.Color;
                         Console.Write($"{fraction.Name} ({fraction.Property.Where( _ => _.Location == this).Count()} объектов)");
                     }
-                    Console.ResetColor();
+                    ResetConsoleColor();
                 }
                 else
                 {
@@ -108,7 +108,7 @@ namespace SoulUniverse
                 }
 
                 //Возвращение курсора
-                Console.SetCursorPosition(current_cursor_x, current_cursor_y);
+                Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
             }
         }
 
@@ -146,7 +146,7 @@ namespace SoulUniverse
                 Console.Write(Symbol);
                 DrawedCoordinates.x = Coordinates.x;
                 DrawedCoordinates.y = Coordinates.y;
-                Console.SetCursorPosition(current_cursor_x, current_cursor_y);
+                Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
                 IsNeedToRedraw = false;
             }
         }
@@ -157,7 +157,7 @@ namespace SoulUniverse
             {
                 Console.SetCursorPosition(20 + DrawedCoordinates.x, 20 + DrawedCoordinates.y);
                 Console.Write(' ');
-                Console.SetCursorPosition(current_cursor_x, current_cursor_y);
+                Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
             }
         }
 
