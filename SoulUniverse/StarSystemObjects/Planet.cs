@@ -8,10 +8,21 @@ namespace SoulUniverse
     {
         public const int minSize = 10;
         public const int maxSize = 25;
-        protected override char Symbol { get; } = '\u25CF'; //●
+        protected override char Symbol => '\u25CF'; //●
         public override int Size { get; init; } = rnd.Next(minSize, maxSize);
         public override double OrbitalSpeed => 107_000;
         public PlanetClass PlanetClass { get; init; }
+
+        /// <summary> Цвет планеты в зависимости от её класса </summary>
+        public override ConsoleColor Color =>
+            PlanetClass switch
+            {
+                PlanetClass.Barren => ConsoleColor.DarkYellow,
+                PlanetClass.Continental => ConsoleColor.Green,
+                PlanetClass.GasGiant => ConsoleColor.DarkBlue,
+                PlanetClass.Ocean => ConsoleColor.Cyan,
+                _ => ConsoleColor.White
+            };
 
         //List<KeyValuePair<Recource, int>> recources = new();
         //private int universe_x;
@@ -70,7 +81,7 @@ namespace SoulUniverse
                 }
                 else
                 {
-                    Console.ForegroundColor = GetColor();
+                    Console.ForegroundColor = Color;
                 }
                 Console.SetCursorPosition(20 + Coordinates.x, 20 + Coordinates.y);
                 Console.Write(Symbol);
@@ -99,22 +110,6 @@ namespace SoulUniverse
         //    Console.ResetColor();
         //}
 
-        public override ConsoleColor GetColor()
-        {
-            switch (PlanetClass)
-            {
-                case PlanetClass.Barren:
-                    return ConsoleColor.DarkYellow;
-                case PlanetClass.Continental:
-                    return ConsoleColor.Green;
-                case PlanetClass.GasGiant:
-                    return ConsoleColor.DarkBlue;
-                case PlanetClass.Ocean:
-                    return ConsoleColor.DarkBlue;
-                default:
-                    return ConsoleColor.White;
-            }
-        }
 
         //public void Move()
         //{

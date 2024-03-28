@@ -19,10 +19,7 @@ namespace SoulUniverse.StarSystemObjects
 
         protected override char Symbol => '.'; //\u00B7
 
-        public override ConsoleColor GetColor()
-        {
-            return ConsoleColor.Gray;
-        }
+        public override ConsoleColor Color => ConsoleColor.Gray;
 
         public Asteroid(int distance) : base(distance)
         {

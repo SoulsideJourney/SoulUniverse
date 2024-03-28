@@ -145,7 +145,7 @@ namespace SoulUniverse
                         {
                             //planetClass = planet.PlanetClass.ToString();
                             Console.Write(string.Format("|{0, 2} | {1, 6} а.е | ", ++planetNumber, starSystemObject.Distance));
-                            Console.ForegroundColor = planet.GetColor();
+                            Console.ForegroundColor = planet.Color;
                             Console.Write(string.Format("{0, 11}", planet.PlanetClass.ToString()));
                             Console.ResetColor();
                             Console.Write(string.Format(" | {0, 6} |", starSystemObject.Size));

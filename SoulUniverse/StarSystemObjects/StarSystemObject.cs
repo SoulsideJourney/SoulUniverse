@@ -30,7 +30,7 @@ namespace SoulUniverse
         //Присутствующие фракции
         public List<Fraction> Fractions { get; } = new();
 
-        public abstract ConsoleColor GetColor();
+        public abstract ConsoleColor Color { get; }
 
         public StarSystemObject(int distance)
         {
@@ -66,7 +66,7 @@ namespace SoulUniverse
                 {
                     //string planetClass = planet.PlanetClass.ToString();
                     Console.Write("Планета класса ");
-                    Console.ForegroundColor = planet.GetColor();
+                    Console.ForegroundColor = planet.Color;
                     Console.Write(planet.PlanetClass);
                     //Console.Write(string.Format("Планета класса {0}", planetClass));
                     Console.ResetColor();
@@ -140,7 +140,7 @@ namespace SoulUniverse
                 }
                 else
                 {
-                    Console.ForegroundColor = GetColor();
+                    Console.ForegroundColor = Color;
                 }
                 Console.SetCursorPosition(20 + Coordinates.x, 20 + Coordinates.y);
                 Console.Write(Symbol);
