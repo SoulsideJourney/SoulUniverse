@@ -10,7 +10,7 @@ namespace SoulUniverse
     public interface IMovable
     {
         bool IsNeedToRedraw { get; set; }
-        Coordinates DrawedCoordinates { get; set; }
+        Coordinates DrawnCoordinates { get; set; }
         void Move();
         void Erase();
     }

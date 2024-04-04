@@ -25,11 +25,15 @@ namespace SoulUniverse
         private double Phi = 0;
 
         //public Coordinates DrawedCoordinates = new();
-        public Coordinates DrawedCoordinates { get; set; } = new();
-        public Coordinates Coordinates = new();
-        public List<GroundObject> GroundObjects = new();
+        public Coordinates DrawnCoordinates { get; set; } = new();
+        public readonly Coordinates Coordinates = new();
+        public readonly List<GroundObject> GroundObjects = new();
+        public List<Deposit> Deposits => GroundObjects.Where(o => o is Deposit).Cast<Deposit>().ToList();
+
         public bool IsColonized => Fractions.Count > 0;
+
         public Dictionary<ResourceName, int> Recources { get; } = new();
+
 
         //Присутствующие фракции
         public List<Fraction> Fractions { get; } = new();
@@ -148,8 +152,8 @@ namespace SoulUniverse
                 }
                 Console.SetCursorPosition(20 + Coordinates.x, 20 + Coordinates.y);
                 Console.Write(Symbol);
-                DrawedCoordinates.x = Coordinates.x;
-                DrawedCoordinates.y = Coordinates.y;
+                DrawnCoordinates.x = Coordinates.x;
+                DrawnCoordinates.y = Coordinates.y;
                 Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
                 IsNeedToRedraw = false;
             }
@@ -159,7 +163,7 @@ namespace SoulUniverse
         {
             lock (locker)
             {
-                Console.SetCursorPosition(20 + DrawedCoordinates.x, 20 + DrawedCoordinates.y);
+                Console.SetCursorPosition(20 + DrawnCoordinates.x, 20 + DrawnCoordinates.y);
                 Console.Write(' ');
                 Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
             }

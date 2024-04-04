@@ -24,30 +24,33 @@ namespace SoulUniverse
                 _ => ConsoleColor.White
             };
 
-        //List<KeyValuePair<Recource, int>> recources = new();
-        //private int universe_x;
-
         public Planet(int distance) : base(distance)
         {
-            //Distance = distance;
-            //Random rnd = new();
-            ////PlanetClass = (PlanetClass)Enum.GetValues(typeof(PlanetClass)).GetValue(rnd.Next(Enum.GetValues(typeof(PlanetClass)).Length));
-
-            ////int absoluteX = (int)Math.Round(Math.Sqrt(Math.Pow(Distance, 2) - rnd.Next((int)Math.Pow(Distance, 2))));
-            ////int absoluteY = (int)Math.Round(Math.Sqrt(Math.Pow(Distance, 2) - Math.Pow(absoluteX, 2)));
-            ////Coordinates.x = absoluteX * (int)Math.Pow(-1, rnd.Next(2));
-            ////Coordinates.y = absoluteY * (int)Math.Pow(-1, rnd.Next(2));
-
-            //Phi = rnd.NextDouble() * 2 * Math.PI;
-            //Coordinates.x = (int)Math.Round(Distance * Math.Cos(Phi));
-            //Coordinates.y = (int)Math.Round(Distance * Math.Sin(Phi));
-
-            //Size = rnd.Next(minSize, maxSize);
+            //Генерация ресурсов
             foreach (ResourceName res in Enum.GetValues(typeof(ResourceName)))
             {
                 Recources.Add(res, Rnd.Next(100000000));
             }
             PlanetClass = (PlanetClass)Rnd.Next(Enum.GetValues(typeof(PlanetClass)).Length);
+
+            //Генерация месторождений
+            int i = 0;
+            while (i < Size + Rnd.Next(-2, 2))
+            {
+                int x = Rnd.Next(Size);
+                int y = Rnd.Next(Size);
+                if (!IsPlaceOccupied(x, y))
+                {
+                    Deposit deposit = new Deposit(x, y, this);
+
+                    mutex.WaitOne();
+                    GroundObjects.Add(deposit);
+                    Deposits.Add(deposit);
+                    mutex.ReleaseMutex();
+                }
+
+                i++;
+            }
         }
 
         public override void Draw()
@@ -85,8 +88,8 @@ namespace SoulUniverse
                 }
                 Console.SetCursorPosition(20 + Coordinates.x, 20 + Coordinates.y);
                 Console.Write(Symbol);
-                DrawedCoordinates.x = Coordinates.x;
-                DrawedCoordinates.y = Coordinates.y;
+                DrawnCoordinates.x = Coordinates.x;
+                DrawnCoordinates.y = Coordinates.y;
                 Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
                 IsNeedToRedraw = false;
             }

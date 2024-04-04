@@ -149,13 +149,23 @@ namespace SoulUniverse
         //    new Mine(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this, starSystemObject);
         //}
 
-        public bool TryBuildMine(StarSystemObject starSystemObject)
+        private bool TryBuildMine(StarSystemObject starSystemObject)
         {
-            int x = Rnd.Next(starSystemObject.Size);
-            int y = Rnd.Next(starSystemObject.Size);
-            if (!starSystemObject.IsPlaceOccupied(x, y))
+            //int x = Rnd.Next(starSystemObject.Size);
+            //int y = Rnd.Next(starSystemObject.Size);
+            //if (!starSystemObject.IsPlaceOccupied(x, y))
+
+            var deposit = starSystemObject.Deposits.FirstOrDefault(d => !d.IsOccupied);
+            if (deposit != null)
             {
-                new Mine(x, y, this, starSystemObject);
+                //Mine mine = new Mine(x, y, this, starSystemObject);
+                Mine mine = new Mine(this, deposit);
+
+                mutex.WaitOne();
+                Universe.Mines.Add(mine);
+                starSystemObject.GroundObjects.Add(mine);
+                mutex.ReleaseMutex();
+
                 return true;
             }
             return false;

@@ -237,12 +237,12 @@ namespace SoulUniverse
 
                     if (UniverseDisplayMode == DisplayMode.Planet)
                     {
-                        foreach (GroundProperty groundObject in checkedStarSystemObject.GroundObjects)
+                        foreach (GroundObject groundObject in checkedStarSystemObject.GroundObjects)
                         {
                             //Отрисовка новых объектов
-                            if (groundObject.IsNeedToDraw)
+                            if (groundObject is GroundProperty { IsNeedToDraw: true } groundProperty)
                             {
-                                groundObject.Draw();
+                                groundProperty.Draw();
                             }
                             //Перерисовка движущихся наземных объектов
                             if (groundObject is Tank { IsNeedToRedraw: true } tank)

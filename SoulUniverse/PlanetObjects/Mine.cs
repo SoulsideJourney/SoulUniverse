@@ -22,19 +22,22 @@ namespace SoulUniverse.PlanetObjects
             new KeyValuePair<ResourceName, int>(ResourceName.Oil, 0)
         ];
 
-        //public bool IsNeedToDraw { get; set; } = true;
-
         public Mine(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, fraction, starSystemObject)
         {
             foreach (var res in fraction.Recources)
             {
                 fraction.Recources[res.Key] = res.Value - BuildCost.Find(r => r.Key == res.Key).Value;
             }
+        }
 
-            mutex.WaitOne();
-            Universe.Mines.Add(this);
-            starSystemObject.GroundObjects.Add(this);
-            mutex.ReleaseMutex();
+        public Mine(Fraction fraction, Deposit deposit) : base(deposit.Coordinates.x, deposit.Coordinates.y, fraction, deposit.Location)
+        {
+            foreach (var res in fraction.Recources)
+            {
+                fraction.Recources[res.Key] = res.Value - BuildCost.Find(r => r.Key == res.Key).Value;
+            }
+
+            deposit.IsOccupied = true;
         }
 
         public void Excavate()

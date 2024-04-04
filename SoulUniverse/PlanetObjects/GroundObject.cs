@@ -38,6 +38,20 @@ namespace SoulUniverse.PlanetObjects
                 ResetCursor();
             }
         }
+
+        public override void Draw()
+        {
+            lock(locker)
+            {
+                Console.SetCursorPosition(Coordinates.x, Coordinates.y);
+                //if (FractionDisplayMode == Enums.DisplayMode.Fractions) Console.ForegroundColor = Owner.Color;
+                //else ResetConsoleColor();
+                Console.Write(Symbol);
+                ResetConsoleColor();
+                Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+                //IsNeedToDraw = false;
+            }  
+        }
     }
 
     public abstract class GroundProperty : GroundObject

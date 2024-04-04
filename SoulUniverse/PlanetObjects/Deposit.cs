@@ -6,18 +6,33 @@ using System.Threading.Tasks;
 
 namespace SoulUniverse.PlanetObjects
 {
-    internal class Deposit : GroundObject
+    public class Deposit : GroundObject
     {
         public Deposit(int x, int y, StarSystemObject starSystemObject) : base(x, y, starSystemObject)
         {
+
         }
 
-        public override void Draw()
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary> Занято ли месторождение шахтой </summary>
+        public bool IsOccupied { get; set; }
 
         protected override char Symbol => '\u25b2'; //▲
         protected override string Name => "Месторождение ЖЫЛЕЗА";
+
+        public override void Draw()
+        {
+            if (!IsOccupied)
+            {
+                base.Draw();
+            }
+        }
+
+        public override void WriteInfo()
+        {
+            if (!IsOccupied)
+            {
+                base.WriteInfo();
+            }
+        }
     }
 }

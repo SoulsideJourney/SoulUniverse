@@ -21,7 +21,7 @@ namespace SoulUniverse.PlanetObjects
         };
 
         public bool IsNeedToRedraw { get; set; } = true;
-        public Coordinates DrawedCoordinates { get; set; } = new();
+        public Coordinates DrawnCoordinates { get; set; } = new();
 
         public Tank(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, fraction, starSystemObject)
         {
@@ -48,7 +48,7 @@ namespace SoulUniverse.PlanetObjects
         /// <summary>Рандомное движение танка на одно поле</summary>
         public void Move()
         {
-            if (DrawedCoordinates.x != 0 && DrawedCoordinates.y != 0)
+            if (DrawnCoordinates.x != 0 && DrawnCoordinates.y != 0)
             {
 
             }
@@ -78,8 +78,8 @@ namespace SoulUniverse.PlanetObjects
                 if (FractionDisplayMode == Enums.DisplayMode.Fractions) Console.ForegroundColor = Owner.Color;
                 else ResetConsoleColor();
                 Console.Write(Symbol);
-                DrawedCoordinates.x = Coordinates.x;
-                DrawedCoordinates.y = Coordinates.y;
+                DrawnCoordinates.x = Coordinates.x;
+                DrawnCoordinates.y = Coordinates.y;
                 ResetConsoleColor();
                 Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
                 IsNeedToRedraw = false;
@@ -90,7 +90,7 @@ namespace SoulUniverse.PlanetObjects
         {
             lock (locker)
             {
-                Console.SetCursorPosition(DrawedCoordinates.x, DrawedCoordinates.y);
+                Console.SetCursorPosition(DrawnCoordinates.x, DrawnCoordinates.y);
                 Console.Write(' ');
                 Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
             }
