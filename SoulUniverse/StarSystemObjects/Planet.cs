@@ -37,19 +37,40 @@ namespace SoulUniverse
             int i = 0;
             while (i < Size + Rnd.Next(-2, 2))
             {
-                int x = Rnd.Next(Size);
-                int y = Rnd.Next(Size);
-                if (!IsPlaceOccupied(x, y))
-                {
-                    Deposit deposit = new Deposit(x, y, this);
-
-                    mutex.WaitOne();
-                    GroundObjects.Add(deposit);
-                    Deposits.Add(deposit);
-                    mutex.ReleaseMutex();
-                }
+                GenerateDeposit(ResourceName.Iron);
 
                 i++;
+            }
+
+            i = 0;
+            while (i < Size / 4 + Rnd.Next(-2, 2))
+            {
+                GenerateDeposit(ResourceName.Oil);
+
+                i++;
+            }
+
+            i = 0;
+            while (i < Size / 10 + Rnd.Next(-2, 2))
+            {
+                GenerateDeposit(ResourceName.Uranium);
+
+                i++;
+            }
+        }
+
+        private void GenerateDeposit(ResourceName resource)
+        {
+            int x = Rnd.Next(Size);
+            int y = Rnd.Next(Size);
+            if (!IsPlaceOccupied(x, y))
+            {
+                Deposit deposit = new Deposit(x, y, this, resource);
+
+                mutex.WaitOne();
+                GroundObjects.Add(deposit);
+                Deposits.Add(deposit);
+                mutex.ReleaseMutex();
             }
         }
 

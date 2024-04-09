@@ -269,7 +269,7 @@ namespace SoulUniverse
                     foreach (var factory in Universe.Factories)
                     {
                         if (factory.Owner.IsEnoughToBuildTank()
-                            && factory.Location.GroundObjects.Count(o => o is Tank tank && tank.Owner == factory.Owner) < 10
+                            && factory.Location.GroundObjects.Count(o => o is Tank tank && tank.Owner == factory.Owner) < factory.Location.PlacesCount * 0.8
                             && !factory.Location.IsPlaceOccupied(factory.Coordinates.x + 1, factory.Coordinates.y))
                         {
                             factory.BuildTank();

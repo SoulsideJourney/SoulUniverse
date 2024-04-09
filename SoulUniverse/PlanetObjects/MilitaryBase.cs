@@ -16,9 +16,9 @@ namespace SoulUniverse.PlanetObjects
         //public override StarSystemObject Location { get; }
         static public List<KeyValuePair<ResourceName, int>> Cost { get; } = new()
         {
-            new KeyValuePair<ResourceName, int>(ResourceName.Iron, 1000),
-            new KeyValuePair<ResourceName, int>(ResourceName.Uranium, 0),
-            new KeyValuePair<ResourceName, int>(ResourceName.Oil, 0),
+            new KeyValuePair<ResourceName, int>(ResourceName.Iron, 10000),
+            new KeyValuePair<ResourceName, int>(ResourceName.Uranium, 50),
+            new KeyValuePair<ResourceName, int>(ResourceName.Oil, 1000),
         };
         //public bool IsNeedToDraw { get; set; } = true;
 

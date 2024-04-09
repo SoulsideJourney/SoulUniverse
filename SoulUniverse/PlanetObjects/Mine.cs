@@ -10,10 +10,33 @@ using static SoulUniverse.Program;
 
 namespace SoulUniverse.PlanetObjects
 {
-    internal class Mine : GroundProperty/*, IBuildable*/
+    public class Mine : GroundProperty/*, IBuildable*/
     {
         protected override char Symbol => '^';
-        protected override string Name => "Шахта";
+        protected override string Name => $"Шахта ({Deposit.Resource})";
+
+        private Deposit? _deposit;
+
+        public Deposit? Deposit
+        {
+            get => _deposit;
+            set
+            {
+                if (value == null)
+                {
+                    if (_deposit != null)
+                    {
+                        _deposit.Mine = null;
+                        _deposit = null;
+                    }
+                }
+                else
+                {
+                    _deposit = value;
+                    _deposit.Mine = this;
+                }
+            }
+        }
 
         public static List<KeyValuePair<ResourceName, int>> BuildCost { get; } =
         [
@@ -37,15 +60,16 @@ namespace SoulUniverse.PlanetObjects
                 fraction.Recources[res.Key] = res.Value - BuildCost.Find(r => r.Key == res.Key).Value;
             }
 
-            deposit.IsOccupied = true;
+            Deposit = deposit;
         }
 
+        /// <summary> Добывать ресурсы </summary>
         public void Excavate()
         {
-            if (Location.Recources[ResourceName.Iron] > 0)
+            if (Location.Recources[Deposit.Resource] > 0)
             {
-                Location.Recources[ResourceName.Iron] -= 1;
-                Owner.Recources[ResourceName.Iron] += 1;
+                Location.Recources[Deposit.Resource] -= 1;
+                Owner.Recources[Deposit.Resource] += 1;
             }
         }
     }

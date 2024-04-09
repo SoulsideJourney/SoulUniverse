@@ -14,6 +14,8 @@ namespace SoulUniverse
         protected abstract char Symbol { get; }
         public abstract int Size { get; init; }
 
+        public int PlacesCount => Size * Size;
+
         /// <summary>Орбитальная скорость в км/ч</summary>
         public abstract double OrbitalSpeed { get; }
 
