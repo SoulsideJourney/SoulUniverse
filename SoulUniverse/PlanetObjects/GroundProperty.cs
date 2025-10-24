@@ -1,4 +1,5 @@
 ﻿using SoulUniverse.StarSystemObjects;
+using static SoulUniverse.ConsoleHelper;
 using static SoulUniverse.Program;
 
 namespace SoulUniverse.PlanetObjects;

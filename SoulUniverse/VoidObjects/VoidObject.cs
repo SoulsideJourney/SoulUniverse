@@ -1,4 +1,5 @@
-﻿using static SoulUniverse.Program;
+﻿using static SoulUniverse.ConsoleHelper;
+using static SoulUniverse.Program;
 
 namespace SoulUniverse.VoidObjects;
 

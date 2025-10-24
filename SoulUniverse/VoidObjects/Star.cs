@@ -1,4 +1,5 @@
 ﻿using SoulUniverse.StarSystemObjects;
+using static SoulUniverse.ConsoleHelper;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 

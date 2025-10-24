@@ -2,6 +2,7 @@
 using SoulUniverse.StarSystemObjects;
 using SoulUniverse.VoidObjects;
 using System.Diagnostics;
+using static SoulUniverse.ConsoleHelper;
 using static SoulUniverse.Enums;
 
 namespace SoulUniverse;
@@ -12,12 +13,6 @@ internal static class Program
 {
     public static readonly object Locker = new();
     public static readonly Mutex Mutex = new();
-
-    /// <summary> Размер консоли по оси X </summary>
-    private const int ConsoleX = 200;
-
-    /// <summary> Размер консоли по оси Y </summary>
-    private const int ConsoleY = 50;
 
     private const int LegendOffsetFromBottom = 8;
 
@@ -31,29 +26,6 @@ internal static class Program
         set
         {
             _isPaused = value;
-            SetConsoleTitle();
-        }
-    }
-
-    private static int _currentCursorX;
-    private static int _currentCursorY;
-
-    public static int CurrentCursorX
-    {
-        get => _currentCursorX;
-        private set
-        {
-            _currentCursorX = value;
-            SetConsoleTitle();
-        }
-    }
-
-    public static int CurrentCursorY
-    {
-        get => _currentCursorY;
-        private set
-        {
-            _currentCursorY = value;
             SetConsoleTitle();
         }
     }
@@ -308,14 +280,6 @@ internal static class Program
             //Первоначальная установка соответствия курсора и переменных
             ResetCursor();
         }
-    }
-
-    /// <summary> Установить курсор </summary>
-    public static void SetCursor(int x, int y)
-    {
-        CurrentCursorX = x;
-        CurrentCursorY = y;
-        Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
     }
 
     public static void ResetCursor()

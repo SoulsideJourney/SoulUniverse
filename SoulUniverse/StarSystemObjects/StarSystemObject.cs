@@ -1,5 +1,6 @@
 ﻿using SoulUniverse.Interfaces;
 using SoulUniverse.PlanetObjects;
+using static SoulUniverse.ConsoleHelper;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
