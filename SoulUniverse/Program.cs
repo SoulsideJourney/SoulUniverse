@@ -71,12 +71,12 @@ internal static class Program
     internal static DisplayMode FractionDisplayMode = DisplayMode.Types;
 
     private static int _timeSelector = 4;
-    private static int[] _time = [1, 10, 100, 500, 1000, 2000];
+    private static readonly int[] TimeSpans = [1, 10, 100, 500, 1000, 2000];
 
     //Выбранные объекты
     internal static VoidObject? CheckedVoidObject;
-    internal static StarSystemObject CheckedStarSystemObject;
-    internal static GroundObject CheckedGroundObject;
+    internal static StarSystemObject? CheckedStarSystemObject;
+    internal static GroundObject? CheckedGroundObject;
 
     /// <summary> Великий рандом </summary>
     internal static readonly Random Rnd = new();
@@ -138,7 +138,7 @@ internal static class Program
         navigateThread.Start();
     }
 
-    static void Navigate()
+    private static void Navigate()
     {
         while (true)
         {
@@ -157,21 +157,20 @@ internal static class Program
             else if (UniverseDisplayMode == DisplayMode.StarSystem)
             {
                 //Информация об объекте
-                Star star = (Star)CheckedVoidObject;
+                Star star = (Star)CheckedVoidObject!;
                 if (CurrentCursorX == 20 && CurrentCursorY == 20)
                 {
                     lock (Locker)
                     {
-                        int row = 2;
                         ResetConsoleColor();
-                        Console.SetCursorPosition(Universe.UniverseX + 2, row);
+                        Console.SetCursorPosition(Universe.UniverseX + 2, 2);
                         Console.Write("Информация об объекте: ");
-                        star?.WriteStarInfo();
+                        star.WriteStarInfo();
                     }
                 }
                 else
                 {
-                    CheckedStarSystemObject = star?.StarSystemObjects.Find(o => o.Coordinates.x == CurrentCursorX - 20 && o.Coordinates.y == CurrentCursorY - 20);
+                    CheckedStarSystemObject = star.StarSystemObjects.Find(o => o.Coordinates.x == CurrentCursorX - 20 && o.Coordinates.y == CurrentCursorY - 20);
                     lock (Locker)
                     {
                         ClearInfo();
@@ -189,12 +188,13 @@ internal static class Program
                 }
             }
         }
+        // ReSharper disable once FunctionNeverReturns
     }
 
     /// <summary>Симуляция времени</summary>
     static void SimulateTime()
     {
-        Thread.Sleep(_time[_timeSelector]);
+        Thread.Sleep(TimeSpans[_timeSelector]);
         while (true)
         {
 
@@ -207,11 +207,11 @@ internal static class Program
 #endif
 
                 //Расчет точек орбит планет
-                foreach (VoidObject? voidObject in Universe.VoidObjects)
+                foreach (VoidObject voidObject in Universe.VoidObjects)
                 {
                     if (voidObject is Star star)
                     {
-                        foreach (StarSystemObject? starSystemObject in star.StarSystemObjects)
+                        foreach (StarSystemObject starSystemObject in star.StarSystemObjects)
                         {
                             if (starSystemObject is Planet planet)
                             {
@@ -238,7 +238,7 @@ internal static class Program
 
                 if (UniverseDisplayMode == DisplayMode.Planet)
                 {
-                    foreach (GroundObject groundObject in CheckedStarSystemObject.GroundObjects)
+                    foreach (GroundObject groundObject in CheckedStarSystemObject!.GroundObjects)
                     {
                         //Отрисовка новых объектов
                         if (groundObject is GroundProperty { IsNeedToDraw: true } groundProperty)
@@ -284,8 +284,9 @@ internal static class Program
                     tank.Move();
                 }
             }
-            Thread.Sleep(_time[_timeSelector]);
+            Thread.Sleep(TimeSpans[_timeSelector]);
         }
+        // ReSharper disable once FunctionNeverReturns
     }
 
     /// <summary>Просмотр Вселенной</summary>
@@ -535,7 +536,7 @@ internal static class Program
                 }
                 else if (UniverseDisplayMode == DisplayMode.Planet)
                 {
-                    CheckedStarSystemObject.DrawObjects();
+                    CheckedStarSystemObject!.DrawObjects();
                 }
             }
         }
@@ -574,7 +575,7 @@ internal static class Program
         {
             if (UniverseDisplayMode == DisplayMode.Universe)
             {
-                if (CheckedVoidObject != null && CheckedVoidObject is Star)
+                if (CheckedVoidObject is Star)
                 {
                     OpenSystem(CheckedVoidObject);
                 }
@@ -597,7 +598,7 @@ internal static class Program
         //+- -- регулирование скорости течения времени
         else if (consoleKey == ConsoleKey.Subtract)
         {
-            if (_timeSelector < _time.Length - 1) _timeSelector++;
+            if (_timeSelector < TimeSpans.Length - 1) _timeSelector++;
         }
         else if (consoleKey == ConsoleKey.Add)
         {
@@ -625,7 +626,7 @@ internal static class Program
             }
             else if (UniverseDisplayMode == DisplayMode.Planet)
             {
-                OpenSystem(CheckedVoidObject);
+                OpenSystem(CheckedVoidObject!);
             }
             //else Environment.Exit(0);
         }
