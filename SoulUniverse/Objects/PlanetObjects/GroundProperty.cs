@@ -1,8 +1,8 @@
-﻿using SoulUniverse.StarSystemObjects;
+﻿using SoulUniverse.Objects.StarSystemObjects;
 using static SoulUniverse.ConsoleHelper;
 using static SoulUniverse.Program;
 
-namespace SoulUniverse.PlanetObjects;
+namespace SoulUniverse.Objects.PlanetObjects;
 
 public abstract class GroundProperty : GroundObject
 {

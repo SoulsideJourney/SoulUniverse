@@ -1,6 +1,6 @@
-﻿using SoulUniverse.StarSystemObjects;
+﻿using SoulUniverse.Objects.StarSystemObjects;
 
-namespace SoulUniverse.PlanetObjects;
+namespace SoulUniverse.Objects.PlanetObjects;
 
 public class Deposit : GroundObject
 {

@@ -1,9 +1,9 @@
-﻿using SoulUniverse.PlanetObjects;
+﻿using SoulUniverse.Objects.PlanetObjects;
 using static SoulUniverse.ConsoleHelper;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
-namespace SoulUniverse.StarSystemObjects;
+namespace SoulUniverse.Objects.StarSystemObjects;
 
 public sealed class Planet : StarSystemObject
 {

@@ -1,5 +1,5 @@
-﻿using SoulUniverse.PlanetObjects;
-using SoulUniverse.StarSystemObjects;
+﻿using SoulUniverse.Objects.PlanetObjects;
+using SoulUniverse.Objects.StarSystemObjects;
 using System.Diagnostics;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;

@@ -1,10 +1,10 @@
 ﻿using SoulUniverse.Interfaces;
-using SoulUniverse.PlanetObjects;
+using SoulUniverse.Objects.PlanetObjects;
 using static SoulUniverse.ConsoleHelper;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
-namespace SoulUniverse.StarSystemObjects;
+namespace SoulUniverse.Objects.StarSystemObjects;
 
 public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemObject>, IMovable
 {
@@ -176,7 +176,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
 
     public int CompareTo(StarSystemObject? other)
     {
-        if (this.Distance > (other?.Distance ?? 0)) return 1;
+        if (Distance > (other?.Distance ?? 0)) return 1;
         else return -1;
     }
 }

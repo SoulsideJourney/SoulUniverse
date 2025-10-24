@@ -1,9 +1,9 @@
-﻿using SoulUniverse.StarSystemObjects;
+﻿using SoulUniverse.Objects.StarSystemObjects;
 using static SoulUniverse.ConsoleHelper;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
-namespace SoulUniverse.VoidObjects;
+namespace SoulUniverse.Objects.VoidObjects;
 
 internal class Star : VoidObject
 {
@@ -113,7 +113,7 @@ internal class Star : VoidObject
         lock (Locker)
         {
             int row = 2;
-            string starClass = this._starClass.ToString();
+            string starClass = _starClass.ToString();
             Console.Write("Звезда класса ");
             Console.ForegroundColor = GetColor();
             Console.Write(starClass);
@@ -154,7 +154,7 @@ internal class Star : VoidObject
                 //Информация о присутствующих фракциях
                 Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                 List<Fraction> fractionsInSystem = new List<Fraction>();
-                foreach (StarSystemObject starSystemObject in this.StarSystemObjects)
+                foreach (StarSystemObject starSystemObject in StarSystemObjects)
                 {
                     foreach (Fraction fraction in starSystemObject.Fractions)
                     {

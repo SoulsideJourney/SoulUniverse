@@ -1,7 +1,7 @@
 ﻿using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
-namespace SoulUniverse.StarSystemObjects;
+namespace SoulUniverse.Objects.StarSystemObjects;
 
 internal class Asteroid : StarSystemObject
 {

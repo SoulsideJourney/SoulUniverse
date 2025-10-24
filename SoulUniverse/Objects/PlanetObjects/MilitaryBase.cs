@@ -1,9 +1,9 @@
 ﻿using SoulUniverse.Interfaces;
-using SoulUniverse.StarSystemObjects;
+using SoulUniverse.Objects.StarSystemObjects;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
-namespace SoulUniverse.PlanetObjects;
+namespace SoulUniverse.Objects.PlanetObjects;
 
 internal class MilitaryBase : GroundProperty, IBuildable
 {

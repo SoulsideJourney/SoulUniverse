@@ -1,6 +1,6 @@
 ﻿using static SoulUniverse.Enums;
 
-namespace SoulUniverse.PlanetObjects;
+namespace SoulUniverse.Objects.PlanetObjects;
 
 public class Mine : GroundProperty/*, IBuildable*/
 {

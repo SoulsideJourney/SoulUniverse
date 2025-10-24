@@ -1,4 +1,4 @@
-﻿namespace SoulUniverse;
+﻿namespace SoulUniverse.Objects;
 
 /// <summary>Любой объект во Вселенной </summary>
 public abstract class UniverseObject

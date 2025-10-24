@@ -1,20 +1,20 @@
 ﻿using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
-namespace SoulUniverse.VoidObjects;
+namespace SoulUniverse.Objects.VoidObjects;
 
-internal class Wormhole : VoidObject
+internal class BlackHole : VoidObject
 {
-    protected override char Symbol { get; } = '@';
-    protected override ConsoleColor Color { get; } = ConsoleColor.Gray;
+    protected override char Symbol { get; } = '\u00D8'; //Ø
 
-    public Wormhole()
+    protected override ConsoleColor Color { get; } = ConsoleColor.Yellow;
+    public BlackHole()
     {
         Coordinates.x = Rnd.Next(Universe.UniverseX);
         Coordinates.y = Rnd.Next(Universe.UniverseY);
     }
 
-    public Wormhole(int x, int y)
+    public BlackHole(int x, int y)
     {
         Coordinates.x = x;
         Coordinates.y = y;

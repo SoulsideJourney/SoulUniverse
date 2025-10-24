@@ -1,6 +1,6 @@
-﻿using SoulUniverse.PlanetObjects;
-using SoulUniverse.StarSystemObjects;
-using SoulUniverse.VoidObjects;
+﻿using SoulUniverse.Objects.PlanetObjects;
+using SoulUniverse.Objects.StarSystemObjects;
+using SoulUniverse.Objects.VoidObjects;
 using System.Diagnostics;
 using static SoulUniverse.ConsoleHelper;
 using static SoulUniverse.Enums;

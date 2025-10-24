@@ -1,7 +1,7 @@
-﻿using SoulUniverse.StarSystemObjects;
+﻿using SoulUniverse.Objects.StarSystemObjects;
 using static SoulUniverse.Enums;
 
-namespace SoulUniverse.PlanetObjects;
+namespace SoulUniverse.Objects.PlanetObjects;
 
 internal class Factory : GroundProperty
 {

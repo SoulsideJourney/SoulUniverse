@@ -1,6 +1,6 @@
-﻿using SoulUniverse.PlanetObjects;
-using SoulUniverse.StarSystemObjects;
-using SoulUniverse.VoidObjects;
+﻿using SoulUniverse.Objects.PlanetObjects;
+using SoulUniverse.Objects.StarSystemObjects;
+using SoulUniverse.Objects.VoidObjects;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 

@@ -1,7 +1,7 @@
 ﻿using static SoulUniverse.ConsoleHelper;
 using static SoulUniverse.Program;
 
-namespace SoulUniverse.VoidObjects;
+namespace SoulUniverse.Objects.VoidObjects;
 
 internal abstract class VoidObject : UniverseObject
 {
