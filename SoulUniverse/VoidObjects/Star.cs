@@ -1,228 +1,212 @@
 ﻿using SoulUniverse.StarSystemObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
-namespace SoulUniverse
+namespace SoulUniverse.VoidObjects;
+
+internal class Star : VoidObject
 {
-    internal class Star : VoidObject
+    protected override char Symbol { get; } = '*';
+
+    protected override ConsoleColor Color { get; }
+
+    private readonly StarClass _starClass;
+
+    public List<StarSystemObject> StarSystemObjects = [];
+
+    public Star()
     {
-        protected override char Symbol { get; } = '*';
-        protected override ConsoleColor Color { get; }
+        Random rnd = new();
+        Coordinates.x = rnd.Next(Universe.UniverseX);
+        Coordinates.y = rnd.Next(Universe.UniverseY);
+        _starClass = (StarClass)rnd.Next(Enum.GetValues(typeof(StarClass)).Length - 1);
+        Color = GetColor(_starClass);
+        GenerateStarSystemObjects();
+    }
 
-        public StarClass starClass;
-        public List<StarSystemObject> starSystemObjects = new();
-
-        public Star()
+    private void GenerateStarSystemObjects()
+    {
+        Random rnd = new();
+        int objectCount = rnd.Next(15);
+        //Генерация объектов системы
+        for (int i = 0; i < objectCount; i++)
         {
-            Random rnd = new();
-            Coordinates.x = rnd.Next(Universe.UniverseX);
-            Coordinates.y = rnd.Next(Universe.UniverseY);
-            starClass = (StarClass)rnd.Next(Enum.GetValues(typeof(StarClass)).Length - 1);
-            Color = GetColor(starClass);
-            GenerateStarSystemObjects();
-        }
-
-        private void GenerateStarSystemObjects()
-        {
-            Random rnd = new();
-            int objectCount = rnd.Next(15);
-            //Генерация объектов системы
-            for (int i = 0; i < objectCount; i++)
+            bool isPositionOccupied = false;
+            while (!isPositionOccupied)
             {
-                bool isPositionOccupied = false;
-                while (!isPositionOccupied)
+                int distance = rnd.Next(2, Universe.UniverseY / 2 - 1);
+                foreach (StarSystemObject obj in StarSystemObjects)
                 {
-                    int distance = rnd.Next(2, Universe.UniverseY / 2 - 1);
-                    foreach (StarSystemObject obj in starSystemObjects)
+                    if (obj.Distance == distance)
                     {
-                        if (obj.Distance == distance)
-                        {
-                            isPositionOccupied = true;
-                            break;
-                        }
-                    }
-                    if (isPositionOccupied) continue;
-
-                    //Орбита свободна -- добавляем планету
-                    else
-                    {
-                        Planet planet = new(distance);
-                        Asteroid asteroid = new(distance);
-                        //Добавляем фракцию на планету с небольшой долей вероятности
-                        while (true)
-                        {
-                            if (rnd.Next(100) < 10)
-                            {
-                                Fraction fraction = Universe.NPCFractions.ElementAt(rnd.Next(Universe.NPCFractions.Count));
-                                planet.Fractions.Add(fraction);
-                                fraction.Colonies.Add(planet);
-                            }
-                            else break;
-                        }
-                        starSystemObjects.Add(planet);
+                        isPositionOccupied = true;
                         break;
                     }
                 }
-            }
-            starSystemObjects.Sort();
-        }
+                if (isPositionOccupied) continue;
 
-        override public void Draw()
-        {
-            Draw(Coordinates.x, Coordinates.y, starClass);
-        }
-        public void Draw(int x, int y)
-        {
-            Draw(x, y, starClass);
-        }
-
-        protected void Draw(int x, int y, StarClass starClass)
-        {
-            lock (locker)
-            {
-                if (FractionDisplayMode == DisplayMode.Fractions)
+                //Орбита свободна -- добавляем планету
+                Planet planet = new(distance);
+                Asteroid asteroid = new(distance); //TODO
+                //Добавляем фракцию на планету с небольшой долей вероятности
+                while (true)
                 {
-                    //Фракционный цвет звезды по цвету первой попавшейся фракции в системе окда?
-                    //FractionColor? fractionColor = starSystemObjects.Find(obj => obj.Fractions.Count > 0)?.Fractions.ElementAt(0).Color;
-                    //ConsoleColor? temp = (ConsoleColor)fractionColor;
-                    Console.ForegroundColor = starSystemObjects.Find(obj => obj.Fractions.Count > 0)?.Fractions.ElementAt(0).Color ?? ConsoleColor.Gray;
-                    //Console.ForegroundColor = temp ?? ConsoleColor.DarkGray;
+                    if (rnd.Next(100) < 10)
+                    {
+                        Fraction fraction = Universe.NpcFractions.ElementAt(rnd.Next(Universe.NpcFractions.Count));
+                        planet.Fractions.Add(fraction);
+                        fraction.Colonies.Add(planet);
+                    }
+                    else break;
                 }
-                else
-                {
-                    Console.ForegroundColor = GetColor();
-                }
-                Console.SetCursorPosition(x, y);
-                Console.Write("*");
+                StarSystemObjects.Add(planet);
+                break;
             }
         }
+        StarSystemObjects.Sort();
+    }
 
-        public void DrawStarSystemObjects()
+    public override void Draw()
+    {
+        Draw(Coordinates.x, Coordinates.y, _starClass);
+    }
+
+    public void Draw(int x, int y)
+    {
+        Draw(x, y, _starClass);
+    }
+
+    protected void Draw(int x, int y, StarClass starClass)
+    {
+        lock (Locker)
         {
-            lock (locker)
+            if (FractionDisplayMode == DisplayMode.Fractions)
             {
-                Draw(20, 20);
-                foreach (StarSystemObject starSystemObject in starSystemObjects)
-                {
-                    starSystemObject.Draw();
-                }
+                //Фракционный цвет звезды по цвету первой попавшейся фракции в системе окда?
+                //FractionColor? fractionColor = starSystemObjects.Find(obj => obj.Fractions.Count > 0)?.Fractions.ElementAt(0).Color;
+                //ConsoleColor? temp = (ConsoleColor)fractionColor;
+                Console.ForegroundColor = StarSystemObjects.Find(obj => obj.Fractions.Count > 0)?.Fractions.ElementAt(0).Color ?? ConsoleColor.Gray;
+                //Console.ForegroundColor = temp ?? ConsoleColor.DarkGray;
             }
-        }
-
-        public void WriteStarInfo()
-        {
-            lock (locker)
+            else
             {
-                int row = 2;
-                string starClass = this.starClass.ToString();
-                Console.Write("Звезда класса ");
                 Console.ForegroundColor = GetColor();
-                Console.Write(starClass);
-                ResetConsoleColor();
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                int planets = starSystemObjects.Count;
-                Console.Write($"Количество планетарных тел: {planets}");
+            }
+            Console.SetCursorPosition(x, y);
+            Console.Write("*");
+        }
+    }
 
-                //Информация о планетах
-                if (planets > 0)
+    public void DrawStarSystemObjects()
+    {
+        lock (Locker)
+        {
+            Draw(20, 20);
+            foreach (StarSystemObject starSystemObject in StarSystemObjects)
+            {
+                starSystemObject.Draw();
+            }
+        }
+    }
+
+    public void WriteStarInfo()
+    {
+        lock (Locker)
+        {
+            int row = 2;
+            string starClass = this._starClass.ToString();
+            Console.Write("Звезда класса ");
+            Console.ForegroundColor = GetColor();
+            Console.Write(starClass);
+            ResetConsoleColor();
+            Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+            int planets = StarSystemObjects.Count;
+            Console.Write($"Количество планетарных тел: {planets}");
+
+            //Информация о планетах
+            if (planets > 0)
+            {
+                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+                Console.Write("Информация об объектах системы:");
+                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+                Console.Write("-----------------------------------------");
+                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+                Console.Write($"| № | Расстояние | {"Класс",11} | Размер |");
+                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+                Console.Write("-----------------------------------------");
+                int planetNumber = 0;
+                foreach (StarSystemObject starSystemObject in StarSystemObjects)
                 {
                     Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                    Console.Write("Информация об объектах системы:");
-                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                    Console.Write("-----------------------------------------");
-                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                    Console.Write($"| № | Расстояние | {"Класс",11} | Размер |");
-                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                    Console.Write("-----------------------------------------");
-                    int planetNumber = 0;
-                    foreach (StarSystemObject starSystemObject in starSystemObjects)
+                    //string planetClass;
+                    if (starSystemObject is Planet planet)
+                    {
+                        //planetClass = planet.PlanetClass.ToString();
+                        Console.Write($"|{++planetNumber,2} | {starSystemObject.Distance,6} а.е | ");
+                        Console.ForegroundColor = planet.Color;
+                        Console.Write($"{planet.PlanetClass,11}");
+                        ResetConsoleColor();
+                        Console.Write($" | {starSystemObject.Size,6} |");
+                    }
+                }
+                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+                Console.Write("-----------------------------------------");
+
+                //Информация о присутствующих фракциях
+                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+                List<Fraction> fractionsInSystem = new List<Fraction>();
+                foreach (StarSystemObject starSystemObject in this.StarSystemObjects)
+                {
+                    foreach (Fraction fraction in starSystemObject.Fractions)
+                    {
+                        if (!fractionsInSystem.Contains(fraction)) fractionsInSystem.Add(fraction);
+                    }
+                }
+                if (fractionsInSystem.Count > 0)
+                {
+                    Console.Write("Присутствующие фракции в системе:");
+                    foreach (Fraction fraction in fractionsInSystem)
                     {
                         Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                        //string planetClass;
-                        if (starSystemObject is Planet planet)
-                        {
-                            //planetClass = planet.PlanetClass.ToString();
-                            Console.Write($"|{++planetNumber,2} | {starSystemObject.Distance,6} а.е | ");
-                            Console.ForegroundColor = planet.Color;
-                            Console.Write($"{planet.PlanetClass,11}");
-                            ResetConsoleColor();
-                            Console.Write($" | {starSystemObject.Size,6} |");
-                        }
+                        Console.ForegroundColor = fraction.Color;
+                        Console.Write(fraction.Name);
                     }
-                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                    Console.Write("-----------------------------------------");
-
-                    //Информация о присутствующих фракциях
-                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                    List<Fraction> fractionsInSystem = new List<Fraction>();
-                    foreach (StarSystemObject starSystemObject in this.starSystemObjects)
-                    {
-                        foreach (Fraction fraction in starSystemObject.Fractions)
-                        {
-                            if (!fractionsInSystem.Contains(fraction)) fractionsInSystem.Add(fraction);
-                        }
-                    }
-                    if (fractionsInSystem.Count > 0)
-                    {
-                        Console.Write("Присутствующие фракции в системе:");
-                        foreach (Fraction fraction in fractionsInSystem)
-                        {
-                            Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                            Console.ForegroundColor = fraction.Color;
-                            Console.Write(fraction.Name);
-                        }
-                        ResetConsoleColor();
-                    }
-                    else Console.Write("Нет присутствующих фракций");
+                    ResetConsoleColor();
                 }
-
-                InfoIsClear = false;
-
-                //Возвращение курсора
-                Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+                else Console.Write("Нет присутствующих фракций");
             }
-        }
 
-        private ConsoleColor GetColor()
-        {
-            return GetColor(starClass);
+            InfoIsClear = false;
+
+            //Возвращение курсора
+            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
         }
+    }
+
+    private ConsoleColor GetColor()
+    {
+        return GetColor(_starClass);
+    }
         
-        private ConsoleColor GetColor(StarClass starClass)
+    private ConsoleColor GetColor(StarClass starClass)
+    {
+        return starClass switch
         {
-            switch (starClass)
-            {
-                case StarClass.W:
-                    return ConsoleColor.Magenta;
-                case StarClass.O:
-                    return ConsoleColor.DarkBlue;
-                case StarClass.B:
-                    return ConsoleColor.Blue;
-                case StarClass.A:
-                    return ConsoleColor.DarkCyan;
-                case StarClass.F:
-                    return ConsoleColor.White;
-                case StarClass.G:
-                    return ConsoleColor.Yellow;
-                case StarClass.K:
-                    return ConsoleColor.DarkYellow;
-                case StarClass.M:
-                    return ConsoleColor.Red;
-                case StarClass.L:
-                    return ConsoleColor.DarkRed;
-                default:
-                    return ConsoleColor.White;
-            }
-        }
+            StarClass.W => ConsoleColor.Magenta,
+            StarClass.O => ConsoleColor.DarkBlue,
+            StarClass.B => ConsoleColor.Blue,
+            StarClass.A => ConsoleColor.DarkCyan,
+            StarClass.F => ConsoleColor.White,
+            StarClass.G => ConsoleColor.Yellow,
+            StarClass.K => ConsoleColor.DarkYellow,
+            StarClass.M => ConsoleColor.Red,
+            StarClass.L => ConsoleColor.DarkRed,
+            _ => ConsoleColor.White
+        };
+    }
 
-        public enum StarClass
-        {
-            W, O, B, A, F, G, K, M, L
-        }
+    public enum StarClass
+    {
+        W, O, B, A, F, G, K, M, L
     }
 }

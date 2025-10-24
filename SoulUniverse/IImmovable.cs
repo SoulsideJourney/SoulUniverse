@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace SoulUniverse;
 
-namespace SoulUniverse
+internal interface IImmovable
 {
-    internal interface IImmovable
-    {
-        bool IsNeedToDraw { get; set; }
-    }
+    bool IsNeedToDraw { get; set; }
 }

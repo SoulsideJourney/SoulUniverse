@@ -1,40 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static SoulUniverse.Enums;
+﻿using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
-namespace SoulUniverse
+namespace SoulUniverse.VoidObjects;
+
+internal class BlackHole : VoidObject
 {
-    internal class BlackHole : VoidObject
+    protected override char Symbol { get; } = '\u00D8'; //Ø
+
+    protected override ConsoleColor Color { get; } = ConsoleColor.Yellow;
+    public BlackHole()
     {
-        protected override char Symbol { get; } = '\u00D8'; //Ø
+        Random rnd = new Random();
+        Coordinates.x = rnd.Next(Universe.UniverseX);
+        Coordinates.y = rnd.Next(Universe.UniverseY);
+    }
 
-        protected override ConsoleColor Color { get; } = ConsoleColor.Yellow;
-        public BlackHole()
-        {
-            Random rnd = new Random();
-            Coordinates.x = rnd.Next(Universe.UniverseX);
-            Coordinates.y = rnd.Next(Universe.UniverseY);
-        }
+    public BlackHole(int x, int y)
+    {
+        Coordinates.x = x;
+        Coordinates.y = y;
+    }
 
-        public BlackHole(int x, int y)
+    public override void Draw()
+    {
+        if (FractionDisplayMode == DisplayMode.Fractions)
         {
-            Coordinates.x = x;
-            Coordinates.y = y;
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
-
-        public override void Draw()
-        {
-            if (FractionDisplayMode == DisplayMode.Fractions)
-            {
-                Console.ForegroundColor = ConsoleColor.Gray;
-            }
-            else Console.ForegroundColor = Color;
-            Console.SetCursorPosition(Coordinates.x, Coordinates.y);
-            Console.Write(Symbol);
-        }
+        else Console.ForegroundColor = Color;
+        Console.SetCursorPosition(Coordinates.x, Coordinates.y);
+        Console.Write(Symbol);
     }
 }

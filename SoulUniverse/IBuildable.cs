@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static SoulUniverse.Enums;
+﻿using static SoulUniverse.Enums;
 
-namespace SoulUniverse
+namespace SoulUniverse;
+
+internal interface IBuildable
 {
-    internal interface IBuildable
-    {
-        //public static List<KeyValuePair<ResourceName, int>> BuildCost { get; }
-    }
+    public static List<KeyValuePair<ResourceName, int>> BuildCost { get; } = null!;
 }

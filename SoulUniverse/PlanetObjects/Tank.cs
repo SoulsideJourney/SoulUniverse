@@ -1,99 +1,94 @@
-﻿using static SoulUniverse.Enums;
+﻿using SoulUniverse.StarSystemObjects;
+using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
-namespace SoulUniverse.PlanetObjects
+namespace SoulUniverse.PlanetObjects;
+
+internal class Tank : GroundProperty, IMovable, IBuildable
 {
-    internal class Tank : GroundProperty, IMovable
+    //public override Fraction Owner { get; }
+
+    //public override StarSystemObject Location { get; }
+
+    protected override char Symbol => '♣';
+
+    protected override string Name => "Танк мать его";
+
+    public static List<KeyValuePair<ResourceName, int>> Cost { get; } =
+    [
+        new(ResourceName.Iron, 10),
+        new(ResourceName.Uranium, 1),
+        new(ResourceName.Oil, 5),
+    ];
+
+    public bool IsNeedToRedraw { get; set; } = true;
+    public Coordinates DrawnCoordinates { get; set; } = new();
+
+    private Tank(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, fraction, starSystemObject) { }
+        
+    public static void New(int x, int y, Fraction fraction, StarSystemObject starSystemObject)
     {
-        //public override Fraction Owner { get; }
+        Tank tank = new(x, y, fraction, starSystemObject);
 
-        //public override StarSystemObject Location { get; }
-
-        protected override char Symbol => '♣';
-
-        protected override string Name => "Танк мать его";
-
-        static public List<KeyValuePair<ResourceName, int>> Cost { get; } = new()
+        foreach (var res in fraction.Recources)
         {
-            new KeyValuePair<ResourceName, int>(ResourceName.Iron, 10),
-            new KeyValuePair<ResourceName, int>(ResourceName.Uranium, 1),
-            new KeyValuePair<ResourceName, int>(ResourceName.Oil, 5),
+            fraction.Recources[res.Key] = res.Value - Cost.Find(r => r.Key == res.Key).Value;
+        }
+
+        Program.Mutex.WaitOne();
+        Universe.Tanks.Add(tank);
+        starSystemObject.GroundObjects.Add(tank);
+        Program.Mutex.ReleaseMutex();
+    }
+
+    /// <summary>Рандомное движение танка на одно поле</summary>
+    public void Move()
+    {
+        //if (DrawnCoordinates.x != 0 && DrawnCoordinates.y != 0)
+        //{
+
+        //}
+        int x = Coordinates.x;
+        int y = Coordinates.y;
+        _ = new Random().Next(4) switch
+        {
+            0 => x < Location.Size ? x += 1 : x -= 1,
+            1 => x > 0 ? x -= 1 : x += 1,
+            2 => y < Location.Size ? y += 1 : y -= 1,
+            _ => y > 0 ? y -= 1 : y += 1,
         };
 
-        public bool IsNeedToRedraw { get; set; } = true;
-        public Coordinates DrawnCoordinates { get; set; } = new();
-
-        public Tank(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, fraction, starSystemObject)
+        if (!((Planet)Location).IsPlaceOccupied(x, y))
         {
-            foreach (var res in fraction.Recources)
-            {
-                fraction.Recources[res.Key] = res.Value - Tank.Cost.Find(r => r.Key == res.Key).Value;
-            }
-
-            mutex.WaitOne();
-            Universe.Tanks.Add(this);
-            starSystemObject.GroundObjects.Add(this);
-            mutex.ReleaseMutex();
+            Coordinates.x = x;
+            Coordinates.y = y;
+            IsNeedToRedraw = true;
         }
+    }
 
-        //public Tank(int x, int y, Fraction fraction, StarSystemObject starSystemObject)
-        //{
-        //    Coordinates.x = x;
-        //    Coordinates.y = y;
-        //    Owner = fraction;
-        //    Location = starSystemObject;
-        //    Program.tanks.Add(this);
-        //}
-
-        /// <summary>Рандомное движение танка на одно поле</summary>
-        public void Move()
+    public override void Draw()
+    {
+        lock (Locker)
         {
-            if (DrawnCoordinates.x != 0 && DrawnCoordinates.y != 0)
-            {
-
-            }
-            int x = Coordinates.x;
-            int y = Coordinates.y;
-            _ = new Random().Next(4) switch
-            {
-                0 => x < Location.Size ? x += 1 : x -= 1,
-                1 => x > 0 ? x -= 1 : x += 1,
-                2 => y < Location.Size ? y += 1 : y -= 1,
-                _ => y > 0 ? y -= 1 : y += 1,
-            };
-
-            if (!(Location as Planet).IsPlaceOccupied(x, y))
-            {
-                Coordinates.x = x;
-                Coordinates.y = y;
-                IsNeedToRedraw = true;
-            }
+            Console.SetCursorPosition(Coordinates.x, Coordinates.y);
+            if (FractionDisplayMode == DisplayMode.Fractions) Console.ForegroundColor = Owner.Color;
+            else ResetConsoleColor();
+            Console.Write(Symbol);
+            DrawnCoordinates.x = Coordinates.x;
+            DrawnCoordinates.y = Coordinates.y;
+            ResetConsoleColor();
+            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+            IsNeedToRedraw = false;
         }
+    }
 
-        public override void Draw()
+    public void Erase()
+    {
+        lock (Locker)
         {
-            lock (locker)
-            {
-                Console.SetCursorPosition(Coordinates.x, Coordinates.y);
-                if (FractionDisplayMode == Enums.DisplayMode.Fractions) Console.ForegroundColor = Owner.Color;
-                else ResetConsoleColor();
-                Console.Write(Symbol);
-                DrawnCoordinates.x = Coordinates.x;
-                DrawnCoordinates.y = Coordinates.y;
-                ResetConsoleColor();
-                Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
-                IsNeedToRedraw = false;
-            }
-        }
-
-        public void Erase()
-        {
-            lock (locker)
-            {
-                Console.SetCursorPosition(DrawnCoordinates.x, DrawnCoordinates.y);
-                Console.Write(' ');
-                Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
-            }
+            Console.SetCursorPosition(DrawnCoordinates.x, DrawnCoordinates.y);
+            Console.Write(' ');
+            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
         }
     }
 }

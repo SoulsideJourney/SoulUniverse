@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static SoulUniverse.Enums;
+﻿using static SoulUniverse.Enums;
 
-namespace SoulUniverse
+namespace SoulUniverse;
+
+internal class Resource
 {
-    internal class Resource
-    {
-        public ResourceName Name { get; }
+    public ResourceName Name { get; }
 
-        public Resource(ResourceName name)
-        {
-            Name = name;
-        }
+    public Resource(ResourceName name)
+    {
+        Name = name;
     }
 }

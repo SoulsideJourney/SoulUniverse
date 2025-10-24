@@ -1,42 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SoulUniverse.StarSystemObjects;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
-namespace SoulUniverse.PlanetObjects
-{
-    internal class MilitaryBase : GroundProperty//, IImmovable
-    {
-        protected override char Symbol => '#';
-        protected override string Name => "Военная база";
-        //public override Fraction Owner { get; }
-        //public override StarSystemObject Location { get; }
-        static public List<KeyValuePair<ResourceName, int>> Cost { get; } = new()
-        {
-            new KeyValuePair<ResourceName, int>(ResourceName.Iron, 10000),
-            new KeyValuePair<ResourceName, int>(ResourceName.Uranium, 50),
-            new KeyValuePair<ResourceName, int>(ResourceName.Oil, 1000),
-        };
-        //public bool IsNeedToDraw { get; set; } = true;
+namespace SoulUniverse.PlanetObjects;
 
-        public MilitaryBase(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, fraction, starSystemObject)
+internal class MilitaryBase : GroundProperty, IBuildable
+{
+    protected override char Symbol => '#';
+    protected override string Name => "Военная база";
+
+    public static List<KeyValuePair<ResourceName, int>> Cost { get; } =
+    [
+        new(ResourceName.Iron, 10000),
+        new(ResourceName.Uranium, 50),
+        new(ResourceName.Oil, 1000),
+    ];
+
+    private MilitaryBase(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, fraction, starSystemObject) { }
+
+    public static void New(int x, int y, Fraction fraction, StarSystemObject starSystemObject)
+    {
+        MilitaryBase @base = new(x, y, fraction, starSystemObject);
+
+        foreach (var res in fraction.Recources)
         {
-            foreach (var res in fraction.Recources)
-            {
-                fraction.Recources[res.Key] = res.Value - Cost.Find(r => r.Key == res.Key).Value;
-            }
-            mutex.WaitOne();
-            starSystemObject.GroundObjects.Add(this);
-            mutex.ReleaseMutex();
+            fraction.Recources[res.Key] = res.Value - Cost.Find(r => r.Key == res.Key).Value;
         }
-        //public MilitaryBase(int x, int y, Fraction fraction)
-        //{
-        //    Coordinates.x = x;
-        //    Coordinates.y = y;
-        //    Owner = fraction;
-        //}
+        Program.Mutex.WaitOne();
+        starSystemObject.GroundObjects.Add(@base);
+        Program.Mutex.ReleaseMutex();
     }
 }

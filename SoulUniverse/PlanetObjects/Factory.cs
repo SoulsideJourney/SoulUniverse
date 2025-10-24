@@ -1,30 +1,34 @@
-﻿using static SoulUniverse.Enums;
-using static SoulUniverse.Program;
+﻿using SoulUniverse.StarSystemObjects;
+using static SoulUniverse.Enums;
 
-namespace SoulUniverse.PlanetObjects
+namespace SoulUniverse.PlanetObjects;
+
+internal class Factory : GroundProperty
 {
-    internal class Factory : GroundProperty
+    protected override char Symbol => 'F';
+
+    protected override string Name => "Завод";
+
+    public static List<KeyValuePair<ResourceName, int>> Cost { get; } =
+    [
+        new(ResourceName.Iron, 1500),
+        new(ResourceName.Uranium, 0),
+        new(ResourceName.Oil, 0),
+    ];
+
+    private Factory(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, fraction, starSystemObject) { }
+
+    /// <summary> Создать фабрику </summary>
+    //Фабрика фабрик)))
+    public static void New(int x, int y, Fraction fraction, StarSystemObject starSystemObject)
     {
-        protected override char Symbol => 'F';
+        Factory factory = new(x, y, fraction, starSystemObject);
+        Universe.Factories.Add(factory);
+        starSystemObject.GroundObjects.Add(factory);
+    }
 
-        protected override string Name => "Завод";
-        public static List<KeyValuePair<ResourceName, int>> Cost { get; } = new()
-        {
-            new KeyValuePair<ResourceName, int>(ResourceName.Iron, 1500),
-            new KeyValuePair<ResourceName, int>(ResourceName.Uranium, 0),
-            new KeyValuePair<ResourceName, int>(ResourceName.Oil, 0),
-        };
-
-        public Factory(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, fraction, starSystemObject)
-        {
-            Universe.Factories.Add(this);
-            starSystemObject.GroundObjects.Add(this);
-        }
-
-        public void BuildTank()
-        {
-            //new Tank(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this.Owner, starSystemObject);
-            new Tank(Coordinates.x + 1, Coordinates.y, Owner, Location);
-        }
+    public void BuildTank()
+    {
+        Tank.New(Coordinates.x + 1, Coordinates.y, Owner, Location);
     }
 }
