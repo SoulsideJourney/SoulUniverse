@@ -34,7 +34,7 @@ public class Mine : GroundProperty/*, IBuildable*/
     //    }
     //}
 
-    public Mine(Fraction fraction, Deposit deposit) : base(deposit.Coordinates.x, deposit.Coordinates.y, fraction, deposit.Location)
+    public Mine(Fraction fraction, Deposit deposit) : base(deposit.Coordinates, fraction, deposit.Location)
     {
         foreach (var res in fraction.Resources)
         {

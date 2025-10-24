@@ -1,7 +1,7 @@
 ﻿namespace SoulUniverse;
 
-public class Coordinates
-{       
-    public int x;
-    public int y;
+public struct Coordinates(int x, int y)
+{
+    public int X = x;
+    public int Y = y;
 }

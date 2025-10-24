@@ -17,8 +17,8 @@ internal class Star : VoidObject
 
     public Star()
     {
-        Coordinates.x = Rnd.Next(Universe.UniverseX);
-        Coordinates.y = Rnd.Next(Universe.UniverseY);
+        Coordinates.X = Rnd.Next(Universe.UniverseX);
+        Coordinates.Y = Rnd.Next(Universe.UniverseY);
         _starClass = (StarClass)Rnd.Next(Enum.GetValues(typeof(StarClass)).Length - 1);
         Color = GetColor(_starClass);
         GenerateStarSystemObjects();
@@ -67,7 +67,7 @@ internal class Star : VoidObject
 
     public override void Draw()
     {
-        Draw(Coordinates.x, Coordinates.y, _starClass);
+        Draw(Coordinates.X, Coordinates.Y, _starClass);
     }
 
     public void Draw(int x, int y)

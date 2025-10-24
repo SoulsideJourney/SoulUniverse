@@ -17,11 +17,11 @@ internal class MilitaryBase : GroundProperty, IBuildable
         new(ResourceName.Oil, 1000),
     ];
 
-    private MilitaryBase(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, fraction, starSystemObject) { }
+    private MilitaryBase(Coordinates coordinates, Fraction fraction, StarSystemObject starSystemObject) : base(coordinates, fraction, starSystemObject) { }
 
     public static void New(int x, int y, Fraction fraction, StarSystemObject starSystemObject)
     {
-        MilitaryBase @base = new(x, y, fraction, starSystemObject);
+        MilitaryBase @base = new(new Coordinates(x, y), fraction, starSystemObject);
 
         foreach (var res in fraction.Resources)
         {

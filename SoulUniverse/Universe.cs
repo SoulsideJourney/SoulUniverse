@@ -108,7 +108,7 @@ internal static class Universe
                 x = Rnd.Next(UniverseX);
                 y = Rnd.Next(UniverseY);
 
-                if (VoidObjects.Any(obj => obj.Coordinates.x == x && obj.Coordinates.y == y))
+                if (VoidObjects.Any(obj => obj.Coordinates.X == x && obj.Coordinates.Y == y))
                 {
                     continue;
                 }
@@ -116,8 +116,8 @@ internal static class Universe
                 {
                     Coordinates =
                     {
-                        x = x,
-                        y = y
+                        X = x,
+                        Y = y
                     }
                 };
                 VoidObjects.Add(voidObject);

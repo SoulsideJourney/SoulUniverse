@@ -121,7 +121,7 @@ internal static class Program
             //Информация об объекте
             if (UniverseDisplayMode == DisplayMode.Universe)
             {
-                CheckedVoidObject = Universe.VoidObjects.Find(o => o.Coordinates.x == CurrentCursorX && o.Coordinates.y == CurrentCursorY);
+                CheckedVoidObject = Universe.VoidObjects.Find(o => o.Coordinates.X == CurrentCursorX && o.Coordinates.Y == CurrentCursorY);
                 lock (Locker)
                 {
                     ClearInfo();
@@ -144,7 +144,7 @@ internal static class Program
                 }
                 else
                 {
-                    CheckedStarSystemObject = star.StarSystemObjects.Find(o => o.Coordinates.x == CurrentCursorX - 20 && o.Coordinates.y == CurrentCursorY - 20);
+                    CheckedStarSystemObject = star.StarSystemObjects.Find(o => o.Coordinates.X == CurrentCursorX - 20 && o.Coordinates.Y == CurrentCursorY - 20);
                     lock (Locker)
                     {
                         ClearInfo();
@@ -154,7 +154,7 @@ internal static class Program
             }
             else if (UniverseDisplayMode == DisplayMode.Planet)
             {
-                CheckedGroundObject = CheckedStarSystemObject?.GroundObjects.Find(o => o.Coordinates.x == CurrentCursorX && o.Coordinates.y == CurrentCursorY);
+                CheckedGroundObject = CheckedStarSystemObject?.GroundObjects.Find(o => o.Coordinates.X == CurrentCursorX && o.Coordinates.Y == CurrentCursorY);
                 lock (Locker)
                 {
                     ClearInfo();
@@ -245,7 +245,7 @@ internal static class Program
                 {
                     if (factory.Owner.IsEnoughToBuildTank()
                         && factory.Location.GroundObjects.Count(o => o is Tank tank && tank.Owner == factory.Owner) < factory.Location.PlacesCount * 0.8
-                        && !factory.Location.IsPlaceOccupied(factory.Coordinates.x + 1, factory.Coordinates.y))
+                        && !factory.Location.IsPlaceOccupied(factory.Coordinates.X + 1, factory.Coordinates.Y))
                     {
                         factory.BuildTank();
                         Debug.WriteLine(string.Format($"Насекомые из {factory.Owner.Name} построили ТАНК! Будет война"));
@@ -275,8 +275,8 @@ internal static class Program
             WriteLegend();
             //Отрисовка объектов
             DrawVoidObjects();
-            CurrentCursorX = CheckedVoidObject?.Coordinates.x ?? 0;
-            CurrentCursorY = CheckedVoidObject?.Coordinates.y ?? 0;
+            CurrentCursorX = CheckedVoidObject?.Coordinates.X ?? 0;
+            CurrentCursorY = CheckedVoidObject?.Coordinates.Y ?? 0;
             //Первоначальная установка соответствия курсора и переменных
             ResetCursor();
         }
@@ -312,8 +312,8 @@ internal static class Program
             DrawFrames();
             Star star = (Star)checkedVoidObject;
             DrawStarSystemObjects(star);
-            CurrentCursorX = CheckedStarSystemObject?.Coordinates.x + 20 ?? 20;
-            CurrentCursorY = CheckedStarSystemObject?.Coordinates.y + 20 ?? 20;
+            CurrentCursorX = CheckedStarSystemObject?.Coordinates.X + 20 ?? 20;
+            CurrentCursorY = CheckedStarSystemObject?.Coordinates.Y + 20 ?? 20;
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
         }
     }
@@ -349,8 +349,8 @@ internal static class Program
         lock (Locker)
         {
             OpenSystem(Universe.HomeStar);
-            CurrentCursorX = Universe.HomePlanet.Coordinates.x + 20;
-            CurrentCursorY = Universe.HomePlanet.Coordinates.y + 20;
+            CurrentCursorX = Universe.HomePlanet.Coordinates.X + 20;
+            CurrentCursorY = Universe.HomePlanet.Coordinates.Y + 20;
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
         }
     }

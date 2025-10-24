@@ -10,14 +10,14 @@ internal class BlackHole : VoidObject
     protected override ConsoleColor Color { get; } = ConsoleColor.Yellow;
     public BlackHole()
     {
-        Coordinates.x = Rnd.Next(Universe.UniverseX);
-        Coordinates.y = Rnd.Next(Universe.UniverseY);
+        Coordinates.X = Rnd.Next(Universe.UniverseX);
+        Coordinates.Y = Rnd.Next(Universe.UniverseY);
     }
 
     public BlackHole(int x, int y)
     {
-        Coordinates.x = x;
-        Coordinates.y = y;
+        Coordinates.X = x;
+        Coordinates.Y = y;
     }
 
     public override void Draw()
@@ -27,7 +27,7 @@ internal class BlackHole : VoidObject
             Console.ForegroundColor = ConsoleColor.Gray;
         }
         else Console.ForegroundColor = Color;
-        Console.SetCursorPosition(Coordinates.x, Coordinates.y);
+        Console.SetCursorPosition(Coordinates.X, Coordinates.Y);
         Console.Write(Symbol);
     }
 }

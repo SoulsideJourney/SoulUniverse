@@ -9,12 +9,11 @@ public abstract class GroundObject : UniverseObject
     protected abstract char Symbol { get; }
     protected abstract string Name { get; }
     public StarSystemObject Location { get; }
-    public Coordinates Coordinates { get; } = new();
+    public Coordinates Coordinates { get; protected set; }
 
-    protected GroundObject(int x, int y, StarSystemObject starSystemObject)
+    protected GroundObject(Coordinates coordinates, StarSystemObject starSystemObject)
     {
-        Coordinates.x = x;
-        Coordinates.y = y;
+        Coordinates = coordinates;
         Location = starSystemObject;
     }
 
@@ -39,7 +38,7 @@ public abstract class GroundObject : UniverseObject
     {
         lock(Locker)
         {
-            Console.SetCursorPosition(Coordinates.x, Coordinates.y);
+            Console.SetCursorPosition(Coordinates.X, Coordinates.Y);
             //if (FractionDisplayMode == Enums.DisplayMode.Fractions) Console.ForegroundColor = Owner.Color;
             //else ResetConsoleColor();
             Console.Write(Symbol);

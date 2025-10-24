@@ -25,7 +25,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
 
     //public Coordinates DrawedCoordinates = new();
     public Coordinates DrawnCoordinates { get; set; } = new();
-    public readonly Coordinates Coordinates = new();
+    public Coordinates Coordinates;
     public readonly List<GroundObject> GroundObjects = new();
     public List<Deposit> Deposits => GroundObjects.Where(o => o is Deposit).Cast<Deposit>().ToList();
 
@@ -43,8 +43,8 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
     {
         Distance = distance;
         _phi = Rnd.NextDouble() * 2 * Math.PI;
-        Coordinates.x = (int)Math.Round(Distance * Math.Cos(_phi));
-        Coordinates.y = (int)Math.Round(Distance * Math.Sin(_phi));
+        Coordinates.X = (int)Math.Round(Distance * Math.Cos(_phi));
+        Coordinates.Y = (int)Math.Round(Distance * Math.Sin(_phi));
     }
 
     public void DrawObjects()
@@ -126,10 +126,9 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
         _phi = (_phi + w * t) % (2 * Math.PI);
         int newX = (int)Math.Round(Distance * Math.Cos(_phi)); // а. е.
         int newY = (int)Math.Round(Distance * Math.Sin(_phi)); // а. е.
-        if (Coordinates.x != newX || Coordinates.y != newY)
+        if (Coordinates.X != newX || Coordinates.Y != newY)
         {
-            Coordinates.x = newX;
-            Coordinates.y = newY;
+            Coordinates = new Coordinates(newX, newY);
             IsNeedToRedraw = true;
         }
     }
@@ -148,10 +147,9 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
             {
                 Console.ForegroundColor = Color;
             }
-            Console.SetCursorPosition(20 + Coordinates.x, 20 + Coordinates.y);
+            Console.SetCursorPosition(20 + Coordinates.X, 20 + Coordinates.Y);
             Console.Write(Symbol);
-            DrawnCoordinates.x = Coordinates.x;
-            DrawnCoordinates.y = Coordinates.y;
+            DrawnCoordinates = Coordinates;
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
             IsNeedToRedraw = false;
         }
@@ -161,7 +159,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
     {
         lock (Locker)
         {
-            Console.SetCursorPosition(20 + DrawnCoordinates.x, 20 + DrawnCoordinates.y);
+            Console.SetCursorPosition(20 + DrawnCoordinates.X, 20 + DrawnCoordinates.Y);
             Console.Write(' ');
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
         }
@@ -170,7 +168,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
     /// <summary>Занято ли место на планете</summary>
     public bool IsPlaceOccupied(int x, int y)
     {
-        if (GroundObjects.Any(o => o.Coordinates.x == x && o.Coordinates.y == y)) return true;
+        if (GroundObjects.Any(o => o.Coordinates.X == x && o.Coordinates.Y == y)) return true;
         else return false;
     }
 

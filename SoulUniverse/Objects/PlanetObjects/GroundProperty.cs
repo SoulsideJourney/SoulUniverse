@@ -12,7 +12,7 @@ public abstract class GroundProperty : GroundObject
     //public abstract void Draw();
 
 
-    protected GroundProperty(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, starSystemObject)
+    protected GroundProperty(Coordinates coordinates, Fraction fraction, StarSystemObject starSystemObject) : base(coordinates, starSystemObject)
     {
         Owner = fraction;
     }
@@ -41,7 +41,7 @@ public abstract class GroundProperty : GroundObject
     {
         lock (Locker)
         {
-            Console.SetCursorPosition(Coordinates.x, Coordinates.y);
+            Console.SetCursorPosition(Coordinates.X, Coordinates.Y);
             if (FractionDisplayMode == Enums.DisplayMode.Fractions) Console.ForegroundColor = Owner.Color;
             else ResetConsoleColor();
             Console.Write(Symbol);

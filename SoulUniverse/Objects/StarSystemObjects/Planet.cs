@@ -66,7 +66,7 @@ public sealed class Planet : StarSystemObject
         int y = Rnd.Next(Size);
         if (!IsPlaceOccupied(x, y))
         {
-            Deposit deposit = new Deposit(x, y, this, resource);
+            Deposit deposit = new Deposit(new Coordinates(x, y), this, resource);
 
             Program.Mutex.WaitOne();
             GroundObjects.Add(deposit);
@@ -108,10 +108,9 @@ public sealed class Planet : StarSystemObject
             {
                 Console.ForegroundColor = Color;
             }
-            Console.SetCursorPosition(20 + Coordinates.x, 20 + Coordinates.y);
+            Console.SetCursorPosition(20 + Coordinates.X, 20 + Coordinates.Y);
             Console.Write(Symbol);
-            DrawnCoordinates.x = Coordinates.x;
-            DrawnCoordinates.y = Coordinates.y;
+            DrawnCoordinates = Coordinates;
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
             IsNeedToRedraw = false;
         }

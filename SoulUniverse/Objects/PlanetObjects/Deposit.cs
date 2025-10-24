@@ -4,7 +4,7 @@ namespace SoulUniverse.Objects.PlanetObjects;
 
 public class Deposit : GroundObject
 {
-    public Deposit(int x, int y, StarSystemObject starSystemObject, Enums.ResourceName resource) : base(x, y, starSystemObject)
+    public Deposit(Coordinates coordinates, StarSystemObject starSystemObject, Enums.ResourceName resource) : base(coordinates, starSystemObject)
     {
         Resource = resource;
     }

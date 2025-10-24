@@ -16,19 +16,19 @@ internal class Factory : GroundProperty
         new(ResourceName.Oil, 0),
     ];
 
-    private Factory(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, fraction, starSystemObject) { }
+    private Factory(Coordinates coordinates, Fraction fraction, StarSystemObject starSystemObject) : base(coordinates, fraction, starSystemObject) { }
 
     /// <summary> Создать фабрику </summary>
     //Фабрика фабрик)))
     public static void New(int x, int y, Fraction fraction, StarSystemObject starSystemObject)
     {
-        Factory factory = new(x, y, fraction, starSystemObject);
+        Factory factory = new(new Coordinates(x, y), fraction, starSystemObject);
         Universe.Factories.Add(factory);
         starSystemObject.GroundObjects.Add(factory);
     }
 
     public void BuildTank()
     {
-        Tank.New(Coordinates.x + 1, Coordinates.y, Owner, Location);
+        Tank.New(Coordinates.X + 1, Coordinates.Y, Owner, Location);
     }
 }

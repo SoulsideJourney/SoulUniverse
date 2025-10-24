@@ -26,11 +26,11 @@ internal class Tank : GroundProperty, IMovable, IBuildable
     public bool IsNeedToRedraw { get; set; } = true;
     public Coordinates DrawnCoordinates { get; set; } = new();
 
-    private Tank(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, fraction, starSystemObject) { }
+    private Tank(Coordinates coordinates, Fraction fraction, StarSystemObject starSystemObject) : base(coordinates, fraction, starSystemObject) { }
         
     public static void New(int x, int y, Fraction fraction, StarSystemObject starSystemObject)
     {
-        Tank tank = new(x, y, fraction, starSystemObject);
+        Tank tank = new(new Coordinates(x, y), fraction, starSystemObject);
 
         foreach (var res in fraction.Resources)
         {
@@ -50,8 +50,8 @@ internal class Tank : GroundProperty, IMovable, IBuildable
         //{
 
         //}
-        int x = Coordinates.x;
-        int y = Coordinates.y;
+        int x = Coordinates.X;
+        int y = Coordinates.Y;
         _ = Rnd.Next(4) switch
         {
             0 => x < Location.Size ? x += 1 : x -= 1,
@@ -62,8 +62,7 @@ internal class Tank : GroundProperty, IMovable, IBuildable
 
         if (!((Planet)Location).IsPlaceOccupied(x, y))
         {
-            Coordinates.x = x;
-            Coordinates.y = y;
+            Coordinates = new Coordinates(x, y);
             IsNeedToRedraw = true;
         }
     }
@@ -72,12 +71,11 @@ internal class Tank : GroundProperty, IMovable, IBuildable
     {
         lock (Locker)
         {
-            Console.SetCursorPosition(Coordinates.x, Coordinates.y);
+            Console.SetCursorPosition(Coordinates.X, Coordinates.Y);
             if (FractionDisplayMode == DisplayMode.Fractions) Console.ForegroundColor = Owner.Color;
             else ResetConsoleColor();
             Console.Write(Symbol);
-            DrawnCoordinates.x = Coordinates.x;
-            DrawnCoordinates.y = Coordinates.y;
+            DrawnCoordinates = Coordinates;
             ResetConsoleColor();
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
             IsNeedToRedraw = false;
@@ -88,7 +86,7 @@ internal class Tank : GroundProperty, IMovable, IBuildable
     {
         lock (Locker)
         {
-            Console.SetCursorPosition(DrawnCoordinates.x, DrawnCoordinates.y);
+            Console.SetCursorPosition(DrawnCoordinates.X, DrawnCoordinates.Y);
             Console.Write(' ');
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
         }
