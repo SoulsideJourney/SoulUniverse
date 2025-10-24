@@ -55,11 +55,6 @@ internal static class Program
     /// <summary> Великий рандом </summary>
     internal static readonly Random Rnd = new();
 
-    public static void ResetConsoleColor()
-    {
-        Console.ForegroundColor = ConsoleColor.Gray;
-    }
-
     public static void SetConsoleTitle()
     {
         string title = "Консольная Вселенная";
@@ -137,8 +132,8 @@ internal static class Program
                     lock (Locker)
                     {
                         ResetConsoleColor();
-                        Console.SetCursorPosition(Universe.UniverseX + 2, 2);
-                        Console.Write("Информация об объекте: ");
+                        SetCursor(Universe.UniverseX + 2, 2);
+                        Write("Информация об объекте: ");
                         star.WriteStarInfo();
                     }
                 }
@@ -285,7 +280,7 @@ internal static class Program
     public static void ResetCursor()
     {
         ResetConsoleColor();
-        Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+        SetCursor(CurrentCursorX, CurrentCursorY);
     }
 
     private static void DrawVoidObjects()
@@ -314,7 +309,7 @@ internal static class Program
             DrawStarSystemObjects(star);
             CurrentCursorX = CheckedStarSystemObject?.Coordinates.X + 20 ?? 20;
             CurrentCursorY = CheckedStarSystemObject?.Coordinates.Y + 20 ?? 20;
-            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+            SetCursor(CurrentCursorX, CurrentCursorY);
         }
     }
 
@@ -329,13 +324,13 @@ internal static class Program
             DrawFrames();
             for (int i = 0; i <= starSystemObject.Size; i++)
             {
-                Console.SetCursorPosition(starSystemObject.Size + 1, i);
-                Console.Write('|');
+                SetCursor(starSystemObject.Size + 1, i);
+                Write('|');
             }
             for (int i = 0; i <= starSystemObject.Size; i++)
             {
-                Console.SetCursorPosition(i, starSystemObject.Size + 1);
-                Console.Write('-');
+                SetCursor(i, starSystemObject.Size + 1);
+                Write('-');
             }
             starSystemObject.DrawObjects();
             SetCursor(0, 0);
@@ -351,7 +346,7 @@ internal static class Program
             OpenSystem(Universe.HomeStar);
             CurrentCursorX = Universe.HomePlanet.Coordinates.X + 20;
             CurrentCursorY = Universe.HomePlanet.Coordinates.Y + 20;
-            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+            SetCursor(CurrentCursorX, CurrentCursorY);
         }
     }
 
@@ -377,33 +372,33 @@ internal static class Program
             //Вертикальные рамки
             for (int i = 0; i < Universe.UniverseY; i++)
             {
-                Console.SetCursorPosition(Universe.UniverseX + 1, i);
-                Console.Write("|");
+                SetCursor(Universe.UniverseX + 1, i);
+                Write("|");
             }
 
             for (int i = 0; i < Universe.UniverseY; i++)
             {
-                Console.SetCursorPosition(Console.WindowWidth - 1, i);
-                Console.Write("|");
+                SetCursor(Console.WindowWidth - 1, i);
+                Write("|");
             }
 
             //Горизонтальные рамки
-            Console.SetCursorPosition(Universe.UniverseX + 2, 0);
+            SetCursor(Universe.UniverseX + 2, 0);
             for (int i = Universe.UniverseX + 2; i < Console.WindowWidth - 1; i++)
             {
-                Console.Write("-");
+                Write("-");
             }
 
-            //Console.SetCursorPosition(Universe.UniverseX + 2, Universe.UniverseY - 1);
+            //SetCursor(Universe.UniverseX + 2, Universe.UniverseY - 1);
             //for (int i = Universe.UniverseX + 2; i < ConsoleX - 1; i++)
             //{
-            //    Console.Write("-");
+            //    Write("-");
             //}
 
-            Console.SetCursorPosition(0, Universe.UniverseY);
+            SetCursor(0, Universe.UniverseY);
             for (int i = 0; i < Console.WindowWidth; i++)
             {
-                Console.Write("-");
+                Write("-");
             }
         }
     }
@@ -418,13 +413,13 @@ internal static class Program
             {
                 for (int i = 2; i < Universe.UniverseY - offset; i++)
                 {
-                    Console.SetCursorPosition(Universe.UniverseX + 2, i);
-                    Console.Write("                                               ");
+                    SetCursor(Universe.UniverseX + 2, i);
+                    Write("                                               ");
                 }
             }
             InfoIsClear = true;
             //Возвращение курсора
-            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+            SetCursor(CurrentCursorX, CurrentCursorY);
         }
     }
     
@@ -435,30 +430,30 @@ internal static class Program
         {
             int offset = 0;
             ResetConsoleColor();
-            Console.SetCursorPosition(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom + 1));
+            SetCursor(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom + 1));
             for (int i = Universe.UniverseX + 2; i < Console.WindowWidth - 1; i++)
             {
-                Console.Write("-");
+                Write("-");
             }
-            Console.SetCursorPosition(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
-            Console.Write("Управление:");
-            Console.SetCursorPosition(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
-            Console.Write("\u2190\u2191\u2192\u2193 -- навигация");
-            if (UniverseDisplayMode == DisplayMode.Universe) Console.Write(", Enter -- войти в систему");
-            if (UniverseDisplayMode == DisplayMode.StarSystem) Console.Write(", Enter -- открыть карту объекта");
-            Console.SetCursorPosition(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
-            Console.Write("Режимы отображения: T -- классы объектов, F -- фракции");
-            Console.SetCursorPosition(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
-            Console.Write("B -- строить");
-            Console.SetCursorPosition(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
-            Console.Write("D -- дипломатический статус");
-            Console.SetCursorPosition(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
-            Console.Write("H -- к родной планете, +- -- скорость симуляции");
-            Console.SetCursorPosition(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
-            Console.Write("P -- пауза");
-            if (UniverseDisplayMode == DisplayMode.Universe) Console.Write(", Esc -- выход");
-            else if (UniverseDisplayMode == DisplayMode.StarSystem) Console.Write(", Esc -- к звездной карте");
-            else if (UniverseDisplayMode == DisplayMode.Planet) Console.Write(", Esc -- к карте системы");
+            SetCursor(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
+            Write("Управление:");
+            SetCursor(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
+            Write("\u2190\u2191\u2192\u2193 -- навигация");
+            if (UniverseDisplayMode == DisplayMode.Universe) Write(", Enter -- войти в систему");
+            if (UniverseDisplayMode == DisplayMode.StarSystem) Write(", Enter -- открыть карту объекта");
+            SetCursor(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
+            Write("Режимы отображения: T -- классы объектов, F -- фракции");
+            SetCursor(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
+            Write("B -- строить");
+            SetCursor(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
+            Write("D -- дипломатический статус");
+            SetCursor(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
+            Write("H -- к родной планете, +- -- скорость симуляции");
+            SetCursor(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
+            Write("P -- пауза");
+            if (UniverseDisplayMode == DisplayMode.Universe) Write(", Esc -- выход");
+            else if (UniverseDisplayMode == DisplayMode.StarSystem) Write(", Esc -- к звездной карте");
+            else if (UniverseDisplayMode == DisplayMode.Planet) Write(", Esc -- к карте системы");
         }
     }
 
@@ -471,21 +466,21 @@ internal static class Program
         //Стрелки
         if (consoleKey == ConsoleKey.LeftArrow && CurrentCursorX > 0)
         {
-            Console.SetCursorPosition(--CurrentCursorX, CurrentCursorY);
+            SetCursor(--CurrentCursorX, CurrentCursorY);
         }
         else if (consoleKey == ConsoleKey.RightArrow && CurrentCursorX < Universe.UniverseX)
         {
-            Console.SetCursorPosition(++CurrentCursorX, CurrentCursorY);
+            SetCursor(++CurrentCursorX, CurrentCursorY);
         }
         else if (consoleKey == ConsoleKey.UpArrow && CurrentCursorY > 0)
         {
-            Console.SetCursorPosition(CurrentCursorX, --CurrentCursorY);
+            SetCursor(CurrentCursorX, --CurrentCursorY);
         }
         else if (consoleKey == ConsoleKey.DownArrow && CurrentCursorY < Universe.UniverseY)
         {
-            Console.SetCursorPosition(CurrentCursorX, ++CurrentCursorY);
+            SetCursor(CurrentCursorX, ++CurrentCursorY);
         }
-
+        
         //Режимы отображения
         else if (consoleKey == ConsoleKey.T)
         {

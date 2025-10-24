@@ -1,4 +1,5 @@
-﻿using static SoulUniverse.Enums;
+﻿using static SoulUniverse.ConsoleHelper;
+using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
 namespace SoulUniverse.Objects.VoidObjects;
@@ -8,10 +9,10 @@ internal class BlackHole : VoidObject
     protected override char Symbol { get; } = '\u00D8'; //Ø
 
     protected override ConsoleColor Color { get; } = ConsoleColor.Yellow;
+
     public BlackHole()
     {
-        Coordinates.X = Rnd.Next(Universe.UniverseX);
-        Coordinates.Y = Rnd.Next(Universe.UniverseY);
+        Coordinates = new Coordinates(Rnd.Next(Universe.UniverseX), Rnd.Next(Universe.UniverseY));
     }
 
     public BlackHole(int x, int y)
@@ -27,7 +28,7 @@ internal class BlackHole : VoidObject
             Console.ForegroundColor = ConsoleColor.Gray;
         }
         else Console.ForegroundColor = Color;
-        Console.SetCursorPosition(Coordinates.X, Coordinates.Y);
-        Console.Write(Symbol);
+        SetCursor(Coordinates);
+        Write(Symbol);
     }
 }

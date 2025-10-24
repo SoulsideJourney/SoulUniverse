@@ -91,8 +91,8 @@ internal class Star : VoidObject
             {
                 Console.ForegroundColor = GetColor();
             }
-            Console.SetCursorPosition(x, y);
-            Console.Write("*");
+            SetCursor(x, y);
+            Write("*");
         }
     }
 
@@ -114,45 +114,45 @@ internal class Star : VoidObject
         {
             int row = 2;
             string starClass = _starClass.ToString();
-            Console.Write("Звезда класса ");
+            Write("Звезда класса ");
             Console.ForegroundColor = GetColor();
-            Console.Write(starClass);
+            Write(starClass);
             ResetConsoleColor();
-            Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+            SetCursor(Universe.UniverseX + 2, ++row);
             int planets = StarSystemObjects.Count;
-            Console.Write($"Количество планетарных тел: {planets}");
+            Write($"Количество планетарных тел: {planets}");
 
             //Информация о планетах
             if (planets > 0)
             {
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write("Информация об объектах системы:");
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write("-----------------------------------------");
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write($"| № | Расстояние | {"Класс",11} | Размер |");
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write("-----------------------------------------");
+                SetCursor(Universe.UniverseX + 2, ++row);
+                Write("Информация об объектах системы:");
+                SetCursor(Universe.UniverseX + 2, ++row);
+                Write("-----------------------------------------");
+                SetCursor(Universe.UniverseX + 2, ++row);
+                Write($"| № | Расстояние | {"Класс",11} | Размер |");
+                SetCursor(Universe.UniverseX + 2, ++row);
+                Write("-----------------------------------------");
                 int planetNumber = 0;
                 foreach (StarSystemObject starSystemObject in StarSystemObjects)
                 {
-                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+                    SetCursor(Universe.UniverseX + 2, ++row);
                     //string planetClass;
                     if (starSystemObject is Planet planet)
                     {
                         //planetClass = planet.PlanetClass.ToString();
-                        Console.Write($"|{++planetNumber,2} | {starSystemObject.Distance,6} а.е | ");
+                        Write($"|{++planetNumber,2} | {starSystemObject.Distance,6} а.е | ");
                         Console.ForegroundColor = planet.Color;
-                        Console.Write($"{planet.PlanetClass,11}");
+                        Write($"{planet.PlanetClass,11}");
                         ResetConsoleColor();
-                        Console.Write($" | {starSystemObject.Size,6} |");
+                        Write($" | {starSystemObject.Size,6} |");
                     }
                 }
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write("-----------------------------------------");
+                SetCursor(Universe.UniverseX + 2, ++row);
+                Write("-----------------------------------------");
 
                 //Информация о присутствующих фракциях
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+                SetCursor(Universe.UniverseX + 2, ++row);
                 List<Fraction> fractionsInSystem = new List<Fraction>();
                 foreach (StarSystemObject starSystemObject in StarSystemObjects)
                 {
@@ -163,22 +163,22 @@ internal class Star : VoidObject
                 }
                 if (fractionsInSystem.Count > 0)
                 {
-                    Console.Write("Присутствующие фракции в системе:");
+                    Write("Присутствующие фракции в системе:");
                     foreach (Fraction fraction in fractionsInSystem)
                     {
-                        Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+                        SetCursor(Universe.UniverseX + 2, ++row);
                         Console.ForegroundColor = fraction.Color;
-                        Console.Write(fraction.Name);
+                        Write(fraction.Name);
                     }
                     ResetConsoleColor();
                 }
-                else Console.Write("Нет присутствующих фракций");
+                else Write("Нет присутствующих фракций");
             }
 
             InfoIsClear = false;
 
             //Возвращение курсора
-            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+            SetCursor(CurrentCursorX, CurrentCursorY);
         }
     }
 
@@ -187,7 +187,7 @@ internal class Star : VoidObject
         return GetColor(_starClass);
     }
         
-    private ConsoleColor GetColor(StarClass starClass)
+    private static ConsoleColor GetColor(StarClass starClass)
     {
         return starClass switch
         {

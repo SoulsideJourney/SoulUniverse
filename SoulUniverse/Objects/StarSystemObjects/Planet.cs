@@ -87,14 +87,14 @@ public sealed class Planet : StarSystemObject
         //    //absoluteX = (int)Math.Round(Math.Sqrt(Math.Pow(Distance, 2) - i));
         //    absoluteX = i;
         //    absoluteY = (int)Math.Round(Math.Sqrt(Math.Pow(Distance, 2) - Math.Pow(absoluteX, 2)));
-        //    Console.SetCursorPosition(20 + absoluteX, 20 + absoluteY);
-        //    Console.Write("\u00B7");
-        //    Console.SetCursorPosition(20 + absoluteX * -1, 20 + absoluteY);
-        //    Console.Write("\u00B7");
-        //    Console.SetCursorPosition(20 + absoluteX * -1, 20 + absoluteY * -1);
-        //    Console.Write("\u00B7");
-        //    Console.SetCursorPosition(20 + absoluteX, 20 + absoluteY * -1);
-        //    Console.Write("\u00B7");
+        //    SetCursor(20 + absoluteX, 20 + absoluteY);
+        //    Write("\u00B7");
+        //    SetCursor(20 + absoluteX * -1, 20 + absoluteY);
+        //    Write("\u00B7");
+        //    SetCursor(20 + absoluteX * -1, 20 + absoluteY * -1);
+        //    Write("\u00B7");
+        //    SetCursor(20 + absoluteX, 20 + absoluteY * -1);
+        //    Write("\u00B7");
         //}
         lock (Locker)
         {
@@ -108,10 +108,10 @@ public sealed class Planet : StarSystemObject
             {
                 Console.ForegroundColor = Color;
             }
-            Console.SetCursorPosition(20 + Coordinates.X, 20 + Coordinates.Y);
-            Console.Write(Symbol);
+            SetCursor(20 + Coordinates.X, 20 + Coordinates.Y);
+            Write(Symbol);
             DrawnCoordinates = Coordinates;
-            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+            SetCursor(CurrentCursorX, CurrentCursorY);
             IsNeedToRedraw = false;
         }
     }
@@ -122,14 +122,14 @@ public sealed class Planet : StarSystemObject
     //    Console.ForegroundColor = this.GetColor();
     //    for (int i = center - 12; i <= center + 12; i++)
     //    {
-    //        Console.SetCursorPosition(i, center);
-    //        Console.Write('*');
+    //        SetCursor(i, center);
+    //        Write('*');
     //    }
-    //    Console.SetCursorPosition(center, center - 6);
+    //    SetCursor(center, center - 6);
     //    for (int i = center - 6; i <= center + 6; i++)
     //    {
-    //        Console.SetCursorPosition(center, i);
-    //        Console.Write('*');
+    //        SetCursor(center, i);
+    //        Write('*');
     //    }
     //    ResetConsoleColor();
     //}

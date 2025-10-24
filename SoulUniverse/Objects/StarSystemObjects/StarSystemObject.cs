@@ -65,56 +65,56 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
             ResetConsoleColor();
 
             //Общая информация
-            Console.SetCursorPosition(Universe.UniverseX + 2, row);
-            Console.Write("Информация об объекте: ");
-            Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+            SetCursor(Universe.UniverseX + 2, row);
+            Write("Информация об объекте: ");
+            SetCursor(Universe.UniverseX + 2, ++row);
             if (this is Planet planet)
             {
                 //string planetClass = planet.PlanetClass.ToString();
-                Console.Write("Планета класса ");
+                Write("Планета класса ");
                 Console.ForegroundColor = planet.Color;
-                Console.Write(planet.PlanetClass);
-                //Console.Write(string.Format("Планета класса {0}", planetClass));
+                Write(planet.PlanetClass);
+                //Write(string.Format("Планета класса {0}", planetClass));
                 ResetConsoleColor();
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write($"Размер: {planet.Size} км");
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write($"Расстояние до родительского тела: {planet.Distance} а.е. ");
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);              
+                SetCursor(Universe.UniverseX + 2, ++row);
+                Write($"Размер: {planet.Size} км");
+                SetCursor(Universe.UniverseX + 2, ++row);
+                Write($"Расстояние до родительского тела: {planet.Distance} а.е. ");
+                SetCursor(Universe.UniverseX + 2, ++row);              
             }
-            else Console.Write("Неизвестный объект");
+            else Write("Неизвестный объект");
 
             //Информация о ресурсах
-            Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-            Console.Write("Имеющиеся ресурсы:");
+            SetCursor(Universe.UniverseX + 2, ++row);
+            Write("Имеющиеся ресурсы:");
             foreach (var resource in Recources)
             {
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write($"{resource.Key}: {resource.Value}");
+                SetCursor(Universe.UniverseX + 2, ++row);
+                Write($"{resource.Key}: {resource.Value}");
             }
             InfoIsClear = false;
 
             //Информация о фракциях
             if (Fractions.Count > 0)
             {
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write("Фракции:");
+                SetCursor(Universe.UniverseX + 2, ++row);
+                Write("Фракции:");
                 foreach (var fraction in Fractions)
                 {
-                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+                    SetCursor(Universe.UniverseX + 2, ++row);
                     Console.ForegroundColor = fraction.Color;
-                    Console.Write($"{fraction.Name} ({fraction.Property.Count(p => p.Location == this)} объектов)");
+                    Write($"{fraction.Name} ({fraction.Property.Count(p => p.Location == this)} объектов)");
                 }
                 ResetConsoleColor();
             }
             else
             {
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write("На планете нет фракций");
+                SetCursor(Universe.UniverseX + 2, ++row);
+                Write("На планете нет фракций");
             }
 
             //Возвращение курсора
-            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+            SetCursor(CurrentCursorX, CurrentCursorY);
         }
     }
 
@@ -147,10 +147,10 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
             {
                 Console.ForegroundColor = Color;
             }
-            Console.SetCursorPosition(20 + Coordinates.X, 20 + Coordinates.Y);
-            Console.Write(Symbol);
+            SetCursor(20 + Coordinates.X, 20 + Coordinates.Y);
+            Write(Symbol);
             DrawnCoordinates = Coordinates;
-            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+            SetCursor(CurrentCursorX, CurrentCursorY);
             IsNeedToRedraw = false;
         }
     }
@@ -159,9 +159,9 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
     {
         lock (Locker)
         {
-            Console.SetCursorPosition(20 + DrawnCoordinates.X, 20 + DrawnCoordinates.Y);
-            Console.Write(' ');
-            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+            SetCursor(20 + DrawnCoordinates.X, 20 + DrawnCoordinates.Y);
+            Write(' ');
+            SetCursor(CurrentCursorX, CurrentCursorY);
         }
     }
 

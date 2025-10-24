@@ -71,13 +71,13 @@ internal class Tank : GroundProperty, IMovable, IBuildable
     {
         lock (Locker)
         {
-            Console.SetCursorPosition(Coordinates.X, Coordinates.Y);
+            SetCursor(Coordinates.X, Coordinates.Y);
             if (FractionDisplayMode == DisplayMode.Fractions) Console.ForegroundColor = Owner.Color;
             else ResetConsoleColor();
-            Console.Write(Symbol);
+            Write(Symbol);
             DrawnCoordinates = Coordinates;
             ResetConsoleColor();
-            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+            SetCursor(CurrentCursorX, CurrentCursorY);
             IsNeedToRedraw = false;
         }
     }
@@ -86,9 +86,9 @@ internal class Tank : GroundProperty, IMovable, IBuildable
     {
         lock (Locker)
         {
-            Console.SetCursorPosition(DrawnCoordinates.X, DrawnCoordinates.Y);
-            Console.Write(' ');
-            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+            SetCursor(DrawnCoordinates.X, DrawnCoordinates.Y);
+            Write(' ');
+            SetCursor(CurrentCursorX, CurrentCursorY);
         }
     }
 }

@@ -25,10 +25,10 @@ public abstract class GroundObject : UniverseObject
             ResetConsoleColor();
 
             //Общая информация
-            Console.SetCursorPosition(Universe.UniverseX + 2, row);
-            Console.Write("Информация об объекте: ");
-            Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-            Console.Write(Name);
+            SetCursor(Universe.UniverseX + 2, row);
+            Write("Информация об объекте: ");
+            SetCursor(Universe.UniverseX + 2, ++row);
+            Write(Name);
             InfoIsClear = false;
             ResetCursor();
         }
@@ -38,12 +38,12 @@ public abstract class GroundObject : UniverseObject
     {
         lock(Locker)
         {
-            Console.SetCursorPosition(Coordinates.X, Coordinates.Y);
+            SetCursor(Coordinates.X, Coordinates.Y);
             //if (FractionDisplayMode == Enums.DisplayMode.Fractions) Console.ForegroundColor = Owner.Color;
             //else ResetConsoleColor();
-            Console.Write(Symbol);
+            Write(Symbol);
             ResetConsoleColor();
-            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+            SetCursor(CurrentCursorX, CurrentCursorY);
             //IsNeedToDraw = false;
         }  
     }

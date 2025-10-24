@@ -25,12 +25,12 @@ public abstract class GroundProperty : GroundObject
             ResetConsoleColor();
 
             //Общая информация
-            Console.SetCursorPosition(Universe.UniverseX + 2, row);
-            Console.Write("Информация об объекте: ");
-            Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-            Console.Write(Name + " фракции ");
+            SetCursor(Universe.UniverseX + 2, row);
+            Write("Информация об объекте: ");
+            SetCursor(Universe.UniverseX + 2, ++row);
+            Write(Name + " фракции ");
             Console.ForegroundColor = Owner.Color;
-            Console.Write(Owner.Name);
+            Write(Owner.Name);
             ResetConsoleColor();
             InfoIsClear = false;
             ResetCursor();
@@ -41,12 +41,12 @@ public abstract class GroundProperty : GroundObject
     {
         lock (Locker)
         {
-            Console.SetCursorPosition(Coordinates.X, Coordinates.Y);
+            SetCursor(Coordinates.X, Coordinates.Y);
             if (FractionDisplayMode == Enums.DisplayMode.Fractions) Console.ForegroundColor = Owner.Color;
             else ResetConsoleColor();
-            Console.Write(Symbol);
+            Write(Symbol);
             ResetConsoleColor();
-            Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+            SetCursor(CurrentCursorX, CurrentCursorY);
             IsNeedToDraw = false;
         }
     }
