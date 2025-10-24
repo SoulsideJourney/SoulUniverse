@@ -6,10 +6,12 @@ using static SoulUniverse.Enums;
 
 namespace SoulUniverse;
 
+// Для нормальной работы в Windows 11 нужно сделать:
+// Настройки -> Система -> Для разработчиков -> Узел консоли Windows
 internal static class Program
 {
-    public static object Locker = new();
-    public static Mutex Mutex = new();
+    public static readonly object Locker = new();
+    public static readonly Mutex Mutex = new();
 
     /// <summary> Размер консоли по оси X </summary>
     private const int ConsoleX = 200;
@@ -108,7 +110,7 @@ internal static class Program
         Console.Title = title;
     }
 
-    static void Main()
+    private static void Main()
     {
         //Настройка консоли
         SetConsoleTitle();
@@ -227,7 +229,7 @@ internal static class Program
                     {
                         foreach (StarSystemObject starSystemObject in star.StarSystemObjects)
                         {
-                            if (starSystemObject is Planet planet && planet.IsNeedToRedraw)
+                            if (starSystemObject is Planet { IsNeedToRedraw: true } planet)
                             {
                                 planet.Erase();
                                 planet.Draw();
@@ -308,12 +310,14 @@ internal static class Program
         }
     }
 
+    /// <summary> Установить курсор </summary>
     public static void SetCursor(int x, int y)
     {
         CurrentCursorX = x;
         CurrentCursorY = y;
         Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
     }
+
     public static void ResetCursor()
     {
         ResetConsoleColor();
@@ -400,6 +404,7 @@ internal static class Program
         }
     }
 
+    /// <summary> Отрисовка рамок/// </summary>
     private static void DrawFrames()
     {
         lock (Locker)
@@ -439,9 +444,7 @@ internal static class Program
         }
     }
 
-
-
-    static void ClearInfo()
+    private static void ClearInfo()
     {
         lock (Locker)
         {
@@ -460,7 +463,8 @@ internal static class Program
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
         }
     }
-
+    
+    /// <summary> Отрисовка легенды </summary>
     private static void WriteLegend()
     {
         lock (Locker)

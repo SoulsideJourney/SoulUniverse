@@ -1,4 +1,5 @@
-﻿using SoulUniverse.StarSystemObjects;
+﻿using SoulUniverse.Interfaces;
+using SoulUniverse.StarSystemObjects;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
@@ -30,9 +31,9 @@ internal class Tank : GroundProperty, IMovable, IBuildable
     {
         Tank tank = new(x, y, fraction, starSystemObject);
 
-        foreach (var res in fraction.Recources)
+        foreach (var res in fraction.Resources)
         {
-            fraction.Recources[res.Key] = res.Value - Cost.Find(r => r.Key == res.Key).Value;
+            fraction.Resources[res.Key] = res.Value - Cost.Find(r => r.Key == res.Key).Value;
         }
 
         Program.Mutex.WaitOne();
@@ -50,7 +51,7 @@ internal class Tank : GroundProperty, IMovable, IBuildable
         //}
         int x = Coordinates.x;
         int y = Coordinates.y;
-        _ = new Random().Next(4) switch
+        _ = Rnd.Next(4) switch
         {
             0 => x < Location.Size ? x += 1 : x -= 1,
             1 => x > 0 ? x -= 1 : x += 1,

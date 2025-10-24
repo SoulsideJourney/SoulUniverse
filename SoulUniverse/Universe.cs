@@ -55,7 +55,7 @@ internal static class Universe
         }
 
         //Фракция игрока
-        Fraction playerFraction = new();
+        var playerFraction = Fraction.CreatePlayerFraction();
 
         //Создание объектов
         GenerateObjects<Star>(100);

@@ -16,25 +16,23 @@ internal class Star : VoidObject
 
     public Star()
     {
-        Random rnd = new();
-        Coordinates.x = rnd.Next(Universe.UniverseX);
-        Coordinates.y = rnd.Next(Universe.UniverseY);
-        _starClass = (StarClass)rnd.Next(Enum.GetValues(typeof(StarClass)).Length - 1);
+        Coordinates.x = Rnd.Next(Universe.UniverseX);
+        Coordinates.y = Rnd.Next(Universe.UniverseY);
+        _starClass = (StarClass)Rnd.Next(Enum.GetValues(typeof(StarClass)).Length - 1);
         Color = GetColor(_starClass);
         GenerateStarSystemObjects();
     }
 
     private void GenerateStarSystemObjects()
     {
-        Random rnd = new();
-        int objectCount = rnd.Next(15);
+        int objectCount = Rnd.Next(15);
         //Генерация объектов системы
         for (int i = 0; i < objectCount; i++)
         {
             bool isPositionOccupied = false;
             while (!isPositionOccupied)
             {
-                int distance = rnd.Next(2, Universe.UniverseY / 2 - 1);
+                int distance = Rnd.Next(2, Universe.UniverseY / 2 - 1);
                 foreach (StarSystemObject obj in StarSystemObjects)
                 {
                     if (obj.Distance == distance)
@@ -51,9 +49,9 @@ internal class Star : VoidObject
                 //Добавляем фракцию на планету с небольшой долей вероятности
                 while (true)
                 {
-                    if (rnd.Next(100) < 10)
+                    if (Rnd.Next(100) < 10)
                     {
-                        Fraction fraction = Universe.NpcFractions.ElementAt(rnd.Next(Universe.NpcFractions.Count));
+                        Fraction fraction = Universe.NpcFractions.ElementAt(Rnd.Next(Universe.NpcFractions.Count));
                         planet.Fractions.Add(fraction);
                         fraction.Colonies.Add(planet);
                     }

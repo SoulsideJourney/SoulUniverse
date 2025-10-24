@@ -154,9 +154,8 @@ public sealed class Planet : StarSystemObject
 
     public void AddGroundObjects(Fraction fraction)
     {
-        Random rnd = new();
-        int x = rnd.Next(Size);
-        int y = rnd.Next(Size);
+        int x = Rnd.Next(Size);
+        int y = Rnd.Next(Size);
         if (!IsPlaceOccupied(x, y)) MilitaryBase.New(x, y, fraction, this);
     }
 }

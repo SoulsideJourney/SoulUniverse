@@ -1,4 +1,5 @@
-﻿using SoulUniverse.PlanetObjects;
+﻿using SoulUniverse.Interfaces;
+using SoulUniverse.PlanetObjects;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
@@ -40,8 +41,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
     public StarSystemObject(int distance)
     {
         Distance = distance;
-        Random rnd = new();
-        _phi = rnd.NextDouble() * 2 * Math.PI;
+        _phi = Rnd.NextDouble() * 2 * Math.PI;
         Coordinates.x = (int)Math.Round(Distance * Math.Cos(_phi));
         Coordinates.y = (int)Math.Round(Distance * Math.Sin(_phi));
     }

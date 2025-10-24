@@ -1,4 +1,5 @@
-﻿using SoulUniverse.StarSystemObjects;
+﻿using SoulUniverse.Interfaces;
+using SoulUniverse.StarSystemObjects;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
@@ -22,9 +23,9 @@ internal class MilitaryBase : GroundProperty, IBuildable
     {
         MilitaryBase @base = new(x, y, fraction, starSystemObject);
 
-        foreach (var res in fraction.Recources)
+        foreach (var res in fraction.Resources)
         {
-            fraction.Recources[res.Key] = res.Value - Cost.Find(r => r.Key == res.Key).Value;
+            fraction.Resources[res.Key] = res.Value - Cost.Find(r => r.Key == res.Key).Value;
         }
         Program.Mutex.WaitOne();
         starSystemObject.GroundObjects.Add(@base);

@@ -1,4 +1,4 @@
-﻿namespace SoulUniverse;
+﻿namespace SoulUniverse.Interfaces;
 
 /// <summary> Движущиеся объекты </summary>
 public interface IMovable

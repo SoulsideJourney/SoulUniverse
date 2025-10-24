@@ -7,11 +7,11 @@ internal class Wormhole : VoidObject
 {
     protected override char Symbol { get; } = '@';
     protected override ConsoleColor Color { get; } = ConsoleColor.Gray;
+
     public Wormhole()
     {
-        Random rnd = new();
-        Coordinates.x = rnd.Next(Universe.UniverseX);
-        Coordinates.y = rnd.Next(Universe.UniverseY);
+        Coordinates.x = Rnd.Next(Universe.UniverseX);
+        Coordinates.y = Rnd.Next(Universe.UniverseY);
     }
 
     public Wormhole(int x, int y)
@@ -20,7 +20,7 @@ internal class Wormhole : VoidObject
         Coordinates.y = y;
     }
 
-    override public void Draw()
+    public override void Draw()
     {
         if (FractionDisplayMode == DisplayMode.Fractions)
         {

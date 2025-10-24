@@ -36,9 +36,9 @@ public class Mine : GroundProperty/*, IBuildable*/
 
     public Mine(Fraction fraction, Deposit deposit) : base(deposit.Coordinates.x, deposit.Coordinates.y, fraction, deposit.Location)
     {
-        foreach (var res in fraction.Recources)
+        foreach (var res in fraction.Resources)
         {
-            fraction.Recources[res.Key] = res.Value - BuildCost.Find(r => r.Key == res.Key).Value;
+            fraction.Resources[res.Key] = res.Value - BuildCost.Find(r => r.Key == res.Key).Value;
         }
 
         Deposit = deposit;
@@ -50,7 +50,7 @@ public class Mine : GroundProperty/*, IBuildable*/
         if (Location.Recources[Deposit.Resource] > 0)
         {
             Location.Recources[Deposit.Resource] -= 1;
-            Owner.Recources[Deposit.Resource] += 1;
+            Owner.Resources[Deposit.Resource] += 1;
         }
     }
 }

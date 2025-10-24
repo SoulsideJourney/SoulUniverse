@@ -8,37 +8,40 @@ namespace SoulUniverse;
 
 public class Fraction
 {
-    public string Name { get; protected set; }
-
-    public ConsoleColor Color { get; protected set; }
-    //public FractionColor Color { get; protected set; }
-    //public List<GroundObject> Property { get; } = new();
-    public List<GroundProperty> Property => Colonies
-        .SelectMany(o => o.GroundObjects)
-        .Where(go => go is GroundProperty property && property.Owner == this).Cast<GroundProperty>().ToList();
-
-    public List<StarSystemObject> Colonies { get; protected set; } = new();
-    public Dictionary<ResourceName, int> Recources { get; } = new();
-
-    //Фракция игрока
-    public Fraction()
+    private Fraction(string name, ConsoleColor color)
     {
-        Name = "Игрок";
-        Color = ConsoleColor.Green;
+        Name = name;
+        Color = color;
     }
 
     public Fraction(FractionName fraction)
     {
         Name = fraction.ToString();
-        Random rnd = new();
         //Рандомный цвет фракции
-        //Color = (ConsoleColor)Enum.GetValues(typeof(FractionColor)).GetValue(rnd.Next(Enum.GetValues(typeof(FractionColor)).Length));
-        Color = (ConsoleColor)rnd.Next(Enum.GetValues(typeof(FractionColor)).Length);
+        Color = (ConsoleColor)Rnd.Next(Enum.GetValues(typeof(FractionColor)).Length);
         foreach (ResourceName resource in Enum.GetValues(typeof(ResourceName)))
         {
-            //Recources.Add(new KeyValuePair<ResourceName, int>(resource, 1000));
-            Recources.Add(resource, 1000);
+            Resources.Add(resource, 1000);
         }
+    }
+
+    public string Name { get; }
+
+    public ConsoleColor Color { get; }
+
+    public List<GroundProperty> Property => Colonies
+        .SelectMany(o => o.GroundObjects)
+        .Where(go => go is GroundProperty property && property.Owner == this).Cast<GroundProperty>().ToList();
+
+    public List<StarSystemObject> Colonies { get; } = [];
+
+    /// <summary> Все ресурсы фракции </summary>
+    public Dictionary<ResourceName, int> Resources { get; } = new();
+
+    /// <summary> Фракция игрока </summary>
+    public static Fraction CreatePlayerFraction()
+    {
+        return new Fraction("Игрок", ConsoleColor.Green);
     }
 
     /// <summary>Фракция что-нибудь делает</summary>
@@ -72,9 +75,9 @@ public class Fraction
     }
 
     /// <summary>Достаточно ли ресурсов на шахту</summary>
-    public bool IsEnoughToBuildMine()
+    private bool IsEnoughToBuildMine()
     {
-        foreach (var kvp in Recources)
+        foreach (var kvp in Resources)
         {
             if (kvp.Value < Mine.BuildCost.Find(k => k.Key == kvp.Key).Value)
             {
@@ -85,9 +88,9 @@ public class Fraction
     }
 
     /// <summary>Достаточно ли ресурсов на военную базу</summary>
-    public bool IsEnoughToBuildMilitaryBase()
+    private bool IsEnoughToBuildMilitaryBase()
     {
-        foreach (var kvp in Recources)
+        foreach (var kvp in Resources)
         {
             if (kvp.Value < MilitaryBase.Cost.Find(k => k.Key == kvp.Key).Value)
             {
@@ -100,7 +103,7 @@ public class Fraction
     /// <summary>Достаточно ли ресурсов на танк</summary>
     public bool IsEnoughToBuildTank()
     {
-        foreach (var kvp in Recources)
+        foreach (var kvp in Resources)
         {
             if (kvp.Value < Tank.Cost.Find(k => k.Key == kvp.Key).Value)
             {
@@ -113,7 +116,7 @@ public class Fraction
     /// <summary>Достаточно ли ресурсов на завод</summary>
     public bool IsEnoughToBuildFactory()
     {
-        foreach (var kvp in Recources)
+        foreach (var kvp in Resources)
         {
             if (kvp.Value < Factory.Cost.Find(k => k.Key == kvp.Key).Value)
             {

@@ -1,4 +1,4 @@
-﻿namespace SoulUniverse;
+﻿namespace SoulUniverse.Interfaces;
 
 internal interface IImmovable
 {

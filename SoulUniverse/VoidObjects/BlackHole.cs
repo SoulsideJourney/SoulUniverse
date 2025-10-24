@@ -10,9 +10,8 @@ internal class BlackHole : VoidObject
     protected override ConsoleColor Color { get; } = ConsoleColor.Yellow;
     public BlackHole()
     {
-        Random rnd = new Random();
-        Coordinates.x = rnd.Next(Universe.UniverseX);
-        Coordinates.y = rnd.Next(Universe.UniverseY);
+        Coordinates.x = Rnd.Next(Universe.UniverseX);
+        Coordinates.y = Rnd.Next(Universe.UniverseY);
     }
 
     public BlackHole(int x, int y)
