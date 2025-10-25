@@ -36,11 +36,11 @@ public class Enums
 
     public enum PlanetClass
     {
-        Barren, Continental, GasGiant, Ocean
+        Barren, Continental, GasGiant, Hycean
     }
 
     public enum ResourceName
     {
-        Iron, Oil, Uranium, 
+        Iron, Oil, Uranium,
     }
 }

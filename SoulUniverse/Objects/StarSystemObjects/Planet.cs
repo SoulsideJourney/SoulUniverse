@@ -21,7 +21,7 @@ public sealed class Planet : StarSystemObject
             PlanetClass.Barren => ConsoleColor.DarkYellow,
             PlanetClass.Continental => ConsoleColor.Green,
             PlanetClass.GasGiant => ConsoleColor.DarkBlue,
-            PlanetClass.Ocean => ConsoleColor.Cyan,
+            PlanetClass.Hycean => ConsoleColor.Cyan,
             _ => ConsoleColor.White
         };
 
