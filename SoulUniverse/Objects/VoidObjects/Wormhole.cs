@@ -1,5 +1,4 @@
-﻿using static SoulUniverse.ConsoleHelper;
-using static SoulUniverse.Enums;
+﻿using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
 namespace SoulUniverse.Objects.VoidObjects;
@@ -28,7 +27,7 @@ internal class Wormhole : VoidObject
             Console.ForegroundColor = ConsoleColor.Gray;
         }
         else Console.ForegroundColor = Color;
-        SetCursor(Coordinates.X, Coordinates.Y);
-        Write(Symbol);
+        Console.SetCursorPosition(Coordinates.X, Coordinates.Y);
+        Console.Write(Symbol);
     }
 }

@@ -6,9 +6,7 @@ namespace SoulUniverse.Objects.VoidObjects;
 internal abstract class VoidObject : UniverseObject
 {
     protected abstract char Symbol { get; }
-
     protected abstract ConsoleColor Color { get; }
-
     public Coordinates Coordinates = new();
     //public abstract void Draw();
 
@@ -16,25 +14,25 @@ internal abstract class VoidObject : UniverseObject
     {
         int row = 2;
         ResetConsoleColor();
-        SetCursor(Universe.UniverseX + 2, row);
-        Write("Информация об объекте: ");
+        Console.SetCursorPosition(Universe.UniverseX + 2, row);
+        Console.Write("Информация об объекте: ");
         if (this is Star star)
         {
             star.WriteStarInfo();
         }
         else if (this is BlackHole)
         {
-            Write("Черная дыра");
+            Console.Write("Черная дыра");
         }
         else if (this is Wormhole)
         {
-            Write("Червоточина");
+            Console.Write("Червоточина");
         }
-        else Write("Неизвестный объект");
+        else Console.Write("Неизвестный объект");
         InfoIsClear = false;
         CheckedVoidObject = this;
 
         //Возвращение курсора
-        SetCursor(CurrentCursorX, CurrentCursorY);
+        Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
     }
 }

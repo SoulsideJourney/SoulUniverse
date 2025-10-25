@@ -33,8 +33,6 @@ internal static class ConsoleHelper
         }
     }
 
-    public static void SetCursor(Coordinates coordinates) => SetCursor(coordinates.X, coordinates.Y);
-
     /// <summary> Установить курсор </summary>
     public static void SetCursor(int x, int y)
     {
@@ -42,15 +40,4 @@ internal static class ConsoleHelper
         CurrentCursorY = y;
         Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
     }
-
-    public static void ResetConsoleColor()
-    {
-        Console.ForegroundColor = ConsoleColor.Gray;
-    }
-
-    public static void Write(string? value) => Console.Write(value);
-
-    public static void Write(char? value) => Console.Write(value);
-
-    public static void Write(object? value) => Console.Write(value);
 }
