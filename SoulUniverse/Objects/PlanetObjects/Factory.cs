@@ -1,4 +1,5 @@
 ﻿using SoulUniverse.Objects.StarSystemObjects;
+using System.Diagnostics;
 using static SoulUniverse.Enums;
 
 namespace SoulUniverse.Objects.PlanetObjects;
@@ -30,5 +31,6 @@ internal class Factory : GroundProperty
     public void BuildTank()
     {
         Tank.New(Coordinates.X + 1, Coordinates.Y, Owner, Location);
+        Debug.WriteLine(string.Format($"Насекомые из {Owner.Name} построили ТАНК! Будет война"));
     }
 }

@@ -248,7 +248,6 @@ internal static class Program
                         && !factory.Location.IsPlaceOccupied(factory.Coordinates.X + 1, factory.Coordinates.Y))
                     {
                         factory.BuildTank();
-                        Debug.WriteLine(string.Format($"Насекомые из {factory.Owner.Name} построили ТАНК! Будет война"));
                     }
                 }
 

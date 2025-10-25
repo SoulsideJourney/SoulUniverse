@@ -47,31 +47,16 @@ public class Fraction
     /// <summary>Фракция что-нибудь делает</summary>
     public void DoSomething()
     {
-        if (IsEnoughToBuildMine())
+        var action = Rnd.Next(2);
+
+        bool result = action switch
         {
-            if (TryBuildMine(this.Colonies.ElementAt(Rnd.Next(Colonies.Count))))
-            {
-                Debug.WriteLine($"Насекомые из {Name} построили шахту");
-            }
+            0 => TryBuildMine(),
+            1 => TryBuildFactory(),
+            _ => TryBuildMilitaryBase()
+        };
 
-            if (IsEnoughToBuildFactory())
-            {
-                if (TryBuildFactory(this.Colonies.ElementAt(Rnd.Next(Colonies.Count))))
-                {
-                    Debug.WriteLine($"Насекомые из {Name} построили завод! Работягам будет, где работать");
-                }
-            }
-
-            if (IsEnoughToBuildMilitaryBase())
-            {
-                if (TryBuildMilitaryBase(this.Colonies.ElementAt(Rnd.Next(Colonies.Count))))
-                {
-                    Debug.WriteLine($"Насекомые из {Name} построили базу");
-                }
-            }
-        }
-
-        else Debug.WriteLine($"Насекомые из {Name} обнищали");
+        if (!result) Debug.WriteLine($"Насекомые из {Name} обнищали");
     }
 
     /// <summary>Достаточно ли ресурсов на шахту</summary>
@@ -126,69 +111,64 @@ public class Fraction
         return true;
     }
 
-    //public void BuildMilitaryBase(StarSystemObject starSystemObject)
-    //{
-    //    new MilitaryBase(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this, starSystemObject);
-    //}
+    /// <summary> Фракция будет пытаться построить военную базу </summary>
+    public bool TryBuildMilitaryBase() => TryBuildMilitaryBase(GetRandomOccupiedPlanet());
 
-    public bool TryBuildMilitaryBase(StarSystemObject starSystemObject)
+    private bool TryBuildMilitaryBase(StarSystemObject starSystemObject)
     {
+        if (!IsEnoughToBuildMilitaryBase()) return false;
+
         int x = Rnd.Next(starSystemObject.Size);
         int y = Rnd.Next(starSystemObject.Size);
         if (!starSystemObject.IsPlaceOccupied(x, y))
         {
             MilitaryBase.New(x, y, this, starSystemObject);
+
+            Debug.WriteLine($"Насекомые из {Name} построили базу");
             return true;
         }
         return false;
     }
 
-    //public void BuildMine(StarSystemObject starSystemObject)
-    //{
-    //    new Mine(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this, starSystemObject);
-    //}
+    /// <summary> Фракция будет пытаться построить шахту </summary>
+    public bool TryBuildMine() => TryBuildMine(GetRandomOccupiedPlanet());
 
     private bool TryBuildMine(StarSystemObject starSystemObject)
     {
-        //int x = Rnd.Next(starSystemObject.Size);
-        //int y = Rnd.Next(starSystemObject.Size);
-        //if (!starSystemObject.IsPlaceOccupied(x, y))
-
+        if (!IsEnoughToBuildMine()) return false;
         var deposit = starSystemObject.Deposits.FirstOrDefault(d => !d.IsOccupied);
         if (deposit != null)
         {
-            //Mine mine = new Mine(x, y, this, starSystemObject);
-            Mine mine = new Mine(this, deposit);
+            Mine mine = new(this, deposit);
 
             Program.Mutex.WaitOne();
             Universe.Mines.Add(mine);
             starSystemObject.GroundObjects.Add(mine);
             Program.Mutex.ReleaseMutex();
 
+            Debug.WriteLine($"Насекомые из {Name} построили шахту");
             return true;
         }
         return false;
     }
 
-    //public void BuildTank(StarSystemObject starSystemObject)
-    //{
-    //    new Tank(rnd.Next(starSystemObject.Size), rnd.Next(starSystemObject.Size), this, starSystemObject);
-    //}
+    /// <summary> Фракция будет пытаться построить завод </summary>
+    public bool TryBuildFactory() => TryBuildFactory(GetRandomOccupiedPlanet());
 
-    public void BuildFactory(StarSystemObject starSystemObject)
+    private bool TryBuildFactory(StarSystemObject starSystemObject)
     {
-        Factory.New(Rnd.Next(starSystemObject.Size), Rnd.Next(starSystemObject.Size), this, starSystemObject);
-    }
-
-    public bool TryBuildFactory(StarSystemObject starSystemObject)
-    {
+        if (!IsEnoughToBuildFactory()) return false;
         int x = Rnd.Next(starSystemObject.Size);
         int y = Rnd.Next(starSystemObject.Size);
         if (!starSystemObject.IsPlaceOccupied(x, y))
         {
             Factory.New(x, y, this, starSystemObject);
+
+            Debug.WriteLine($"Насекомые из {Name} построили завод! Работягам будет, где работать");
             return true;
         }
         return false;
     }
+
+    private StarSystemObject GetRandomOccupiedPlanet() => Colonies.ElementAt(Rnd.Next(Colonies.Count));
 }
