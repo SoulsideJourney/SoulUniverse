@@ -30,35 +30,47 @@ internal class Star : VoidObject
         //Генерация объектов системы
         for (int i = 0; i < objectCount; i++)
         {
-            bool isPositionOccupied = false;
-            while (!isPositionOccupied)
+            bool isOrbitOccupied = false;
+            while (!isOrbitOccupied)
             {
                 int distance = Rnd.Next(2, Universe.UniverseY / 2 - 1);
                 foreach (StarSystemObject obj in StarSystemObjects)
                 {
                     if (obj.Distance == distance)
                     {
-                        isPositionOccupied = true;
+                        isOrbitOccupied = true;
                         break;
                     }
                 }
-                if (isPositionOccupied) continue;
+                if (isOrbitOccupied) continue;
 
-                //Орбита свободна -- добавляем планету
-                Planet planet = new(distance);
-                Asteroid asteroid = new(distance); //TODO
-                //Добавляем фракцию на планету с небольшой долей вероятности
-                while (true)
+                //Орбита свободна -- добавляем планету или пояс астероидов
+                var rnd = Rnd.Next(100);
+                if (rnd < 70)
                 {
-                    if (Rnd.Next(100) < 10)
+                    Planet planet = new(distance);
+                    //Добавляем фракцию на планету с небольшой долей вероятности
+                    while (true)
                     {
-                        Fraction fraction = Universe.NpcFractions.ElementAt(Rnd.Next(Universe.NpcFractions.Count));
-                        planet.Fractions.Add(fraction);
-                        fraction.Colonies.Add(planet);
+                        if (Rnd.Next(100) < 10)
+                        {
+                            Fraction fraction = Universe.NpcFractions.ElementAt(Rnd.Next(Universe.NpcFractions.Count));
+                            planet.Fractions.Add(fraction);
+                            fraction.Colonies.Add(planet);
+                        }
+                        else break;
                     }
-                    else break;
+                    StarSystemObjects.Add(planet);
                 }
-                StarSystemObjects.Add(planet);
+                else
+                {
+                    //Создаем несколько астероидов в поясе в зависимости от радиуса орбиты
+                    for (int j = 0; j < 10; j++)
+                    {
+                        StarSystemObjects.Add(new Asteroid(distance));
+                    }
+                }
+
                 break;
             }
         }
@@ -67,15 +79,10 @@ internal class Star : VoidObject
 
     public override void Draw()
     {
-        Draw(Coordinates.X, Coordinates.Y, _starClass);
+        Draw(Coordinates.X, Coordinates.Y);
     }
 
     public void Draw(int x, int y)
-    {
-        Draw(x, y, _starClass);
-    }
-
-    protected void Draw(int x, int y, StarClass starClass)
     {
         lock (Locker)
         {
@@ -186,7 +193,7 @@ internal class Star : VoidObject
     {
         return GetColor(_starClass);
     }
-        
+
     private ConsoleColor GetColor(StarClass starClass)
     {
         return starClass switch

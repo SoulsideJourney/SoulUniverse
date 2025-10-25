@@ -57,6 +57,11 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
         Program.Mutex.ReleaseMutex();
     }
 
+    protected virtual void WriteSelfInfo(ref int row)
+    {
+        Console.Write("Неизвестный объект");
+    }
+
     public void WriteInfo()
     {
         lock (Locker)
@@ -68,21 +73,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
             Console.SetCursorPosition(Universe.UniverseX + 2, row);
             Console.Write("Информация об объекте: ");
             Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-            if (this is Planet planet)
-            {
-                //string planetClass = planet.PlanetClass.ToString();
-                Console.Write("Планета класса ");
-                Console.ForegroundColor = planet.Color;
-                Console.Write(planet.PlanetClass);
-                //Console.Write(string.Format("Планета класса {0}", planetClass));
-                ResetConsoleColor();
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write($"Размер: {planet.Size} км");
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write($"Расстояние до родительского тела: {planet.Distance} а.е. ");
-                Console.SetCursorPosition(Universe.UniverseX + 2, ++row);              
-            }
-            else Console.Write("Неизвестный объект");
+            WriteSelfInfo(ref row);
 
             //Информация о ресурсах
             Console.SetCursorPosition(Universe.UniverseX + 2, ++row);

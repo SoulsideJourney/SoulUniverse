@@ -24,4 +24,9 @@ internal class Asteroid : StarSystemObject
             Resources.Add(res, Rnd.Next(100000000));
         }
     }
+
+    protected override void WriteSelfInfo(ref int row)
+    {
+        Console.Write("Астероид");
+    }
 }

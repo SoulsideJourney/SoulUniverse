@@ -81,25 +81,6 @@ public sealed class Planet : StarSystemObject
 
     public override void Draw()
     {
-        ////Отрисовка орбиты
-        //ResetConsoleColor();
-        //int absoluteX;
-        //int absoluteY;
-
-        //for (int i = 0; i <= Distance; i++)
-        //{
-        //    //absoluteX = (int)Math.Round(Math.Sqrt(Math.Pow(Distance, 2) - i));
-        //    absoluteX = i;
-        //    absoluteY = (int)Math.Round(Math.Sqrt(Math.Pow(Distance, 2) - Math.Pow(absoluteX, 2)));
-        //    Console.SetCursorPosition(20 + absoluteX, 20 + absoluteY);
-        //    Console.Write("\u00B7");
-        //    Console.SetCursorPosition(20 + absoluteX * -1, 20 + absoluteY);
-        //    Console.Write("\u00B7");
-        //    Console.SetCursorPosition(20 + absoluteX * -1, 20 + absoluteY * -1);
-        //    Console.Write("\u00B7");
-        //    Console.SetCursorPosition(20 + absoluteX, 20 + absoluteY * -1);
-        //    Console.Write("\u00B7");
-        //}
         lock (Locker)
         {
             //Отрисовка планеты
@@ -119,47 +100,23 @@ public sealed class Planet : StarSystemObject
             IsNeedToRedraw = false;
         }
     }
-
-    //public void DrawMacro()
-    //{
-    //    int center = 20;
-    //    Console.ForegroundColor = this.GetColor();
-    //    for (int i = center - 12; i <= center + 12; i++)
-    //    {
-    //        Console.SetCursorPosition(i, center);
-    //        Console.Write('*');
-    //    }
-    //    Console.SetCursorPosition(center, center - 6);
-    //    for (int i = center - 6; i <= center + 6; i++)
-    //    {
-    //        Console.SetCursorPosition(center, i);
-    //        Console.Write('*');
-    //    }
-    //    ResetConsoleColor();
-    //}
-
-
-    //public void Move()
-    //{
-    //    //Угловая скорость
-    //    double w = OrbitalSpeed / ((double)Distance * 150_000_000); // рад/ч
-    //    double t = 24; //часов
-    //    Phi = (Phi + w * t) % (2 * Math.PI);
-    //    int newX = (int)Math.Round(Distance * Math.Cos(Phi)); // а. е.
-    //    int newY = (int)Math.Round(Distance * Math.Sin(Phi)); // а. е.
-    //    if (Coordinates.x != newX || Coordinates.y != newY)
-    //    {
-    //        Coordinates.x = newX;
-    //        Coordinates.y = newY;
-    //        IsNeedToRedraw = true;
-    //    }
-
-    //}
-
     public void AddGroundObjects(Fraction fraction)
     {
         int x = Rnd.Next(Size);
         int y = Rnd.Next(Size);
         if (!IsPlaceOccupied(x, y)) MilitaryBase.New(x, y, fraction, this);
+    }
+
+    protected override void WriteSelfInfo(ref int row)
+    {
+        Console.Write("Планета класса ");
+        Console.ForegroundColor = Color;
+        Console.Write(PlanetClass);
+        ResetConsoleColor();
+        Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+        Console.Write($"Размер: {Size} км");
+        Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+        Console.Write($"Расстояние до родительского тела: {Distance} а.е. ");
+        Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
     }
 }
