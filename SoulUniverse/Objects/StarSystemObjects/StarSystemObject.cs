@@ -20,7 +20,8 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
 
     public bool IsNeedToRedraw { get; set; }
 
-    public int Distance { get; }
+    /// <summary> Радиус орбиты в а.е. </summary>
+    public int OrbitRadius { get; }
 
     /// <summary> Текущий угол орбиты </summary>
     private double _phi;
@@ -41,10 +42,10 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
 
     public StarSystemObject(int distance)
     {
-        Distance = distance;
+        OrbitRadius = distance;
         _phi = Rnd.NextDouble() * 2 * Math.PI;
-        Coordinates.X = (int)Math.Round(Distance * Math.Cos(_phi));
-        Coordinates.Y = (int)Math.Round(Distance * Math.Sin(_phi));
+        Coordinates.X = (int)Math.Round(OrbitRadius * Math.Cos(_phi));
+        Coordinates.Y = (int)Math.Round(OrbitRadius * Math.Sin(_phi));
     }
 
     public void DrawObjects()
@@ -112,10 +113,10 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
     public void Move()
     {
         //Угловая скорость
-        double w = OrbitalSpeed / ((double)Distance * 150_000_000); // рад/ч
+        double w = OrbitalSpeed / ((double)OrbitRadius * 150_000_000); // рад/ч
         _phi = (_phi + w * 24) % (2 * Math.PI); //24 -- часов
-        int newX = (int)Math.Round(Distance * Math.Cos(_phi)); // а. е.
-        int newY = (int)Math.Round(Distance * Math.Sin(_phi)); // а. е.
+        int newX = (int)Math.Round(OrbitRadius * Math.Cos(_phi)); // а. е.
+        int newY = (int)Math.Round(OrbitRadius * Math.Sin(_phi)); // а. е.
         if (Coordinates.X != newX || Coordinates.Y != newY)
         {
             Coordinates = new Coordinates(newX, newY);
@@ -163,7 +164,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
 
     public int CompareTo(StarSystemObject? other)
     {
-        if (Distance > (other?.Distance ?? 0)) return 1;
+        if (OrbitRadius > (other?.OrbitRadius ?? 0)) return 1;
         return -1;
     }
 }

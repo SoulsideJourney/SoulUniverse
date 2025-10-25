@@ -37,7 +37,7 @@ internal class Star : VoidObject
                 int distance = Rnd.Next(2, Universe.UniverseY / 2 - 1);
                 foreach (StarSystemObject obj in StarSystemObjects)
                 {
-                    if (obj.Distance == distance)
+                    if (obj.OrbitRadius == distance)
                     {
                         isOrbitOccupied = true;
                         break;
@@ -147,7 +147,7 @@ internal class Star : VoidObject
                     if (starSystemObject is Planet planet)
                     {
                         Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                        Console.Write($"|{++planetNumber,2} | {starSystemObject.Distance,6} а.е | ");
+                        Console.Write($"|{++planetNumber,2} | {starSystemObject.OrbitRadius,6} а.е | ");
                         Console.ForegroundColor = planet.Color;
                         Console.Write($"{planet.PlanetClass,11}");
                         ResetConsoleColor();
