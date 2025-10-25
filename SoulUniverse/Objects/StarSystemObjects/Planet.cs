@@ -9,10 +9,14 @@ public sealed class Planet : StarSystemObject
 {
     public const int MinSize = 10;
     public const int MaxSize = 25;
+
     protected override char Symbol => '\u25CF'; //●
-    public override int Size { get; init; } = Rnd.Next(MinSize, MaxSize);
+
+    public override int Size { get; } = Rnd.Next(MinSize, MaxSize);
+
     public override double OrbitalSpeed => 107_000;
-    public PlanetClass PlanetClass { get; init; }
+
+    public PlanetClass PlanetClass { get; }
 
     /// <summary> Цвет планеты в зависимости от её класса </summary>
     public override ConsoleColor Color =>
@@ -30,7 +34,7 @@ public sealed class Planet : StarSystemObject
         //Генерация ресурсов
         foreach (ResourceName res in Enum.GetValues(typeof(ResourceName)))
         {
-            Recources.Add(res, Rnd.Next(100000000));
+            Resources.Add(res, Rnd.Next(100000000));
         }
         PlanetClass = (PlanetClass)Rnd.Next(Enum.GetValues(typeof(PlanetClass)).Length);
 

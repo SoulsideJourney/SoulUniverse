@@ -10,7 +10,7 @@ internal class Asteroid : StarSystemObject
 
     public override double OrbitalSpeed => 107_000;
 
-    public override int Size { get; init; } = Rnd.Next(MinSize, MaxSize);
+    public override int Size { get; } = Rnd.Next(MinSize, MaxSize);
 
     protected override char Symbol => '.'; //\u00B7
 
@@ -21,7 +21,7 @@ internal class Asteroid : StarSystemObject
         //Size = rnd.Next(minSize, maxSize);
         foreach (ResourceName res in Enum.GetValues(typeof(ResourceName)))
         {
-            Recources.Add(res, Rnd.Next(100000000));
+            Resources.Add(res, Rnd.Next(100000000));
         }
     }
 }

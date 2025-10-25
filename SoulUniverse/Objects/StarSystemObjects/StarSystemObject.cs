@@ -6,10 +6,12 @@ using static SoulUniverse.Program;
 
 namespace SoulUniverse.Objects.StarSystemObjects;
 
+/// <summary> Небесное тело в планетарной системе (планетного масштаба) </summary>
 public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemObject>, IMovable
 {
     protected abstract char Symbol { get; }
-    public abstract int Size { get; init; }
+
+    public abstract int Size { get; }
 
     public int PlacesCount => Size * Size;
 
@@ -21,21 +23,19 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
     public int Distance { get; }
 
     /// <summary> Текущий угол орбиты </summary>
-    private double _phi = 0;
+    private double _phi;
 
-    //public Coordinates DrawedCoordinates = new();
-    public Coordinates DrawnCoordinates { get; set; } = new();
+    public Coordinates DrawnCoordinates { get; set; }
     public Coordinates Coordinates;
-    public readonly List<GroundObject> GroundObjects = new();
+    public readonly List<GroundObject> GroundObjects = [];
     public List<Deposit> Deposits => GroundObjects.Where(o => o is Deposit).Cast<Deposit>().ToList();
 
     public bool IsColonized => Fractions.Count > 0;
 
-    public Dictionary<ResourceName, int> Recources { get; } = new();
+    public Dictionary<ResourceName, int> Resources { get; } = new();
 
-
-    //Присутствующие фракции
-    public List<Fraction> Fractions { get; } = new();
+    /// <summary> Присутствующие фракции </summary>
+    public List<Fraction> Fractions { get; } = [];
 
     public abstract ConsoleColor Color { get; }
 
@@ -87,7 +87,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
             //Информация о ресурсах
             Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
             Console.Write("Имеющиеся ресурсы:");
-            foreach (var resource in Recources)
+            foreach (var resource in Resources)
             {
                 Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                 Console.Write($"{resource.Key}: {resource.Value}");
@@ -140,8 +140,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
             //Отрисовка планеты
             if (FractionDisplayMode == DisplayMode.Fractions)
             {
-                if (IsColonized) Console.ForegroundColor = Fractions.ElementAt(0).Color;
-                else Console.ForegroundColor = ConsoleColor.Gray;
+                Console.ForegroundColor = IsColonized ? Fractions.ElementAt(0).Color : ConsoleColor.Gray;
             }
             else
             {
@@ -175,6 +174,6 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
     public int CompareTo(StarSystemObject? other)
     {
         if (Distance > (other?.Distance ?? 0)) return 1;
-        else return -1;
+        return -1;
     }
 }

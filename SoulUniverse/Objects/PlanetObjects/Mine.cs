@@ -42,9 +42,9 @@ public class Mine : GroundProperty, IBuildable
     /// <summary> Добывать ресурсы </summary>
     public void Excavate()
     {
-        if (Location.Recources[Deposit.Resource] > 0)
+        if (Location.Resources[Deposit.Resource] > 0)
         {
-            Location.Recources[Deposit.Resource] -= 1;
+            Location.Resources[Deposit.Resource] -= 1;
             Owner.Resources[Deposit.Resource] += 1;
         }
     }
