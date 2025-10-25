@@ -186,10 +186,7 @@ internal static class Program
                     {
                         foreach (StarSystemObject starSystemObject in star.StarSystemObjects)
                         {
-                            if (starSystemObject is Planet planet)
-                            {
-                                planet.Move();
-                            }
+                            starSystemObject.Move();
                         }
                     }
                 }
@@ -200,10 +197,10 @@ internal static class Program
                     {
                         foreach (StarSystemObject starSystemObject in star.StarSystemObjects)
                         {
-                            if (starSystemObject is Planet { IsNeedToRedraw: true } planet)
+                            if (starSystemObject is { IsNeedToRedraw: true })
                             {
-                                planet.Erase();
-                                planet.Draw();
+                                starSystemObject.Erase();
+                                starSystemObject.Draw();
                             }
                         }
                     }
@@ -423,7 +420,7 @@ internal static class Program
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
         }
     }
-    
+
     /// <summary> Отрисовка легенды </summary>
     private static void WriteLegend()
     {

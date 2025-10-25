@@ -115,8 +115,9 @@ public class Fraction
     /// <summary> Фракция будет пытаться построить военную базу </summary>
     public bool TryBuildMilitaryBase() => TryBuildMilitaryBase(GetRandomOccupiedPlanet());
 
-    private bool TryBuildMilitaryBase(StarSystemObject starSystemObject)
+    private bool TryBuildMilitaryBase(StarSystemObject? starSystemObject)
     {
+        if (starSystemObject == null) return false;
         if (!IsEnoughToBuildMilitaryBase()) return false;
 
         int x = Rnd.Next(starSystemObject.Size);
@@ -134,8 +135,9 @@ public class Fraction
     /// <summary> Фракция будет пытаться построить шахту </summary>
     public bool TryBuildMine() => TryBuildMine(GetRandomOccupiedPlanet());
 
-    private bool TryBuildMine(StarSystemObject starSystemObject)
+    private bool TryBuildMine(StarSystemObject? starSystemObject)
     {
+        if (starSystemObject == null) return false;
         if (!IsEnoughToBuildMine()) return false;
         var deposit = starSystemObject.Deposits.FirstOrDefault(d => !d.IsOccupied);
         if (deposit != null)
@@ -156,8 +158,9 @@ public class Fraction
     /// <summary> Фракция будет пытаться построить завод </summary>
     public bool TryBuildFactory() => TryBuildFactory(GetRandomOccupiedPlanet());
 
-    private bool TryBuildFactory(StarSystemObject starSystemObject)
+    private bool TryBuildFactory(StarSystemObject? starSystemObject)
     {
+        if (starSystemObject == null) return false;
         if (!IsEnoughToBuildFactory()) return false;
         int x = Rnd.Next(starSystemObject.Size);
         int y = Rnd.Next(starSystemObject.Size);
@@ -171,5 +174,5 @@ public class Fraction
         return false;
     }
 
-    private StarSystemObject GetRandomOccupiedPlanet() => Colonies.ElementAt(Rnd.Next(Colonies.Count));
+    private StarSystemObject? GetRandomOccupiedPlanet() => Colonies.Count > 0 ? Colonies.ElementAt(Rnd.Next(Colonies.Count)) : null;
 }

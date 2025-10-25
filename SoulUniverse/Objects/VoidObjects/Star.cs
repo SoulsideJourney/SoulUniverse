@@ -24,6 +24,7 @@ internal class Star : VoidObject
         GenerateStarSystemObjects();
     }
 
+    /// <summary> Сгенегировать планеты и астероиды на орбитах вокруг данного объекта </summary>
     private void GenerateStarSystemObjects()
     {
         int objectCount = Rnd.Next(15);
@@ -65,7 +66,7 @@ internal class Star : VoidObject
                 else
                 {
                     //Создаем несколько астероидов в поясе в зависимости от радиуса орбиты
-                    for (int j = 0; j < 10; j++)
+                    for (int j = 0; j < distance * distance; j++)
                     {
                         StarSystemObjects.Add(new Asteroid(distance));
                     }
@@ -126,8 +127,8 @@ internal class Star : VoidObject
             Console.Write(starClass);
             ResetConsoleColor();
             Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-            int planets = StarSystemObjects.Count;
-            Console.Write($"Количество планетарных тел: {planets}");
+            int planets = StarSystemObjects.Count(o => o is Planet);
+            Console.Write($"Количество планет: {planets}");
 
             //Информация о планетах
             if (planets > 0)
@@ -143,11 +144,9 @@ internal class Star : VoidObject
                 int planetNumber = 0;
                 foreach (StarSystemObject starSystemObject in StarSystemObjects)
                 {
-                    Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                    //string planetClass;
                     if (starSystemObject is Planet planet)
                     {
-                        //planetClass = planet.PlanetClass.ToString();
+                        Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                         Console.Write($"|{++planetNumber,2} | {starSystemObject.Distance,6} а.е | ");
                         Console.ForegroundColor = planet.Color;
                         Console.Write($"{planet.PlanetClass,11}");

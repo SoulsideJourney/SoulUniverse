@@ -113,8 +113,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
     {
         //Угловая скорость
         double w = OrbitalSpeed / ((double)Distance * 150_000_000); // рад/ч
-        double t = 24; //часов
-        _phi = (_phi + w * t) % (2 * Math.PI);
+        _phi = (_phi + w * 24) % (2 * Math.PI); //24 -- часов
         int newX = (int)Math.Round(Distance * Math.Cos(_phi)); // а. е.
         int newY = (int)Math.Round(Distance * Math.Sin(_phi)); // а. е.
         if (Coordinates.X != newX || Coordinates.Y != newY)

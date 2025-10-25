@@ -28,5 +28,10 @@ internal class Asteroid : StarSystemObject
     protected override void WriteSelfInfo(ref int row)
     {
         Console.Write("Астероид");
+        Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+        Console.Write($"Размер: {Size} км");
+        Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
+        Console.Write($"Расстояние до родительского тела: {Distance} а.е. ");
+        Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
     }
 }
