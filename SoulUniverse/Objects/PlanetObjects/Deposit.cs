@@ -2,6 +2,7 @@
 
 namespace SoulUniverse.Objects.PlanetObjects;
 
+/// <summary> Депозит ресурсов на планете </summary>
 public class Deposit : GroundObject
 {
     public Deposit(Coordinates coordinates, StarSystemObject starSystemObject, Enums.ResourceName resource) : base(coordinates, starSystemObject)

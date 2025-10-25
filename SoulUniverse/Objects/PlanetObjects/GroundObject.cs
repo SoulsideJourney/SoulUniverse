@@ -4,6 +4,7 @@ using static SoulUniverse.Program;
 
 namespace SoulUniverse.Objects.PlanetObjects;
 
+/// <summary> Наземный объект </summary>
 public abstract class GroundObject : UniverseObject
 {
     protected abstract char Symbol { get; }

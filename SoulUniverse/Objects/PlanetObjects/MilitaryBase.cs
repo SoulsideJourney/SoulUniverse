@@ -1,7 +1,6 @@
 ﻿using SoulUniverse.Interfaces;
 using SoulUniverse.Objects.StarSystemObjects;
 using static SoulUniverse.Enums;
-using static SoulUniverse.Program;
 
 namespace SoulUniverse.Objects.PlanetObjects;
 
@@ -10,7 +9,7 @@ internal class MilitaryBase : GroundProperty, IBuildable
     protected override char Symbol => '#';
     protected override string Name => "Военная база";
 
-    public static List<KeyValuePair<ResourceName, int>> Cost { get; } =
+    public static List<KeyValuePair<ResourceName, int>> BuildCost { get; } =
     [
         new(ResourceName.Iron, 10000),
         new(ResourceName.Uranium, 50),
@@ -25,7 +24,7 @@ internal class MilitaryBase : GroundProperty, IBuildable
 
         foreach (var res in fraction.Resources)
         {
-            fraction.Resources[res.Key] = res.Value - Cost.Find(r => r.Key == res.Key).Value;
+            fraction.Resources[res.Key] = res.Value - BuildCost.Find(r => r.Key == res.Key).Value;
         }
         Program.Mutex.WaitOne();
         starSystemObject.GroundObjects.Add(@base);

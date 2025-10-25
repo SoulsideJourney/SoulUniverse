@@ -6,6 +6,7 @@ using static SoulUniverse.Program;
 
 namespace SoulUniverse;
 
+/// <summary> Фракция </summary>
 public class Fraction
 {
     private Fraction(string name, ConsoleColor color)
@@ -44,7 +45,7 @@ public class Fraction
         return new Fraction("Игрок", ConsoleColor.Green);
     }
 
-    /// <summary>Фракция что-нибудь делает</summary>
+    /// <summary>NPC-фракция что-нибудь делает</summary>
     public void DoSomething()
     {
         var action = Rnd.Next(2);
@@ -77,7 +78,7 @@ public class Fraction
     {
         foreach (var kvp in Resources)
         {
-            if (kvp.Value < MilitaryBase.Cost.Find(k => k.Key == kvp.Key).Value)
+            if (kvp.Value < MilitaryBase.BuildCost.Find(k => k.Key == kvp.Key).Value)
             {
                 return false;
             }

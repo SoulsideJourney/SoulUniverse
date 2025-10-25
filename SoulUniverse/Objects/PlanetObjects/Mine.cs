@@ -1,14 +1,17 @@
-﻿using static SoulUniverse.Enums;
+﻿using SoulUniverse.Interfaces;
+using static SoulUniverse.Enums;
 
 namespace SoulUniverse.Objects.PlanetObjects;
 
-public class Mine : GroundProperty/*, IBuildable*/
+/// <summary> Шахта </summary>
+public class Mine : GroundProperty, IBuildable
 {
     protected override char Symbol => '^';
     protected override string Name => $"Шахта ({Deposit.Resource})";
 
     private Deposit _deposit;
 
+    /// <summary> Занимаемый шахтой депозит </summary>
     public Deposit Deposit
     {
         get => _deposit;
@@ -25,14 +28,6 @@ public class Mine : GroundProperty/*, IBuildable*/
         new(ResourceName.Uranium, 0),
         new(ResourceName.Oil, 0)
     ];
-
-    //public Mine(int x, int y, Fraction fraction, StarSystemObject starSystemObject) : base(x, y, fraction, starSystemObject)
-    //{
-    //    foreach (var res in fraction.Recources)
-    //    {
-    //        fraction.Recources[res.Key] = res.Value - BuildCost.Find(r => r.Key == res.Key).Value;
-    //    }
-    //}
 
     public Mine(Fraction fraction, Deposit deposit) : base(deposit.Coordinates, fraction, deposit.Location)
     {

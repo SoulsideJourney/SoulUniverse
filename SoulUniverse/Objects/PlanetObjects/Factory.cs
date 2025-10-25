@@ -28,6 +28,20 @@ internal class Factory : GroundProperty
         starSystemObject.GroundObjects.Add(factory);
     }
 
+    /// <summary> Фабрика будет пытаться построить танк </summary>
+    public bool TryBuildTank()
+    {
+        if (Owner.IsEnoughToBuildTank()
+            && Location.GroundObjects.Count(o => o is Tank tank && tank.Owner == Owner) < Location.PlacesCount * 0.8
+            && !Location.IsPlaceOccupied(Coordinates.X + 1, Coordinates.Y))
+        {
+            BuildTank();
+            return true;
+        }
+
+        return false;
+    }
+
     public void BuildTank()
     {
         Tank.New(Coordinates.X + 1, Coordinates.Y, Owner, Location);

@@ -165,8 +165,8 @@ internal static class Program
         // ReSharper disable once FunctionNeverReturns
     }
 
-    /// <summary>Симуляция времени</summary>
-    static void SimulateTime()
+    /// <summary>Симуляция времени: расчеты движения и выполнение действий объектов </summary>
+    private static void SimulateTime()
     {
         Thread.Sleep(TimeSpans[_timeSelector]);
         while (true)
@@ -176,9 +176,8 @@ internal static class Program
             if (!IsPaused)
             {
                 Universe.CurrentDate = Universe.CurrentDate.AddDays(1);
-#if DEBUG
+
                 Debug.WriteLine("------Новый день в галактике, как быстро летит время...------");
-#endif
 
                 //Расчет точек орбит планет
                 foreach (VoidObject voidObject in Universe.VoidObjects)
@@ -243,12 +242,7 @@ internal static class Program
                 //Работа заводов
                 foreach (var factory in Universe.Factories)
                 {
-                    if (factory.Owner.IsEnoughToBuildTank()
-                        && factory.Location.GroundObjects.Count(o => o is Tank tank && tank.Owner == factory.Owner) < factory.Location.PlacesCount * 0.8
-                        && !factory.Location.IsPlaceOccupied(factory.Coordinates.X + 1, factory.Coordinates.Y))
-                    {
-                        factory.BuildTank();
-                    }
+                    factory.TryBuildTank();
                 }
 
                 //Движение танков
@@ -281,6 +275,9 @@ internal static class Program
         }
     }
 
+    /// <summary>
+    /// Вернуть курсор в сохраненную позицию
+    /// </summary>
     public static void ResetCursor()
     {
         ResetConsoleColor();
@@ -559,7 +556,7 @@ internal static class Program
         //B -- Режим строительства
         else if (consoleKey == ConsoleKey.B)
         {
-
+            //TODO
         }
 
         //+- -- регулирование скорости течения времени

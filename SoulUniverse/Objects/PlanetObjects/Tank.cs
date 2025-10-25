@@ -6,6 +6,7 @@ using static SoulUniverse.Program;
 
 namespace SoulUniverse.Objects.PlanetObjects;
 
+/// <summary> Танк </summary>
 internal class Tank : GroundProperty, IMovable, IBuildable
 {
     //public override Fraction Owner { get; }
@@ -24,7 +25,7 @@ internal class Tank : GroundProperty, IMovable, IBuildable
     ];
 
     public bool IsNeedToRedraw { get; set; } = true;
-    public Coordinates DrawnCoordinates { get; set; } = new();
+    public Coordinates DrawnCoordinates { get; set; }
 
     private Tank(Coordinates coordinates, Fraction fraction, StarSystemObject starSystemObject) : base(coordinates, fraction, starSystemObject) { }
         

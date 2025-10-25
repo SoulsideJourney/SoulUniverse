@@ -8,9 +8,6 @@ public abstract class GroundProperty : GroundObject
 {
     public bool IsNeedToDraw { get; set; } = true;
     public Fraction Owner { get; }
-    //static public abstract List<KeyValuePair<ResourceName, int>> Cost { get; }
-    //public abstract void Draw();
-
 
     protected GroundProperty(Coordinates coordinates, Fraction fraction, StarSystemObject starSystemObject) : base(coordinates, starSystemObject)
     {

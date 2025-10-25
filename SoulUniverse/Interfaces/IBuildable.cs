@@ -4,5 +4,5 @@ namespace SoulUniverse.Interfaces;
 
 internal interface IBuildable
 {
-    public static List<KeyValuePair<ResourceName, int>> Cost => null!;
+    public static List<KeyValuePair<ResourceName, int>> BuildCost => null!;
 }
