@@ -9,20 +9,21 @@ namespace SoulUniverse.Objects.PlanetObjects;
 /// <summary> Танк </summary>
 internal class Tank : GroundProperty, IMovable, IBuildable
 {
-    //public override Fraction Owner { get; }
+    /// <summary> Наносимый разовый урон </summary>
+    private const int Damage = 20;
 
-    //public override StarSystemObject Location { get; }
-
-    protected override char Symbol => '♣';
-
-    protected override string Name => "Танк мать его";
-
-    public static List<KeyValuePair<ResourceName, int>> Cost { get; } =
+    public static List<KeyValuePair<ResourceName, int>> BuildCost { get; } =
     [
         new(ResourceName.Iron, 10),
         new(ResourceName.Uranium, 1),
         new(ResourceName.Oil, 5),
     ];
+
+    public override int Health { get; set; } = 100;
+
+    protected override string Name => "Танк мать его";
+
+    protected override char Symbol => '♣';
 
     public bool IsNeedToRedraw { get; set; } = true;
     public Coordinates DrawnCoordinates { get; set; }
@@ -35,7 +36,7 @@ internal class Tank : GroundProperty, IMovable, IBuildable
 
         foreach (var res in fraction.Resources)
         {
-            fraction.Resources[res.Key] = res.Value - Cost.Find(r => r.Key == res.Key).Value;
+            fraction.Resources[res.Key] = res.Value - BuildCost.Find(r => r.Key == res.Key).Value;
         }
 
         Program.Mutex.WaitOne();
@@ -81,7 +82,7 @@ internal class Tank : GroundProperty, IMovable, IBuildable
 
     private void Fire(GroundProperty target)
     {
-
+        target.Damage(Damage);
     }
 
     public override void Draw()

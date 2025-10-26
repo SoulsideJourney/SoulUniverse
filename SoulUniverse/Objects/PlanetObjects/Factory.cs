@@ -6,16 +6,18 @@ namespace SoulUniverse.Objects.PlanetObjects;
 
 internal class Factory : GroundProperty
 {
-    protected override char Symbol => 'F';
-
-    protected override string Name => "Завод";
-
-    public static List<KeyValuePair<ResourceName, int>> Cost { get; } =
+    public static List<KeyValuePair<ResourceName, int>> BuildCost { get; } =
     [
         new(ResourceName.Iron, 1500),
         new(ResourceName.Uranium, 0),
         new(ResourceName.Oil, 0),
     ];
+
+    public override int Health { get; set; } = 1000;
+
+    protected override string Name => "Завод";
+
+    protected override char Symbol => 'F';
 
     private Factory(Coordinates coordinates, Fraction fraction, StarSystemObject starSystemObject) : base(coordinates, fraction, starSystemObject) { }
 

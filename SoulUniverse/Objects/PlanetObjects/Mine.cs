@@ -6,10 +6,13 @@ namespace SoulUniverse.Objects.PlanetObjects;
 /// <summary> Шахта </summary>
 public class Mine : GroundProperty, IBuildable
 {
-    protected override char Symbol => '^';
+    private Deposit _deposit;
+
+    public override int Health { get; set; } = 100;
+
     protected override string Name => $"Шахта ({Deposit.Resource})";
 
-    private Deposit _deposit;
+    protected override char Symbol => '^';
 
     /// <summary> Занимаемый шахтой депозит </summary>
     public Deposit Deposit

@@ -6,15 +6,18 @@ namespace SoulUniverse.Objects.PlanetObjects;
 
 internal class MilitaryBase : GroundProperty, IBuildable
 {
-    protected override char Symbol => '#';
-    protected override string Name => "Военная база";
-
     public static List<KeyValuePair<ResourceName, int>> BuildCost { get; } =
     [
         new(ResourceName.Iron, 10000),
         new(ResourceName.Uranium, 50),
         new(ResourceName.Oil, 1000),
     ];
+
+    public override int Health { get; set; } = 1000;
+
+    protected override string Name => "Военная база";
+
+    protected override char Symbol => '#';
 
     private MilitaryBase(Coordinates coordinates, Fraction fraction, StarSystemObject starSystemObject) : base(coordinates, fraction, starSystemObject) { }
 

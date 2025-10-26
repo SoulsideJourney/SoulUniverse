@@ -91,7 +91,7 @@ public class Fraction
     {
         foreach (var kvp in Resources)
         {
-            if (kvp.Value < Tank.Cost.Find(k => k.Key == kvp.Key).Value)
+            if (kvp.Value < Tank.BuildCost.Find(k => k.Key == kvp.Key).Value)
             {
                 return false;
             }
@@ -104,7 +104,7 @@ public class Fraction
     {
         foreach (var kvp in Resources)
         {
-            if (kvp.Value < Factory.Cost.Find(k => k.Key == kvp.Key).Value)
+            if (kvp.Value < Factory.BuildCost.Find(k => k.Key == kvp.Key).Value)
             {
                 return false;
             }
