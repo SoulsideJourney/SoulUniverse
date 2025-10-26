@@ -68,6 +68,22 @@ internal class Tank : GroundProperty, IMovable, IBuildable
         }
     }
 
+    /// <summary> Стрелять во всё что движется и не движется </summary>
+    public void TryFire()
+    {
+        var potentialTargets = Location.GroundObjects.Where(o => o is GroundProperty p && p.Owner != Owner).Cast<GroundProperty>().ToList();
+
+        //Сначала танки, потом всё остальное
+        var target = potentialTargets.FirstOrDefault(t => t is Tank) ?? potentialTargets.First();
+
+        Fire(target);
+    }
+
+    private void Fire(GroundProperty target)
+    {
+
+    }
+
     public override void Draw()
     {
         lock (Locker)
