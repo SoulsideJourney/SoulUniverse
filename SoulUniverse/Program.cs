@@ -223,7 +223,6 @@ internal static class Program
                         //Перерисовка движущихся наземных объектов
                         if (groundObject is Tank { IsNeedToRedraw: true } tank)
                         {
-                            //TODO не попадаем сюда
                             tank.Erase();
                             tank.Draw();
                         }

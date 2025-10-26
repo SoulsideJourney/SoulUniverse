@@ -25,6 +25,7 @@ internal class Tank : GroundProperty, IMovable, IBuildable
 
     protected override char Symbol => '♣';
 
+    /// <summary> Надо перерисовать (объект переместился) </summary>
     public bool IsNeedToRedraw { get; set; } = true;
 
     public Coordinates DrawnCoordinates { get; set; }
@@ -97,6 +98,7 @@ internal class Tank : GroundProperty, IMovable, IBuildable
             DrawnCoordinates = Coordinates;
             ResetConsoleColor();
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
+            IsNeedToDraw = false;
             IsNeedToRedraw = false;
         }
     }
@@ -105,7 +107,6 @@ internal class Tank : GroundProperty, IMovable, IBuildable
     {
         lock (Locker)
         {
-            //TODO тут везде по нулям -- исправить
             Console.SetCursorPosition(DrawnCoordinates.X, DrawnCoordinates.Y);
             Console.Write(' ');
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
@@ -115,6 +116,7 @@ internal class Tank : GroundProperty, IMovable, IBuildable
     public override void DestroySelf()
     {
         base.DestroySelf();
-        Erase();
+        //TODO стирание объекта при удалении
+        //Erase();
     }
 }

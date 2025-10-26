@@ -12,7 +12,7 @@ public abstract class GroundProperty : GroundObject, IDestructible
     
     //TODO
     /// <summary> Не помню, зачем это вообще было. Возможно, подразумевалось, что не все объекты будут рисоваться </summary>
-    public bool IsNeedToDraw { get; private set; } = true;
+    public bool IsNeedToDraw { get; protected set; } = true;
 
     /// <summary> Фракция-владелец объекта </summary>
     public Fraction Owner { get; }

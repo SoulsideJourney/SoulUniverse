@@ -19,15 +19,14 @@ public sealed class Planet : StarSystemObject
     public PlanetClass PlanetClass { get; }
 
     /// <summary> Цвет планеты в зависимости от её класса </summary>
-    public override ConsoleColor Color =>
-        PlanetClass switch
-        {
-            PlanetClass.Barren => ConsoleColor.DarkYellow,
-            PlanetClass.Continental => ConsoleColor.Green,
-            PlanetClass.GasGiant => ConsoleColor.DarkBlue,
-            PlanetClass.Hycean => ConsoleColor.Cyan,
-            _ => ConsoleColor.White
-        };
+    public override ConsoleColor Color => PlanetClass switch
+    {
+        PlanetClass.Barren => ConsoleColor.DarkYellow,
+        PlanetClass.Continental => ConsoleColor.Green,
+        PlanetClass.GasGiant => ConsoleColor.DarkBlue,
+        PlanetClass.Hycean => ConsoleColor.Cyan,
+        _ => ConsoleColor.White
+    };
 
     public Planet(int distance) : base(distance)
     {
