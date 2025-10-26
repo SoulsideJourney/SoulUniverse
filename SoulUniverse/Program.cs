@@ -36,14 +36,14 @@ internal static class Program
         }
     }
 
-    private static DisplayMode _universeDisplayMode = DisplayMode.Universe;
+    private static Scale _selectedScale = Scale.Universe;
 
-    private static DisplayMode UniverseDisplayMode
+    private static Scale SelectedScale
     {
-        get => _universeDisplayMode;
+        get => _selectedScale;
         set
         {
-            _universeDisplayMode = value;
+            _selectedScale = value;
             SetConsoleTitle();
         }
     }
@@ -70,11 +70,11 @@ internal static class Program
     {
         string title = "Консольная Вселенная";
 
-        if (UniverseDisplayMode == DisplayMode.Universe)
+        if (SelectedScale == Scale.Universe)
         {
             title += ": звездная карта";
         }
-        else if (UniverseDisplayMode == DisplayMode.StarSystem)
+        else if (SelectedScale == Scale.StarSystem)
         {
             title += ": карта звездной системы";
         }
@@ -125,7 +125,7 @@ internal static class Program
             ReadButtons();
 
             //Информация об объекте
-            if (UniverseDisplayMode == DisplayMode.Universe)
+            if (SelectedScale == Scale.Universe)
             {
                 CheckedVoidObject = Universe.VoidObjects.Find(o => o.Coordinates.X == CurrentCursorX && o.Coordinates.Y == CurrentCursorY);
                 lock (Locker)
@@ -134,7 +134,7 @@ internal static class Program
                     CheckedVoidObject?.WriteInfo();
                 }
             }
-            else if (UniverseDisplayMode == DisplayMode.StarSystem)
+            else if (SelectedScale == Scale.StarSystem)
             {
                 //Информация об объекте
                 Star star = (Star)CheckedVoidObject!;
@@ -160,7 +160,7 @@ internal static class Program
                     }
                 }
             }
-            else if (UniverseDisplayMode == DisplayMode.Planet)
+            else if (SelectedScale == Scale.Planet)
             {
                 //TODO инфо о шахтах на местах месторождений
                 CheckedGroundObject = CheckedStarSystemObject?.GroundObjects.Find(o => o.Coordinates.X == CurrentCursorX && o.Coordinates.Y == CurrentCursorY);
@@ -200,7 +200,7 @@ internal static class Program
                     }
                 }
                 //Перерисовка планет
-                if (UniverseDisplayMode == DisplayMode.StarSystem)
+                if (SelectedScale == Scale.StarSystem)
                 {
                     if (CheckedVoidObject is Star star)
                     {
@@ -215,7 +215,7 @@ internal static class Program
                     }
                 }
 
-                if (UniverseDisplayMode == DisplayMode.Planet)
+                if (SelectedScale == Scale.Planet)
                 {
                     foreach (GroundObject groundObject in CheckedStarSystemObject!.GroundObjects)
                     {
@@ -266,7 +266,7 @@ internal static class Program
     /// <summary>Просмотр Вселенной</summary>
     private static void OpenUniverse()
     {
-        UniverseDisplayMode = DisplayMode.Universe;
+        SelectedScale = Scale.Universe;
         CheckedStarSystemObject = null;
         lock (Locker)
         {
@@ -305,7 +305,7 @@ internal static class Program
 
     private static void OpenSystem(VoidObject checkedVoidObject)
     {
-        UniverseDisplayMode = DisplayMode.StarSystem;
+        SelectedScale = Scale.StarSystem;
         lock (Locker)
         {
             Console.Clear();
@@ -323,7 +323,7 @@ internal static class Program
 
     private static void OpenPlanet(StarSystemObject starSystemObject)
     {
-        UniverseDisplayMode = DisplayMode.Planet;
+        SelectedScale = Scale.Planet;
         lock (Locker)
         {
             Console.Clear();
@@ -365,7 +365,7 @@ internal static class Program
             star.Draw(StarOffset, StarOffset);
             foreach (StarSystemObject starSystemObject in star.StarSystemObjects)
             {
-                if (UniverseDisplayMode != DisplayMode.StarSystem) return;
+                if (SelectedScale != Scale.StarSystem) return;
                 starSystemObject.Draw();
             }
         }
@@ -447,10 +447,10 @@ internal static class Program
             Console.Write("Управление:");
             Console.SetCursorPosition(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
             Console.Write("\u2190\u2191\u2192\u2193 -- навигация");
-            if (UniverseDisplayMode == DisplayMode.Universe) Console.Write(", Enter -- войти в систему");
-            if (UniverseDisplayMode == DisplayMode.StarSystem) Console.Write(", Enter -- открыть карту объекта");
+            if (SelectedScale == Scale.Universe) Console.Write(", Enter -- войти в систему");
+            if (SelectedScale == Scale.StarSystem) Console.Write(", Enter -- открыть карту объекта");
             Console.SetCursorPosition(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
-            Console.Write("Режимы отображения: T -- классы объектов, F -- фракции");
+            Console.Write("V -- режимы отображения (классы объектов/фракции)");
             Console.SetCursorPosition(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
             Console.Write("B -- строить");
             Console.SetCursorPosition(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
@@ -459,9 +459,9 @@ internal static class Program
             Console.Write("H -- к родной планете, +- -- скорость симуляции");
             Console.SetCursorPosition(Universe.UniverseX + 2, Universe.UniverseY - (LegendOffsetFromBottom - offset++));
             Console.Write("P -- пауза");
-            if (UniverseDisplayMode == DisplayMode.Universe) Console.Write(", Esc -- выход");
-            else if (UniverseDisplayMode == DisplayMode.StarSystem) Console.Write(", Esc -- к звездной карте");
-            else if (UniverseDisplayMode == DisplayMode.Planet) Console.Write(", Esc -- к карте системы");
+            if (SelectedScale == Scale.Universe) Console.Write(", Esc -- выход");
+            else if (SelectedScale == Scale.StarSystem) Console.Write(", Esc -- к звездной карте");
+            else if (SelectedScale == Scale.Planet) Console.Write(", Esc -- к карте системы");
         }
     }
 
@@ -490,43 +490,41 @@ internal static class Program
         }
 
         //Режимы отображения
-        else if (consoleKey == ConsoleKey.T)
+        else if (consoleKey == ConsoleKey.V)
         {
+            FractionDisplayMode = FractionDisplayMode == DisplayMode.Types ? DisplayMode.Fractions : DisplayMode.Types;
+
             //Режим отображения классов объектов
-            if (FractionDisplayMode != DisplayMode.Types)
+            if (FractionDisplayMode == DisplayMode.Types)
             {
-                FractionDisplayMode = DisplayMode.Types;
-                if (UniverseDisplayMode == DisplayMode.Universe)
+                if (SelectedScale == Scale.Universe)
                 {
                     DrawVoidObjects();
                 }
-                else if (UniverseDisplayMode == DisplayMode.StarSystem)
+                else if (SelectedScale == Scale.StarSystem)
                 {
                     //DrawStarSystemObjects((Star)checkedVoidObject);
                     (CheckedVoidObject as Star)!.DrawStarSystemObjects();
                 }
-                else if (UniverseDisplayMode == DisplayMode.Planet)
+                else if (SelectedScale == Scale.Planet)
                 {
                     CheckedStarSystemObject!.DrawObjects();
                 }
             }
-        }
-        else if (consoleKey == ConsoleKey.F)
-        {
+
             //Режим отображения принадлежности к фракциям
-            if (FractionDisplayMode != DisplayMode.Fractions)
+            else if (FractionDisplayMode == DisplayMode.Fractions)
             {
-                FractionDisplayMode = DisplayMode.Fractions;
-                if (UniverseDisplayMode == DisplayMode.Universe)
+                if (SelectedScale == Scale.Universe)
                 {
                     DrawVoidObjects();
                 }
-                else if (UniverseDisplayMode == DisplayMode.StarSystem)
+                else if (SelectedScale == Scale.StarSystem)
                 {
                     //DrawStarSystemObjects((Star)checkedVoidObject);
                     (CheckedVoidObject as Star)!.DrawStarSystemObjects();
                 }
-                else if (UniverseDisplayMode == DisplayMode.Planet)
+                else if (SelectedScale == Scale.Planet)
                 {
                     //DrawStarSystemObjects((Star)checkedVoidObject);
                     CheckedStarSystemObject!.DrawObjects();
@@ -544,14 +542,14 @@ internal static class Program
         //Enter -- вход в систему или планету
         else if (consoleKey == ConsoleKey.Enter)
         {
-            if (UniverseDisplayMode == DisplayMode.Universe)
+            if (SelectedScale == Scale.Universe)
             {
                 if (CheckedVoidObject is Star)
                 {
                     OpenSystem(CheckedVoidObject);
                 }
             }
-            else if (UniverseDisplayMode == DisplayMode.StarSystem)
+            else if (SelectedScale == Scale.StarSystem)
             {
                 if (CheckedVoidObject != null && CheckedStarSystemObject is Planet)
                 {
@@ -591,11 +589,11 @@ internal static class Program
         //Выход
         else if (consoleKey == ConsoleKey.Escape)
         {
-            if (UniverseDisplayMode == DisplayMode.StarSystem)
+            if (SelectedScale == Scale.StarSystem)
             {
                 OpenUniverse();
             }
-            else if (UniverseDisplayMode == DisplayMode.Planet)
+            else if (SelectedScale == Scale.Planet)
             {
                 OpenSystem(CheckedVoidObject!);
             }

@@ -24,7 +24,12 @@ public class Enums
 
     public enum DisplayMode
     {
-        Universe, StarSystem, Planet, Types, Fractions
+        Types, Fractions
+    }
+
+    public enum Scale
+    {
+        Universe, StarSystem, Planet //TODO режим отображения окресностей планеты со спутниками
     }
 
     public enum FractionName
