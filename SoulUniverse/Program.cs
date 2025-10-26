@@ -246,6 +246,7 @@ internal static class Program
                 foreach (var tank in Universe.Tanks)
                 {
                     tank.Move();
+                    tank.TryFire();
                 }
             }
             Thread.Sleep(TimeSpans[_timeSelector]);
