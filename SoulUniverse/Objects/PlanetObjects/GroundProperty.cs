@@ -66,7 +66,6 @@ public abstract class GroundProperty : GroundObject, IDestructible
     {
         // TODO подумоть
         //Затирать только если он вообще отрисован (режим просмотра планеты)
-        Owner.Property.Remove(this);
         Location.GroundObjects.Remove(this);
     }
 }

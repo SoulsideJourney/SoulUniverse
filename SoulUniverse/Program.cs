@@ -160,7 +160,6 @@ internal static class Program
             {
                 //TODO инфо о шахтах на местах месторождений
                 CheckedGroundObject = CheckedStarSystemObject?.GroundObjects.Find(o => o.Coordinates.X == CurrentCursorX && o.Coordinates.Y == CurrentCursorY);
-                var test = CheckedStarSystemObject?.GroundObjects.Where(o => o.Coordinates.X == CurrentCursorX && o.Coordinates.Y == CurrentCursorY).ToList();
                 lock (Locker)
                 {
                     ClearInfo();

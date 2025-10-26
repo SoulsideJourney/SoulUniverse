@@ -51,4 +51,10 @@ public class Mine : GroundProperty, IBuildable
             Owner.Resources[Deposit.Resource] += 1;
         }
     }
+
+    public override void DestroySelf()
+    {
+        Deposit.Mine = null;
+        base.DestroySelf();
+    }
 }

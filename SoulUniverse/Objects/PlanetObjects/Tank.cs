@@ -105,6 +105,7 @@ internal class Tank : GroundProperty, IMovable, IBuildable
     {
         lock (Locker)
         {
+            //TODO тут везде по нулям -- исправить
             Console.SetCursorPosition(DrawnCoordinates.X, DrawnCoordinates.Y);
             Console.Write(' ');
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);

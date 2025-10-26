@@ -86,8 +86,7 @@ public sealed class Planet : StarSystemObject
             //Отрисовка планеты
             if (FractionDisplayMode == DisplayMode.Fractions)
             {
-                if (IsColonized) Console.ForegroundColor = Fractions.ElementAt(0).Color;
-                else Console.ForegroundColor = ConsoleColor.Gray;
+                Console.ForegroundColor = IsColonized ? Fractions.ElementAt(0).Color : ConsoleColor.Gray;
             }
             else
             {

@@ -40,5 +40,9 @@ public class Deposit : GroundObject
         {
             base.WriteInfo();
         }
+        else
+        {
+            Mine!.WriteInfo();
+        }
     }
 }
