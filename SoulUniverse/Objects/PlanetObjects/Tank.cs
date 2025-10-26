@@ -109,4 +109,10 @@ internal class Tank : GroundProperty, IMovable, IBuildable
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
         }
     }
+
+    public override void DestroySelf()
+    {
+        base.DestroySelf();
+        Erase();
+    }
 }

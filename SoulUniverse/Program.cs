@@ -7,6 +7,8 @@ using static SoulUniverse.Enums;
 
 namespace SoulUniverse;
 
+//TODO сделать сохранение мира, например, сериализацию в JSON
+
 // Для нормальной работы в Windows 11 нужно сделать:
 // Настройки -> Система -> Для разработчиков -> Узел консоли Windows
 internal static class Program

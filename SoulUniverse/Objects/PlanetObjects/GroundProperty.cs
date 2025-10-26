@@ -5,11 +5,16 @@ using static SoulUniverse.Program;
 
 namespace SoulUniverse.Objects.PlanetObjects;
 
+/// <summary> Чья-то собственность </summary>
 public abstract class GroundProperty : GroundObject, IDestructible
 {
-    public bool IsNeedToDraw { get; set; } = true;
-    public Fraction Owner { get; }
     public abstract int Health { get; set; }
+
+    /// <summary> Не помню, зачем это вообще было. Возможно, подразумевалось, что не все объекты будут рисоваться </summary>
+    public bool IsNeedToDraw { get; private set; } = true;
+
+    /// <summary> Фракция-владелец объекта </summary>
+    public Fraction Owner { get; }
 
     protected GroundProperty(Coordinates coordinates, Fraction fraction, StarSystemObject starSystemObject) : base(coordinates, starSystemObject)
     {
@@ -56,7 +61,7 @@ public abstract class GroundProperty : GroundObject, IDestructible
         if (Health <= 0) DestroySelf();
     }
 
-    public void DestroySelf()
+    public virtual void DestroySelf()
     {
         // TODO подумоть
 
