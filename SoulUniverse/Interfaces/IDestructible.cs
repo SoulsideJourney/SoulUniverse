@@ -6,8 +6,8 @@ internal interface IDestructible
     public int Health { get; set; }
 
     /// <summary> Получение урона </summary>
-    public void Damage(int receivedDamage);
+    public void TakeDamage(int receivedDamage);
 
-    /// <summary> Уничтожение </summary>
-    public void Destroy();
+    /// <summary> Выпиливание данного объекта отовсюду при его уничтожении </summary>
+    public void DestroySelf();
 }

@@ -26,6 +26,7 @@ internal class Tank : GroundProperty, IMovable, IBuildable
     protected override char Symbol => '♣';
 
     public bool IsNeedToRedraw { get; set; } = true;
+
     public Coordinates DrawnCoordinates { get; set; }
 
     private Tank(Coordinates coordinates, Fraction fraction, StarSystemObject starSystemObject) : base(coordinates, fraction, starSystemObject) { }
@@ -48,12 +49,11 @@ internal class Tank : GroundProperty, IMovable, IBuildable
     /// <summary>Рандомное движение танка на одно поле</summary>
     public void Move()
     {
-        //if (DrawnCoordinates.x != 0 && DrawnCoordinates.y != 0)
-        //{
-
-        //}
+        //TODO по-моему, не работает затирка предыдущего положения объекта
         int x = Coordinates.X;
         int y = Coordinates.Y;
+
+        //Движение на одну клетку в случайную сторону
         _ = Rnd.Next(4) switch
         {
             0 => x < Location.Size ? x += 1 : x -= 1,
@@ -82,7 +82,7 @@ internal class Tank : GroundProperty, IMovable, IBuildable
 
     private void Fire(GroundProperty target)
     {
-        target.Damage(Damage);
+        target.TakeDamage(Damage);
     }
 
     public override void Draw()

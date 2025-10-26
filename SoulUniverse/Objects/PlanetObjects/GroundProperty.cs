@@ -50,13 +50,17 @@ public abstract class GroundProperty : GroundObject, IDestructible
         }
     }
 
-    public void Damage(int receivedDamage)
+    public void TakeDamage(int receivedDamage)
     {
-        throw new NotImplementedException();
+        Health -= receivedDamage;
+        if (Health <= 0) DestroySelf();
     }
 
-    public void Destroy()
+    public void DestroySelf()
     {
+        // TODO подумоть
+
+        //Затирать только если он вообще отрисован (режим просмотра планеты)
         throw new NotImplementedException();
     }
 }
