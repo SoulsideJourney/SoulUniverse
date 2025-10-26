@@ -50,17 +50,6 @@ internal class Star : VoidObject
                 if (rnd < 70)
                 {
                     Planet planet = new(distance);
-                    //Добавляем фракцию на планету с небольшой долей вероятности
-                    while (true)
-                    {
-                        if (Rnd.Next(100) < 10)
-                        {
-                            Fraction fraction = Universe.NpcFractions.ElementAt(Rnd.Next(Universe.NpcFractions.Count));
-                            planet.Fractions.Add(fraction);
-                            fraction.Colonies.Add(planet);
-                        }
-                        else break;
-                    }
                     StarSystemObjects.Add(planet);
                 }
                 else
@@ -90,10 +79,7 @@ internal class Star : VoidObject
             if (FractionDisplayMode == DisplayMode.Fractions)
             {
                 //Фракционный цвет звезды по цвету первой попавшейся фракции в системе окда?
-                //FractionColor? fractionColor = starSystemObjects.Find(obj => obj.Fractions.Count > 0)?.Fractions.ElementAt(0).Color;
-                //ConsoleColor? temp = (ConsoleColor)fractionColor;
-                Console.ForegroundColor = StarSystemObjects.Find(obj => obj.Fractions.Count > 0)?.Fractions.ElementAt(0).Color ?? ConsoleColor.Gray;
-                //Console.ForegroundColor = temp ?? ConsoleColor.DarkGray;
+                Console.ForegroundColor = StarSystemObjects.Find(obj => obj.Fractions.Length > 0)?.Fractions.ElementAt(0).Color ?? ConsoleColor.Gray;
             }
             else
             {

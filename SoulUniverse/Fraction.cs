@@ -30,11 +30,9 @@ public class Fraction
 
     public ConsoleColor Color { get; }
 
-    public List<GroundProperty> Property => Colonies
-        .SelectMany(o => o.GroundObjects)
-        .Where(go => go is GroundProperty property && property.Owner == this).Cast<GroundProperty>().ToList();
+    public List<GroundProperty> Property { get; } = [];
 
-    public List<StarSystemObject> Colonies { get; } = [];
+    public StarSystemObject[] Colonies => Property.Select(p => p.Location).ToArray();
 
     /// <summary> Все ресурсы фракции </summary>
     public Dictionary<ResourceName, int> Resources { get; } = new();
@@ -174,5 +172,5 @@ public class Fraction
         return false;
     }
 
-    private StarSystemObject? GetRandomOccupiedPlanet() => Colonies.Count > 0 ? Colonies.ElementAt(Rnd.Next(Colonies.Count)) : null;
+    private StarSystemObject? GetRandomOccupiedPlanet() => Colonies.Length > 0 ? Colonies.ElementAt(Rnd.Next(Colonies.Length)) : null;
 }

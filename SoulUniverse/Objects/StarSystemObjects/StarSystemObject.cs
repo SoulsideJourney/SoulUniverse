@@ -29,16 +29,17 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
 
     public Coordinates DrawnCoordinates { get; set; }
     public Coordinates Coordinates;
+
     public readonly List<GroundObject> GroundObjects = [];
     public List<Deposit> Deposits => GroundObjects.Where(o => o is Deposit).Cast<Deposit>().ToList();
 
-    public bool IsColonized => Fractions.Count > 0;
+    public bool IsColonized => Fractions.Length > 0;
 
     public Dictionary<ResourceName, int> Resources { get; } = new();
 
     /// <summary> Присутствующие фракции </summary>
-    //TODO динамическое вычисление
-    public List<Fraction> Fractions { get; } = [];
+    public Fraction[] Fractions => GroundObjects.Where(o => o is GroundProperty).Cast<GroundProperty>()
+        .Select(p => p.Owner).Distinct().ToArray();
 
     public abstract ConsoleColor Color { get; }
 
@@ -89,7 +90,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
             InfoIsClear = false;
 
             //Информация о фракциях
-            if (Fractions.Count > 0)
+            if (Fractions.Length > 0)
             {
                 Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                 Console.Write("Фракции:");

@@ -20,6 +20,7 @@ public abstract class GroundProperty : GroundObject, IDestructible
     protected GroundProperty(Coordinates coordinates, Fraction fraction, StarSystemObject starSystemObject) : base(coordinates, starSystemObject)
     {
         Owner = fraction;
+        Owner.Property.Add(this);
     }
 
     public override void WriteInfo()
@@ -67,5 +68,6 @@ public abstract class GroundProperty : GroundObject, IDestructible
         // TODO подумоть
         //Затирать только если он вообще отрисован (режим просмотра планеты)
         Location.GroundObjects.Remove(this);
+        Owner.Property.Remove(this);
     }
 }

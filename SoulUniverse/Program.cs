@@ -371,7 +371,7 @@ internal static class Program
         }
     }
 
-    /// <summary> Отрисовка рамок/// </summary>
+    /// <summary> Отрисовка рамок </summary>
     private static void DrawFrames()
     {
         lock (Locker)

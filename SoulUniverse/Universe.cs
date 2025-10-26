@@ -69,10 +69,6 @@ internal static class Universe
             {
                 HomeStar = star;
                 HomePlanet = (Planet)star.StarSystemObjects.First(obj => obj is Planet { PlanetClass: PlanetClass.Continental });
-                HomePlanet.Fractions.Add(playerFraction);
-
-                playerFraction.Colonies.Add(HomePlanet);
-
                 MilitaryBase.New(Rnd.Next(HomePlanet.Size), Rnd.Next(HomePlanet.Size), playerFraction, HomePlanet, true);
                 break;
             }
@@ -84,14 +80,13 @@ internal static class Universe
             if (voidObject is not Star star) continue;
             foreach (StarSystemObject starSystemObject in star.StarSystemObjects)
             {
-                if (starSystemObject is not Planet planet) continue;
+                if (starSystemObject is not Planet) continue;
                 while (true)
                 {
                     if (Rnd.Next(100) < 10)
                     {
                         Fraction fraction = NpcFractions.ElementAt(Rnd.Next(NpcFractions.Count));
-                        planet.Fractions.Add(fraction);
-                        fraction.Colonies.Add(planet);
+                        MilitaryBase.New(Rnd.Next(starSystemObject.Size), Rnd.Next(starSystemObject.Size), fraction, starSystemObject, true);
                     }
                     else break;
                 }
