@@ -48,7 +48,7 @@ public class Fraction
     /// <summary>NPC-фракция что-нибудь делает</summary>
     public void DoSomething()
     {
-        var action = Rnd.Next(2);
+        var action = Rnd.Next(3);
 
         bool result = action switch
         {

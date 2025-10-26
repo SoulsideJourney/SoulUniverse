@@ -37,6 +37,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
     public Dictionary<ResourceName, int> Resources { get; } = new();
 
     /// <summary> Присутствующие фракции </summary>
+    //TODO динамическое вычисление
     public List<Fraction> Fractions { get; } = [];
 
     public abstract ConsoleColor Color { get; }

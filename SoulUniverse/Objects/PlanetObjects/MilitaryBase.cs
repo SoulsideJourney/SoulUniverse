@@ -21,13 +21,16 @@ internal class MilitaryBase : GroundProperty, IBuildable
 
     private MilitaryBase(Coordinates coordinates, Fraction fraction, StarSystemObject starSystemObject) : base(coordinates, fraction, starSystemObject) { }
 
-    public static void New(int x, int y, Fraction fraction, StarSystemObject starSystemObject)
+    public static void New(int x, int y, Fraction fraction, StarSystemObject starSystemObject, bool isFree = false)
     {
         MilitaryBase @base = new(new Coordinates(x, y), fraction, starSystemObject);
 
-        foreach (var res in fraction.Resources)
+        if (!isFree)
         {
-            fraction.Resources[res.Key] = res.Value - BuildCost.Find(r => r.Key == res.Key).Value;
+            foreach (var res in fraction.Resources)
+            {
+                fraction.Resources[res.Key] = res.Value - BuildCost.Find(r => r.Key == res.Key).Value;
+            }
         }
         Program.Mutex.WaitOne();
         starSystemObject.GroundObjects.Add(@base);

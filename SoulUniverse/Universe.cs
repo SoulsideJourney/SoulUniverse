@@ -71,7 +71,9 @@ internal static class Universe
                 HomePlanet = (Planet)star.StarSystemObjects.First(obj => obj is Planet { PlanetClass: PlanetClass.Continental });
                 HomePlanet.Fractions.Add(playerFraction);
 
-                MilitaryBase.New(Rnd.Next(HomePlanet.Size), Rnd.Next(HomePlanet.Size), playerFraction, HomePlanet);
+                playerFraction.Colonies.Add(HomePlanet);
+
+                MilitaryBase.New(Rnd.Next(HomePlanet.Size), Rnd.Next(HomePlanet.Size), playerFraction, HomePlanet, true);
                 break;
             }
         }
