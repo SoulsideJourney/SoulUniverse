@@ -9,7 +9,8 @@ namespace SoulUniverse.Objects.PlanetObjects;
 public abstract class GroundProperty : GroundObject, IDestructible
 {
     public abstract int Health { get; set; }
-
+    
+    //TODO
     /// <summary> Не помню, зачем это вообще было. Возможно, подразумевалось, что не все объекты будут рисоваться </summary>
     public bool IsNeedToDraw { get; private set; } = true;
 

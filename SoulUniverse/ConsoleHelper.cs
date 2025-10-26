@@ -13,6 +13,7 @@ internal static class ConsoleHelper
     private static int _currentCursorX;
     private static int _currentCursorY;
 
+    /// <summary> Сохраненная (не фактическая) координата курсора по X </summary>
     public static int CurrentCursorX
     {
         get => _currentCursorX;
@@ -23,6 +24,7 @@ internal static class ConsoleHelper
         }
     }
 
+    /// <summary> Сохраненная (не фактическая) координата курсора по Y </summary>
     public static int CurrentCursorY
     {
         get => _currentCursorY;

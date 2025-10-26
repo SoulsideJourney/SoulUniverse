@@ -11,6 +11,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
 {
     protected abstract char Symbol { get; }
 
+    /// <summary> Диаметр объекта, в тыс. км. </summary>
     public abstract int Size { get; }
 
     public int PlacesCount => Size * Size;
