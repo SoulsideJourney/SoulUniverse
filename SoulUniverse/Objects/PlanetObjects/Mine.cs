@@ -6,7 +6,14 @@ namespace SoulUniverse.Objects.PlanetObjects;
 /// <summary> Шахта </summary>
 public class Mine : GroundProperty, IBuildable
 {
-    private Deposit _deposit;
+    private readonly Deposit _deposit;
+
+    public static List<KeyValuePair<ResourceName, int>> BuildCost { get; } =
+    [
+        new(ResourceName.Iron, 100),
+        new(ResourceName.Uranium, 0),
+        new(ResourceName.Oil, 0)
+    ];
 
     public override int Health { get; set; } = 100;
 
@@ -18,19 +25,12 @@ public class Mine : GroundProperty, IBuildable
     public Deposit Deposit
     {
         get => _deposit;
-        set
+        init
         {
             _deposit = value;
             _deposit.Mine = this;
         }
     }
-
-    public static List<KeyValuePair<ResourceName, int>> BuildCost { get; } =
-    [
-        new(ResourceName.Iron, 100),
-        new(ResourceName.Uranium, 0),
-        new(ResourceName.Oil, 0)
-    ];
 
     public Mine(Fraction fraction, Deposit deposit) : base(deposit.Coordinates, fraction, deposit.Location)
     {

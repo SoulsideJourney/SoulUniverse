@@ -13,7 +13,7 @@ internal class MilitaryBase : GroundProperty, IBuildable
         new(ResourceName.Oil, 1000),
     ];
 
-    public override int Health { get; set; } = 1000;
+    public override int Health { get; set; } = 10000;
 
     protected override string Name => "Военная база";
 

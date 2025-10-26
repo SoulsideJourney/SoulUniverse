@@ -14,9 +14,9 @@ internal class Tank : GroundProperty, IMovable, IBuildable
 
     public static List<KeyValuePair<ResourceName, int>> BuildCost { get; } =
     [
-        new(ResourceName.Iron, 10),
-        new(ResourceName.Uranium, 1),
-        new(ResourceName.Oil, 5),
+        new(ResourceName.Iron, 100),
+        new(ResourceName.Uranium, 10),
+        new(ResourceName.Oil, 20)
     ];
 
     public override int Health { get; set; } = 100;

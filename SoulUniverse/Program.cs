@@ -248,7 +248,7 @@ internal static class Program
                 //Работа заводов
                 foreach (var factory in Universe.Factories)
                 {
-                    factory.TryBuildTank();
+                    factory.Work();
                 }
 
                 //Движение танков

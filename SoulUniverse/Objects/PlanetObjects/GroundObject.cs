@@ -7,16 +7,19 @@ namespace SoulUniverse.Objects.PlanetObjects;
 /// <summary> Наземный объект </summary>
 public abstract class GroundObject : UniverseObject
 {
-    protected abstract char Symbol { get; }
-    protected abstract string Name { get; }
-    public StarSystemObject Location { get; }
-    public Coordinates Coordinates { get; protected set; }
-
     protected GroundObject(Coordinates coordinates, StarSystemObject starSystemObject)
     {
         Coordinates = coordinates;
         Location = starSystemObject;
     }
+
+    public Coordinates Coordinates { get; protected set; }
+
+    public StarSystemObject Location { get; }
+
+    protected abstract string Name { get; }
+
+    protected abstract char Symbol { get; }
 
     public virtual void WriteInfo()
     {

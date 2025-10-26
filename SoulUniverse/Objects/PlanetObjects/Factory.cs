@@ -4,6 +4,7 @@ using static SoulUniverse.Enums;
 
 namespace SoulUniverse.Objects.PlanetObjects;
 
+/// <summary> Завод для работяг </summary>
 internal class Factory : GroundProperty
 {
     public static List<KeyValuePair<ResourceName, int>> BuildCost { get; } =
@@ -30,8 +31,13 @@ internal class Factory : GroundProperty
         starSystemObject.GroundObjects.Add(factory);
     }
 
+    public void Work()
+    {
+        TryBuildTank();
+    }
+
     /// <summary> Фабрика будет пытаться построить танк </summary>
-    public bool TryBuildTank()
+    private bool TryBuildTank()
     {
         if (Owner.IsEnoughToBuildTank()
             && Location.GroundObjects.Count(o => o is Tank tank && tank.Owner == Owner) < Location.PlacesCount * 0.8
@@ -44,7 +50,7 @@ internal class Factory : GroundProperty
         return false;
     }
 
-    public void BuildTank()
+    private void BuildTank()
     {
         Tank.New(Coordinates.X + 1, Coordinates.Y, Owner, Location);
         Debug.WriteLine(string.Format($"Насекомые из {Owner.Name} построили ТАНК! Будет война"));
