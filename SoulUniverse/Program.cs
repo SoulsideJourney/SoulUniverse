@@ -9,7 +9,6 @@ namespace SoulUniverse;
 
 //TODO попробовать ловить клики мыши
 //TODO сделать сохранение мира, например, сериализацию в JSON
-//TODO информация о шахтах не пишется -- они находятся в одной точке с месторождениями (логично...)
 
 // Для нормальной работы в Windows 11 нужно сделать:
 // Настройки -> Система -> Для разработчиков -> Узел консоли Windows
@@ -19,6 +18,9 @@ internal static class Program
     public static readonly Mutex Mutex = new();
 
     private const int LegendOffsetFromBottom = 8;
+
+    /// <summary> Отступ при отрисовке звезды в карте системы </summary>
+    public const int StarOffset = 20;
 
     public static bool InfoIsClear;
 
@@ -136,7 +138,9 @@ internal static class Program
             {
                 //Информация об объекте
                 Star star = (Star)CheckedVoidObject!;
-                if (CurrentCursorX == 20 && CurrentCursorY == 20)
+                
+                //TODO ну и шляпа тут написана
+                if (CurrentCursorX == StarOffset && CurrentCursorY == StarOffset)
                 {
                     lock (Locker)
                     {
@@ -148,7 +152,7 @@ internal static class Program
                 }
                 else
                 {
-                    CheckedStarSystemObject = star.StarSystemObjects.Find(o => o.Coordinates.X == CurrentCursorX - 20 && o.Coordinates.Y == CurrentCursorY - 20);
+                    CheckedStarSystemObject = star.StarSystemObjects.Find(o => o.Coordinates.X == CurrentCursorX - StarOffset && o.Coordinates.Y == CurrentCursorY - StarOffset);
                     lock (Locker)
                     {
                         ClearInfo();
@@ -311,8 +315,8 @@ internal static class Program
             DrawFrames();
             Star star = (Star)checkedVoidObject;
             DrawStarSystemObjects(star);
-            CurrentCursorX = CheckedStarSystemObject?.Coordinates.X + 20 ?? 20;
-            CurrentCursorY = CheckedStarSystemObject?.Coordinates.Y + 20 ?? 20;
+            CurrentCursorX = CheckedStarSystemObject?.Coordinates.X + StarOffset ?? StarOffset;
+            CurrentCursorY = CheckedStarSystemObject?.Coordinates.Y + StarOffset ?? StarOffset;
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
         }
     }
@@ -348,8 +352,8 @@ internal static class Program
         lock (Locker)
         {
             OpenSystem(Universe.HomeStar);
-            CurrentCursorX = Universe.HomePlanet.Coordinates.X + 20;
-            CurrentCursorY = Universe.HomePlanet.Coordinates.Y + 20;
+            CurrentCursorX = Universe.HomePlanet.Coordinates.X + StarOffset;
+            CurrentCursorY = Universe.HomePlanet.Coordinates.Y + StarOffset;
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
         }
     }
@@ -358,7 +362,7 @@ internal static class Program
     {
         lock (Locker)
         {
-            star.Draw(20, 20);
+            star.Draw(StarOffset, StarOffset);
             foreach (StarSystemObject starSystemObject in star.StarSystemObjects)
             {
                 if (UniverseDisplayMode != DisplayMode.StarSystem) return;

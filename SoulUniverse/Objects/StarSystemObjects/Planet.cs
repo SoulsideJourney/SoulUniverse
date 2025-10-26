@@ -91,7 +91,7 @@ public sealed class Planet : StarSystemObject
             {
                 Console.ForegroundColor = Color;
             }
-            Console.SetCursorPosition(20 + Coordinates.X, 20 + Coordinates.Y);
+            Console.SetCursorPosition(StarOffset + Coordinates.X, StarOffset + Coordinates.Y);
             Console.Write(Symbol);
             DrawnCoordinates = Coordinates;
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);

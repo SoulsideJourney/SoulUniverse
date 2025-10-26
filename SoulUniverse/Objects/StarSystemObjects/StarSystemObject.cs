@@ -138,7 +138,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
             {
                 Console.ForegroundColor = Color;
             }
-            Console.SetCursorPosition(20 + Coordinates.X, 20 + Coordinates.Y);
+            Console.SetCursorPosition(StarOffset + Coordinates.X, StarOffset + Coordinates.Y);
             Console.Write(Symbol);
             DrawnCoordinates = Coordinates;
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
@@ -150,7 +150,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
     {
         lock (Locker)
         {
-            Console.SetCursorPosition(20 + DrawnCoordinates.X, 20 + DrawnCoordinates.Y);
+            Console.SetCursorPosition(StarOffset + DrawnCoordinates.X, StarOffset + DrawnCoordinates.Y);
             Console.Write(' ');
             Console.SetCursorPosition(CurrentCursorX, CurrentCursorY);
         }

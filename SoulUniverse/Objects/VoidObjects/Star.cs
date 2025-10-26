@@ -108,7 +108,7 @@ internal class Star : VoidObject
     {
         lock (Locker)
         {
-            Draw(20, 20);
+            Draw(StarOffset, StarOffset);
             foreach (StarSystemObject starSystemObject in StarSystemObjects)
             {
                 starSystemObject.Draw();
