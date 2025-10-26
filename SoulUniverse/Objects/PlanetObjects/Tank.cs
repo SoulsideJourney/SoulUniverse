@@ -73,6 +73,7 @@ internal class Tank : GroundProperty, IMovable, IBuildable
     public void TryFire()
     {
         var potentialTargets = Location.GroundObjects.Where(o => o is GroundProperty p && p.Owner != Owner).Cast<GroundProperty>().ToList();
+        if (potentialTargets.Count == 0) return;
 
         //Сначала танки, потом всё остальное
         var target = potentialTargets.FirstOrDefault(t => t is Tank) ?? potentialTargets.First();

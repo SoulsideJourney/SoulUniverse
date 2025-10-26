@@ -29,7 +29,7 @@ internal class Asteroid : StarSystemObject
     {
         Console.Write("Астероид");
         Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-        Console.Write($"Размер: {Size} км");
+        Console.Write($"Диаметр: {Size * 1000} км");
         Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
         Console.Write($"Расстояние до родительского тела: {OrbitRadius} а.е. ");
         Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
