@@ -49,4 +49,10 @@ internal class Factory : GroundProperty
         Tank.New(Coordinates.X + 1, Coordinates.Y, Owner, Location);
         Debug.WriteLine(string.Format($"Насекомые из {Owner.Name} построили ТАНК! Будет война"));
     }
+
+    public override void DestroySelf()
+    {
+        Universe.Factories.Remove(this);
+        base.DestroySelf();
+    }
 }

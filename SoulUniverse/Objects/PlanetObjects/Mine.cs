@@ -55,6 +55,7 @@ public class Mine : GroundProperty, IBuildable
     public override void DestroySelf()
     {
         Deposit.Mine = null;
+        Universe.Mines.Remove(this);
         base.DestroySelf();
     }
 }

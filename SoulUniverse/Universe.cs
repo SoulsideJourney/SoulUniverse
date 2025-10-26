@@ -17,17 +17,20 @@ internal static class Universe
     /// <summary> Список объектов </summary>
     public static readonly List<VoidObject> VoidObjects = new();
 
+    //TODO что-то сделать с этим
     /// <summary> Шахты </summary>
-    internal static readonly List<Mine> Mines = new();
+    internal static readonly List<Mine> Mines = [];
 
     /// <summary> Танки </summary>
-    internal static readonly List<Tank> Tanks = new();
+    internal static readonly List<Tank> Tanks = [];
 
     /// <summary> Заводы </summary>
-    internal static readonly List<Factory> Factories = new();
+    internal static readonly List<Factory> Factories = [];
+
+
 
     /// <summary> Список фракций </summary>
-    internal static readonly List<Fraction> NpcFractions = new();
+    internal static readonly List<Fraction> NpcFractions = [];
 
     private static DateTime _currentTime = DateTime.Today.Date;
 
