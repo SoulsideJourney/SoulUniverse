@@ -2,7 +2,8 @@
 
 namespace SoulUniverse.Interfaces;
 
-internal interface IBuildable
+public interface IBuildable
 {
+    /// <summary> Стоимость постройки </summary>
     public static List<KeyValuePair<ResourceName, int>> BuildCost => null!;
 }

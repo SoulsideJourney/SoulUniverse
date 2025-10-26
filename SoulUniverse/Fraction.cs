@@ -1,6 +1,7 @@
 ﻿using SoulUniverse.Objects.PlanetObjects;
 using SoulUniverse.Objects.StarSystemObjects;
 using System.Diagnostics;
+using SoulUniverse.Interfaces;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
@@ -55,7 +56,7 @@ public class Fraction
             _ => TryBuildMilitaryBase()
         };
 
-        if (!result) Debug.WriteLine($"Насекомые из {Name} обнищали");
+        //if (!result) Debug.WriteLine($"Насекомые из {Name} обнищали");
     }
 
     /// <summary>Достаточно ли ресурсов на шахту</summary>
@@ -108,6 +109,14 @@ public class Fraction
             }
         }
         return true;
+    }
+
+    public bool IsEnoughToBuildColonialShip() => IsEnoughToBuild(ColonialShip.BuildCost);
+
+    public bool IsEnoughToBuild(IEnumerable<KeyValuePair<ResourceName, int>> buildCost)
+    {
+        return buildCost.All(cost =>
+            Resources.TryGetValue(cost.Key, out int available) && available >= cost.Value);
     }
 
     /// <summary> Фракция будет пытаться построить военную базу </summary>

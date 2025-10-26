@@ -33,14 +33,42 @@ internal class Factory : GroundProperty
 
     public void Work()
     {
-        TryBuildTank();
+        //Если нет вражеских объектов, соотношение танков и кораблей больше 20:1
+        var hostileCount = Location.GroundObjects.Count(o => o is GroundProperty p && p.Owner != Owner);
+        var tanksCount = Location.GroundObjects.Count(o => o is Tank t && t.Owner == Owner);
+        var shipsCount = Location.GroundObjects.Count(o => o is ColonialShip s && s.Owner == Owner);
+
+        if (hostileCount == 0 && tanksCount > 20 && (shipsCount == 0 || tanksCount / shipsCount > 20))
+        {
+            TryBuildColonialShip();
+        }
+        else TryBuildTank();
+    }
+
+    private bool TryBuildColonialShip()
+    {
+        if (Owner.IsEnoughToBuildColonialShip()
+            && Location.GroundObjects.Count(o => o is GroundProperty p && p.Owner == Owner) < Location.PlacesCount * 0.1
+            && !Location.IsPlaceOccupied(Coordinates.X + 1, Coordinates.Y))
+        {
+            BuildColonialShip();
+            return true;
+        }
+
+        return false;
+    }
+
+    private void BuildColonialShip()
+    {
+        ColonialShip.New(Coordinates.X + 1, Coordinates.Y, Owner, Location);
+        Debug.WriteLine(string.Format($"Насекомые из {Owner.Name} построили КОЛОНИАЛЬНЫЙ КОРАБЛЬ! Будет захват галактики"));
     }
 
     /// <summary> Фабрика будет пытаться построить танк </summary>
     private bool TryBuildTank()
     {
         if (Owner.IsEnoughToBuildTank()
-            && Location.GroundObjects.Count(o => o is Tank tank && tank.Owner == Owner) < Location.PlacesCount * 0.8
+            && Location.GroundObjects.Count(o => o is GroundProperty p && p.Owner == Owner) < Location.PlacesCount * 0.8
             && !Location.IsPlaceOccupied(Coordinates.X + 1, Coordinates.Y))
         {
             BuildTank();
