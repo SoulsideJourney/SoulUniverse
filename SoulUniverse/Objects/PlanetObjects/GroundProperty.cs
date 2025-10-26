@@ -65,8 +65,8 @@ public abstract class GroundProperty : GroundObject, IDestructible
     public virtual void DestroySelf()
     {
         // TODO подумоть
-
         //Затирать только если он вообще отрисован (режим просмотра планеты)
-        throw new NotImplementedException();
+        Owner.Property.Remove(this);
+        Location.GroundObjects.Remove(this);
     }
 }

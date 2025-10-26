@@ -7,7 +7,9 @@ using static SoulUniverse.Enums;
 
 namespace SoulUniverse;
 
+//TODO попробовать ловить клики мыши
 //TODO сделать сохранение мира, например, сериализацию в JSON
+//TODO информация о шахтах не пишется -- они находятся в одной точке с месторождениями (логично...)
 
 // Для нормальной работы в Windows 11 нужно сделать:
 // Настройки -> Система -> Для разработчиков -> Узел консоли Windows
@@ -156,7 +158,9 @@ internal static class Program
             }
             else if (UniverseDisplayMode == DisplayMode.Planet)
             {
+                //TODO инфо о шахтах на местах месторождений
                 CheckedGroundObject = CheckedStarSystemObject?.GroundObjects.Find(o => o.Coordinates.X == CurrentCursorX && o.Coordinates.Y == CurrentCursorY);
+                var test = CheckedStarSystemObject?.GroundObjects.Where(o => o.Coordinates.X == CurrentCursorX && o.Coordinates.Y == CurrentCursorY).ToList();
                 lock (Locker)
                 {
                     ClearInfo();
