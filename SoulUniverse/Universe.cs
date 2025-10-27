@@ -15,7 +15,7 @@ internal static class Universe
     public const int UniverseY = 40;
 
     /// <summary> Список объектов </summary>
-    public static readonly List<VoidObject> VoidObjects = new();
+    public static readonly List<VoidObject> VoidObjects = [];
 
     //TODO что-то сделать с этим
     /// <summary> Шахты </summary>
@@ -27,7 +27,8 @@ internal static class Universe
     /// <summary> Заводы </summary>
     internal static readonly List<Factory> Factories = [];
 
-
+    /// <summary> Колониальные корабли </summary>
+    internal static readonly List<ColonialShip> Ships = [];
 
     /// <summary> Список фракций </summary>
     internal static readonly List<Fraction> NpcFractions = [];

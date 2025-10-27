@@ -13,7 +13,7 @@ internal class Star : VoidObject
 
     private readonly StarClass _starClass;
 
-    public List<StarSystemObject> StarSystemObjects = [];
+    public readonly List<StarSystemObject> StarSystemObjects = [];
 
     public Star()
     {
@@ -49,7 +49,7 @@ internal class Star : VoidObject
                 var rnd = Rnd.Next(100);
                 if (rnd < 70)
                 {
-                    Planet planet = new(distance);
+                    Planet planet = new(this, distance);
                     StarSystemObjects.Add(planet);
                 }
                 else
@@ -57,7 +57,7 @@ internal class Star : VoidObject
                     //Создаем несколько астероидов в поясе в зависимости от радиуса орбиты
                     for (int j = 0; j < distance * distance; j++)
                     {
-                        StarSystemObjects.Add(new Asteroid(distance));
+                        StarSystemObjects.Add(new Asteroid(this, distance));
                     }
                 }
 

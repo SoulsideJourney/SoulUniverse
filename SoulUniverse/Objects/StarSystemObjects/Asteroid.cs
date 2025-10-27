@@ -1,4 +1,5 @@
-﻿using static SoulUniverse.Enums;
+﻿using SoulUniverse.Objects.VoidObjects;
+using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
 
 namespace SoulUniverse.Objects.StarSystemObjects;
@@ -16,9 +17,8 @@ internal class Asteroid : StarSystemObject
 
     public override ConsoleColor Color => ConsoleColor.Gray;
 
-    public Asteroid(int distance) : base(distance)
+    public Asteroid(VoidObject parentObject, int distance) : base(parentObject, distance)
     {
-        //Size = rnd.Next(minSize, maxSize);
         foreach (ResourceName res in Enum.GetValues(typeof(ResourceName)))
         {
             Resources.Add(res, Rnd.Next(100000000));

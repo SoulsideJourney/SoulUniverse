@@ -39,4 +39,19 @@ internal class ColonialShip : GroundProperty, IBuildable
         starSystemObject.GroundObjects.Add(ship);
         Program.Mutex.ReleaseMutex();
     }
+
+    /// <summary> Пытаемся колонизировать другую планету </summary>
+    public bool TryColonize()
+    {
+        //TODO
+        //Ищем планету недалеко
+        //var target = Location.ParentObject.
+        //Colonize();
+        return false;
+    }
+
+    private void Colonize()
+    {
+
+    }
 }

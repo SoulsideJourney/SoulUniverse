@@ -1,5 +1,6 @@
 ﻿using SoulUniverse.Interfaces;
 using SoulUniverse.Objects.PlanetObjects;
+using SoulUniverse.Objects.VoidObjects;
 using static SoulUniverse.ConsoleHelper;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
@@ -18,6 +19,9 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
 
     /// <summary> Радиус орбиты в а.е. </summary>
     public int OrbitRadius { get; }
+
+    /// <summary> Родительский объект (звезда как правило) </summary>
+    public VoidObject ParentObject { get; }
 
     public int PlacesCount => Size * Size;
 
@@ -45,9 +49,10 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
 
     public abstract ConsoleColor Color { get; }
 
-    public StarSystemObject(int distance)
+    public StarSystemObject(VoidObject parentObject, int distance)
     {
         OrbitRadius = distance;
+        ParentObject = parentObject;
         _phi = Rnd.NextDouble() * 2 * Math.PI;
         Coordinates.X = (int)Math.Round(OrbitRadius * Math.Cos(_phi));
         Coordinates.Y = (int)Math.Round(OrbitRadius * Math.Sin(_phi));

@@ -4,7 +4,7 @@ using static SoulUniverse.Program;
 namespace SoulUniverse.Objects.VoidObjects;
 
 /// <summary> Небесное тело в галактике (звездного масштаба) </summary>
-internal abstract class VoidObject : UniverseObject
+public abstract class VoidObject : UniverseObject
 {
     protected abstract char Symbol { get; }
 

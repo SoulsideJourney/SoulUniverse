@@ -258,6 +258,12 @@ internal static class Program
                     tank.TryFire();
                 }
 
+                //Колониальные корабли пытаются чего-то
+                foreach (var colonialShip in Universe.Ships)
+                {
+                    colonialShip.TryColonize();
+                }
+
                 Universe.Tanks.RemoveAll(t => t.Health <= 0);
             }
             Thread.Sleep(TimeSpans[_timeSelector]);

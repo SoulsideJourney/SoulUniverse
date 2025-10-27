@@ -1,4 +1,5 @@
 ﻿using SoulUniverse.Objects.PlanetObjects;
+using SoulUniverse.Objects.VoidObjects;
 using static SoulUniverse.ConsoleHelper;
 using static SoulUniverse.Enums;
 using static SoulUniverse.Program;
@@ -28,7 +29,7 @@ public sealed class Planet : StarSystemObject
         _ => ConsoleColor.White
     };
 
-    public Planet(int distance) : base(distance)
+    public Planet(VoidObject parentObject, int distance) : base(parentObject, distance)
     {
         //Генерация ресурсов
         foreach (ResourceName res in Enum.GetValues(typeof(ResourceName)))
