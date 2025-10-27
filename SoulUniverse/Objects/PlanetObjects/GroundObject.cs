@@ -15,7 +15,7 @@ public abstract class GroundObject : UniverseObject
 
     public Coordinates Coordinates { get; protected set; }
 
-    public StarSystemObject Location { get; }
+    public StarSystemObject Location { get; protected set; }
 
     protected abstract string Name { get; }
 

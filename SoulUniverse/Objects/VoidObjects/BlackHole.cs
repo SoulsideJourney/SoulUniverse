@@ -5,9 +5,9 @@ namespace SoulUniverse.Objects.VoidObjects;
 
 internal class BlackHole : VoidObject
 {
-    protected override char Symbol { get; } = '\u00D8'; //Ø
+    protected override char Symbol => '\u00D8'; //Ø
 
-    protected override ConsoleColor Color { get; } = ConsoleColor.Yellow;
+    protected override ConsoleColor Color => ConsoleColor.Yellow;
 
     public override void Draw()
     {

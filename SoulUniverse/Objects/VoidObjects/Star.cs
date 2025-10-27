@@ -5,7 +5,7 @@ using static SoulUniverse.Program;
 
 namespace SoulUniverse.Objects.VoidObjects;
 
-internal class Star : VoidObject
+public class Star : VoidObject
 {
     public Star()
     {
