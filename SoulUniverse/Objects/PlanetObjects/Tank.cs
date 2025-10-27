@@ -15,7 +15,7 @@ internal class Tank : GroundProperty, IMovable, IBuildable
     public static List<KeyValuePair<ResourceName, int>> BuildCost { get; } =
     [
         new(ResourceName.Iron, 100),
-        new(ResourceName.Uranium, 10),
+        new(ResourceName.Uranium, 5),
         new(ResourceName.Oil, 20)
     ];
 
