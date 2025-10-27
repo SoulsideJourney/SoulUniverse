@@ -122,18 +122,18 @@ internal class Star : VoidObject
                 Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
                 Console.Write("Информация об объектах системы:");
                 Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write("-----------------------------------------");
+                Console.Write("-----------------------------------------------------------");
                 Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write($"| № | Расстояние | {"Класс",11} | Размер |");
+                Console.Write($"| № | Расстояние | {"Название",15} | {"Класс",11} | Размер |");
                 Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write("-----------------------------------------");
+                Console.Write("-----------------------------------------------------------");
                 int planetNumber = 0;
                 foreach (StarSystemObject starSystemObject in StarSystemObjects)
                 {
                     if (starSystemObject is Planet planet)
                     {
                         Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                        Console.Write($"|{++planetNumber,2} | {starSystemObject.OrbitRadius,6} а.е | ");
+                        Console.Write($"|{++planetNumber,2} | {starSystemObject.OrbitRadius,6} а.е | {starSystemObject.Name,15} | ");
                         Console.ForegroundColor = planet.Color;
                         Console.Write($"{planet.PlanetClass,11}");
                         ResetConsoleColor();
@@ -141,7 +141,7 @@ internal class Star : VoidObject
                     }
                 }
                 Console.SetCursorPosition(Universe.UniverseX + 2, ++row);
-                Console.Write("-----------------------------------------");
+                Console.Write("-----------------------------------------------------------");
 
                 //Информация о присутствующих фракциях
                 Console.SetCursorPosition(Universe.UniverseX + 2, ++row);

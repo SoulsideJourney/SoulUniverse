@@ -424,7 +424,7 @@ internal static class Program
                 for (int i = 2; i < Universe.UniverseY - offset; i++)
                 {
                     Console.SetCursorPosition(Universe.UniverseX + 2, i);
-                    Console.Write("                                               ");
+                    Console.Write("                                                                 ");
                 }
             }
             InfoIsClear = true;
