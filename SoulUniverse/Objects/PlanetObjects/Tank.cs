@@ -115,7 +115,6 @@ internal class Tank : GroundProperty, IMovable, IBuildable
 
     public override void DestroySelf()
     {
-        Universe.Tanks.Remove(this);
         base.DestroySelf();
         //TODO стирание объекта при удалении
         //Erase();

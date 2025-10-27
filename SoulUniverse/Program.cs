@@ -257,6 +257,8 @@ internal static class Program
                     tank.Move();
                     tank.TryFire();
                 }
+
+                Universe.Tanks.RemoveAll(t => t.Health <= 0);
             }
             Thread.Sleep(TimeSpans[_timeSelector]);
         }

@@ -33,12 +33,12 @@ internal class Factory : GroundProperty
 
     public void Work()
     {
-        //Если нет вражеских объектов, соотношение танков и кораблей больше 20:1
         var hostileCount = Location.GroundObjects.Count(o => o is GroundProperty p && p.Owner != Owner);
         var tanksCount = Location.GroundObjects.Count(o => o is Tank t && t.Owner == Owner);
         var shipsCount = Location.GroundObjects.Count(o => o is ColonialShip s && s.Owner == Owner);
 
-        if (hostileCount == 0 && tanksCount > 20 && (shipsCount == 0 || tanksCount / shipsCount > 20))
+        //Если нет вражеских объектов, соотношение танков и кораблей больше 40:1
+        if (hostileCount == 0 && tanksCount > 40 && (shipsCount == 0 || tanksCount / shipsCount > 20))
         {
             TryBuildColonialShip();
         }
