@@ -17,12 +17,9 @@ internal class Asteroid : StarSystemObject
 
     public override ConsoleColor Color => ConsoleColor.Gray;
 
-    public Asteroid(VoidObject parentObject, int distance) : base(parentObject, distance)
+    public Asteroid(Star parentObject, int distance) : base(parentObject, distance)
     {
-        foreach (ResourceName res in Enum.GetValues(typeof(ResourceName)))
-        {
-            Resources.Add(res, Rnd.Next(100000000));
-        }
+        GenerateResources();
     }
 
     protected override void WriteSelfInfo(ref int row)

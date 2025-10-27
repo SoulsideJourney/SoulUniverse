@@ -32,53 +32,7 @@ public sealed class Planet : StarSystemObject
     public Planet(Star parentObject, int distance) : base(parentObject, distance)
     {
         PlanetClass = (PlanetClass)Rnd.Next(Enum.GetValues(typeof(PlanetClass)).Length);
-
-        //Генерация ресурсов и месторождений
-        int i = 0;
-        bool generated = false;
-        while (i < Size + Rnd.Next(-2, 2))
-        {
-            GenerateDeposit(ResourceName.Iron);
-            generated = true;
-            i++;
-        }
-        if (generated) Resources.Add(ResourceName.Iron, Rnd.Next(100000000));
-
-        i = 0;
-        generated = false;
-        while (i < Size / 4 + Rnd.Next(-2, 2))
-        {
-            GenerateDeposit(ResourceName.Oil);
-            generated = true;
-            i++;
-        }
-        if (generated) Resources.Add(ResourceName.Oil, Rnd.Next(1000000));
-
-        i = 0;
-        generated = false;
-        while (i < Size / 10 + Rnd.Next(-2, 2))
-        {
-            GenerateDeposit(ResourceName.Uranium);
-            generated = true;
-
-            i++;
-        }
-        if (generated) Resources.Add(ResourceName.Uranium, Rnd.Next(100000));
-    }
-
-    private void GenerateDeposit(ResourceName resource)
-    {
-        int x = Rnd.Next(Size);
-        int y = Rnd.Next(Size);
-        if (!IsPlaceOccupied(x, y))
-        {
-            Deposit deposit = new Deposit(new Coordinates(x, y), this, resource);
-
-            Program.Mutex.WaitOne();
-            GroundObjects.Add(deposit);
-            Deposits.Add(deposit);
-            Program.Mutex.ReleaseMutex();
-        }
+        GenerateResources();
     }
 
     public override void Draw()

@@ -48,7 +48,7 @@ internal class Factory : GroundProperty
     private bool TryBuildColonialShip()
     {
         if (Owner.IsEnoughToBuildColonialShip()
-            && Location.GroundObjects.Count(o => o is GroundProperty p && p.Owner == Owner) < Location.PlacesCount * 0.1
+            && Location.GroundObjects.Count(o => o is GroundProperty p && p.Owner == Owner) < Location.PlacesCount * 0.8
             && !Location.IsPlaceOccupied(Coordinates.X + 1, Coordinates.Y))
         {
             BuildColonialShip();

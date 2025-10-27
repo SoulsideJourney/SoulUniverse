@@ -21,7 +21,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
     public int OrbitRadius { get; }
 
     /// <summary> Родительский объект (звезда как правило) </summary>
-    public VoidObject ParentObject { get; }
+    public Star ParentObject { get; }
 
     public int PlacesCount => Size * Size;
 
@@ -49,7 +49,7 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
 
     public abstract ConsoleColor Color { get; }
 
-    public StarSystemObject(VoidObject parentObject, int distance)
+    public StarSystemObject(Star parentObject, int distance)
     {
         OrbitRadius = distance;
         ParentObject = parentObject;
@@ -176,5 +176,55 @@ public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemO
     {
         if (OrbitRadius > (other?.OrbitRadius ?? 0)) return 1;
         return -1;
+    }
+
+    protected void GenerateResources()
+    {
+        //Генерация ресурсов и месторождений
+        int i = 0;
+        bool generated = false;
+        while (i < Size + Rnd.Next(-2, 2))
+        {
+            GenerateDeposit(ResourceName.Iron);
+            generated = true;
+            i++;
+        }
+        if (generated) Resources.Add(ResourceName.Iron, Rnd.Next(100000000));
+
+        i = 0;
+        generated = false;
+        while (i < Size / 2 + Rnd.Next(-2, 2))
+        {
+            GenerateDeposit(ResourceName.Oil);
+            generated = true;
+            i++;
+        }
+        if (generated) Resources.Add(ResourceName.Oil, Rnd.Next(1000000));
+
+        i = 0;
+        generated = false;
+        while (i < Size / 5 + Rnd.Next(-2, 2))
+        {
+            GenerateDeposit(ResourceName.Uranium);
+            generated = true;
+
+            i++;
+        }
+        if (generated) Resources.Add(ResourceName.Uranium, Rnd.Next(100000));
+    }
+
+    private void GenerateDeposit(ResourceName resource)
+    {
+        int x = Rnd.Next(Size);
+        int y = Rnd.Next(Size);
+        if (!IsPlaceOccupied(x, y))
+        {
+            Deposit deposit = new Deposit(new Coordinates(x, y), this, resource);
+
+            Program.Mutex.WaitOne();
+            GroundObjects.Add(deposit);
+            Deposits.Add(deposit);
+            Program.Mutex.ReleaseMutex();
+        }
     }
 }

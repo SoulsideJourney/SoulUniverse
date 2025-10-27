@@ -264,6 +264,7 @@ internal static class Program
                     colonialShip.TryColonize();
                 }
 
+                Universe.Ships.RemoveAll(s => s.IsActivated);
                 Universe.Tanks.RemoveAll(t => t.Health <= 0);
             }
             Thread.Sleep(TimeSpans[_timeSelector]);

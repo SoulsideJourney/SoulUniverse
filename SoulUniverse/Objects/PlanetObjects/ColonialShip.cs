@@ -1,6 +1,7 @@
 ﻿using SoulUniverse.Interfaces;
 using SoulUniverse.Objects.StarSystemObjects;
 using static SoulUniverse.Enums;
+using static SoulUniverse.Program;
 
 namespace SoulUniverse.Objects.PlanetObjects;
 
@@ -23,7 +24,7 @@ internal class ColonialShip : GroundProperty, IBuildable
     protected override char Symbol => '◊';
 
     /// <summary> Колониальный корабль выполнил свою миссию и превратился в стационарную базу </summary>
-    private bool IsActivated { get; set; }
+    public bool IsActivated { get; private set; }
 
     public static void New(int x, int y, Fraction fraction, StarSystemObject starSystemObject)
     {
@@ -35,7 +36,7 @@ internal class ColonialShip : GroundProperty, IBuildable
         }
 
         Program.Mutex.WaitOne();
-        //Universe.Tanks.Add(tank); //TODO
+        Universe.Ships.Add(ship);
         starSystemObject.GroundObjects.Add(ship);
         Program.Mutex.ReleaseMutex();
     }
@@ -44,14 +45,22 @@ internal class ColonialShip : GroundProperty, IBuildable
     public bool TryColonize()
     {
         //TODO
-        //Ищем планету недалеко
-        //var target = Location.ParentObject.
-        //Colonize();
-        return false;
+        //Ищем планету недалеко. Корабль сможет совершить небольшой прыжок
+        var target = Location.ParentObject
+            .StarSystemObjects
+            .FirstOrDefault(o => o is Planet p
+                                 //&& p.Fractions.Any(f => f != Owner) //Пока не будем на занятые врагом планеты прыгать
+                                 && !p.IsColonized
+                                 && o.Coordinates.IsWithin(Location.Coordinates, 3));
+        if (target == null) return false;
+        Colonize(target);
+        return true;
     }
 
-    private void Colonize()
+    private void Colonize(StarSystemObject targetObject)
     {
-
+        Location = targetObject;
+        Coordinates = new Coordinates(Rnd.Next(Location.Size), Rnd.Next(Location.Size));
+        IsActivated = true;
     }
 }

@@ -125,6 +125,7 @@ public class Fraction
     private bool TryBuildMilitaryBase(StarSystemObject? starSystemObject)
     {
         if (starSystemObject == null) return false;
+        if (starSystemObject.GroundObjects.Count(o => o is MilitaryBase b && b.Owner == this) >= 1) return false;
         if (!IsEnoughToBuildMilitaryBase()) return false;
 
         int x = Rnd.Next(starSystemObject.Size);
