@@ -7,22 +7,21 @@ namespace SoulUniverse.Objects.VoidObjects;
 
 internal class Star : VoidObject
 {
-    protected override char Symbol { get; } = '*';
+    public Star()
+    {
+        StarClass = (StarClasses)Rnd.Next(Enum.GetValues(typeof(StarClasses)).Length - 1);
+        Color = GetColor(StarClass);
+        GenerateStarSystemObjects();
+    }
 
     protected override ConsoleColor Color { get; }
 
-    private readonly StarClass _starClass;
+    public StarClasses StarClass { get; }
+
 
     public readonly List<StarSystemObject> StarSystemObjects = [];
 
-    public Star()
-    {
-        Coordinates.X = Rnd.Next(Universe.UniverseX);
-        Coordinates.Y = Rnd.Next(Universe.UniverseY);
-        _starClass = (StarClass)Rnd.Next(Enum.GetValues(typeof(StarClass)).Length - 1);
-        Color = GetColor(_starClass);
-        GenerateStarSystemObjects();
-    }
+    protected override char Symbol => '*';
 
     /// <summary> Сгенегировать планеты и астероиды на орбитах вокруг данного объекта </summary>
     private void GenerateStarSystemObjects()
@@ -107,7 +106,7 @@ internal class Star : VoidObject
         lock (Locker)
         {
             int row = 2;
-            string starClass = _starClass.ToString();
+            string starClass = StarClass.ToString();
             Console.Write("Звезда класса ");
             Console.ForegroundColor = GetColor();
             Console.Write(starClass);
@@ -176,27 +175,27 @@ internal class Star : VoidObject
 
     private ConsoleColor GetColor()
     {
-        return GetColor(_starClass);
+        return GetColor(StarClass);
     }
 
-    private ConsoleColor GetColor(StarClass starClass)
+    private ConsoleColor GetColor(StarClasses starClass)
     {
         return starClass switch
         {
-            StarClass.W => ConsoleColor.Magenta,
-            StarClass.O => ConsoleColor.DarkBlue,
-            StarClass.B => ConsoleColor.Blue,
-            StarClass.A => ConsoleColor.DarkCyan,
-            StarClass.F => ConsoleColor.White,
-            StarClass.G => ConsoleColor.Yellow,
-            StarClass.K => ConsoleColor.DarkYellow,
-            StarClass.M => ConsoleColor.Red,
-            StarClass.L => ConsoleColor.DarkRed,
+            StarClasses.W => ConsoleColor.Magenta,
+            StarClasses.O => ConsoleColor.DarkBlue,
+            StarClasses.B => ConsoleColor.Blue,
+            StarClasses.A => ConsoleColor.DarkCyan,
+            StarClasses.F => ConsoleColor.White,
+            StarClasses.G => ConsoleColor.Yellow,
+            StarClasses.K => ConsoleColor.DarkYellow,
+            StarClasses.M => ConsoleColor.Red,
+            StarClasses.L => ConsoleColor.DarkRed,
             _ => ConsoleColor.White
         };
     }
 
-    public enum StarClass
+    public enum StarClasses
     {
         W, O, B, A, F, G, K, M, L
     }

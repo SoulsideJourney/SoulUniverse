@@ -6,6 +6,12 @@ namespace SoulUniverse.Objects.VoidObjects;
 /// <summary> Небесное тело в галактике (звездного масштаба) </summary>
 public abstract class VoidObject : UniverseObject
 {
+    protected VoidObject()
+    {
+        Coordinates.X = Rnd.Next(Universe.UniverseX);
+        Coordinates.Y = Rnd.Next(Universe.UniverseY);
+    }
+
     protected abstract char Symbol { get; }
 
     protected abstract ConsoleColor Color { get; }
