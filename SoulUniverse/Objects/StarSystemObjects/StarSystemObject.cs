@@ -9,20 +9,22 @@ namespace SoulUniverse.Objects.StarSystemObjects;
 /// <summary> Небесное тело в планетарной системе (планетного масштаба) </summary>
 public abstract class StarSystemObject : UniverseObject, IComparable<StarSystemObject>, IMovable
 {
-    protected abstract char Symbol { get; }
+    public bool IsNeedToRedraw { get; set; }
 
-    /// <summary> Диаметр объекта, в тыс. км. </summary>
-    public abstract int Size { get; }
-
-    public int PlacesCount => Size * Size;
+    public string Name { get; } = PlanetNames.Names[Rnd.Next(PlanetNames.Names.Length)];
 
     /// <summary>Орбитальная скорость в км/ч</summary>
     public abstract double OrbitalSpeed { get; }
 
-    public bool IsNeedToRedraw { get; set; }
-
     /// <summary> Радиус орбиты в а.е. </summary>
     public int OrbitRadius { get; }
+
+    public int PlacesCount => Size * Size;
+
+    /// <summary> Диаметр объекта, в тыс. км. </summary>
+    public abstract int Size { get; }
+
+    protected abstract char Symbol { get; }
 
     /// <summary> Текущий угол орбиты </summary>
     private double _phi;

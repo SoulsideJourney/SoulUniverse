@@ -107,7 +107,7 @@ public sealed class Planet : StarSystemObject
 
     protected override void WriteSelfInfo(ref int row)
     {
-        Console.Write("Планета класса ");
+        Console.Write($"Планета {Name} класса ");
         Console.ForegroundColor = Color;
         Console.Write(PlanetClass);
         ResetConsoleColor();
