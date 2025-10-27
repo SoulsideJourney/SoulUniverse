@@ -168,6 +168,7 @@ public class Fraction
     private bool TryBuildFactory(StarSystemObject? starSystemObject)
     {
         if (starSystemObject == null) return false;
+        if (starSystemObject.GroundObjects.Count(o => o is Factory f && f.Owner == this) >= 3) return false;
         if (!IsEnoughToBuildFactory()) return false;
         int x = Rnd.Next(starSystemObject.Size);
         int y = Rnd.Next(starSystemObject.Size);
