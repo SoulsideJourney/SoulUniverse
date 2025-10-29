@@ -44,14 +44,14 @@ internal class ColonialShip : GroundProperty, IBuildable
     /// <summary> Пытаемся колонизировать другую планету </summary>
     public bool TryColonize()
     {
-        //TODO
         //Ищем планету недалеко. Корабль сможет совершить небольшой прыжок
-        var target = Location.ParentObject
+        var targets = Location.ParentObject
             .StarSystemObjects
-            .FirstOrDefault(o => o is Planet p
-                                 //&& p.Fractions.Any(f => f != Owner) //Пока не будем на занятые врагом планеты прыгать
-                                 && !p.IsColonized
-                                 && o.Coordinates.IsWithin(Location.Coordinates, 3));
+            .Where(o => o is Planet p
+                                 && p.Fractions.Any(f => f != Owner)
+                                 && o.Coordinates.IsWithin(Location.Coordinates, 3)).ToList();
+        var target = targets.FirstOrDefault(p => !p.IsColonized) ?? targets.FirstOrDefault();
+
         if (target == null) return false;
         Colonize(target);
         return true;
