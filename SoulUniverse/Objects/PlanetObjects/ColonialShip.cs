@@ -59,7 +59,9 @@ internal class ColonialShip : GroundProperty, IBuildable
 
     private void Colonize(StarSystemObject targetObject)
     {
+        Location.GroundObjects.Remove(this);
         Location = targetObject;
+        Location.GroundObjects.Add(this);
         Coordinates = new Coordinates(Rnd.Next(Location.Size), Rnd.Next(Location.Size));
         IsActivated = true;
     }
